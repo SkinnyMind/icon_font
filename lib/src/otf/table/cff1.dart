@@ -209,12 +209,9 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
     final glyphSidList = [...sidList];
 
     final fontName = name.getStringByNameId(NameID.fullFontName)!;
-    final copyrightString = '${name.getStringByNameId(NameID.copyright)} '
-        '${name.getStringByNameId(NameID.urlVendor)}';
 
     final topDictStringEntryMap = {
       op.version: name.getStringByNameId(NameID.version),
-      op.notice: copyrightString,
       op.fullName: fontName,
       op.weight: name.getStringByNameId(NameID.fontSubfamily),
     };
