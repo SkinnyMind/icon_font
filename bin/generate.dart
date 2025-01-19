@@ -145,9 +145,9 @@ const _kAbout =
     'class.';
 
 const _kUsage = '''
-Usage:   icon_font_generator <input-svg-dir> <output-font-file> [options]
+Usage:   icon_font <input-svg-dir> <output-font-file> [options]
 
-Example: icon_font_generator assets/svg/ fonts/my_icons_font.otf --output-class-file=lib/my_icons.dart
+Example: icon_font assets/svg/ fonts/my_icons_font.otf --output-class-file=lib/my_icons.dart
 
 Converts every .svg file from <input-svg-dir> directory to an OpenType font and writes it to <output-font-file> file.
 If "--output-class-file" option is specified, Flutter-compatible class that contains identifiers for the icons is generated.
