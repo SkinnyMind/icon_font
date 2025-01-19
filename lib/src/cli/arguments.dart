@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:args/args.dart';
-import 'package:collection/collection.dart';
 import 'package:icon_font/src/cli/formatter.dart';
 import 'package:icon_font/src/utils/enum_class.dart';
 import 'package:icon_font/src/utils/logger.dart';
@@ -223,7 +222,7 @@ Map<CliArgument, Object?>? parseConfig({required String config}) {
   }
 
   final entries =
-      iconFontGeneratoryamlmap.entries.map(_mapConfigKeyEntry).whereNotNull();
+      iconFontGeneratoryamlmap.entries.map(_mapConfigKeyEntry).nonNulls;
 
   return Map<CliArgument, Object?>.fromEntries(entries);
 }
