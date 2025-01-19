@@ -49,8 +49,6 @@ Flutter class options:
   Name for a generated class.
 - `-p` or `--package=<name>`
   Name of a package that provides a font. Used to provide a font through package dependency.
-- `--[no-]format`
-  Format dart generated code.
 - `-l` or `--list`
   Generate a list of icons (Can be accessed through `ClassName.values`).
 
@@ -107,7 +105,6 @@ icon_font:
   output_class_file: "lib/my_icons.dart"
   class_name: "MyIcons"
   package: my_font_package
-  format: true
   list: true
 
   font_name: "My Icons"

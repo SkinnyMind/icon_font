@@ -105,14 +105,8 @@ void _run(CliArguments parsedArgs) {
       iconList: parsedArgs.iconList,
     );
 
-    if (parsedArgs.format ?? kDefaultFormat) {
-      try {
-        logger.t('Formatting Flutter class generation.');
-        classString = formatter.format(classString);
-      } on Object catch (e) {
-        logger.e(e.toString());
-      }
-    }
+    logger.i('Formatting generated Flutter class.');
+    classString = formatter.format(classString);
 
     parsedArgs.classFile!.writeAsStringSync(classString);
   }

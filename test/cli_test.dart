@@ -139,7 +139,6 @@ void main() {
       expect(parsedArgs.classFile?.path, 'lib/test_font.dart');
       expect(parsedArgs.className, 'MyIcons');
       expect(parsedArgs.fontName, 'My Icons');
-      expect(parsedArgs.format, isTrue);
       expect(parsedArgs.normalize, isFalse);
       expect(parsedArgs.ignoreShapes, isFalse);
       expect(parsedArgs.recursive, isFalse);
@@ -161,7 +160,6 @@ void main() {
       expect(parsedArgs.classFile?.path, 'lib/test_font.dart');
       expect(parsedArgs.className, 'MyIcons');
       expect(parsedArgs.fontName, 'My Icons');
-      expect(parsedArgs.format, isTrue);
       expect(parsedArgs.normalize, isFalse);
       expect(parsedArgs.ignoreShapes, isFalse);
       expect(parsedArgs.recursive, isFalse);
