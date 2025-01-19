@@ -27,10 +27,6 @@ void defineOptions({required ArgParser argParser}) {
       valueHelp: 'name',
     )
     ..addFlag(
-      kOptionNames[CliArgument.format]!,
-      help: 'Format dart generated code.',
-    )
-    ..addFlag(
       kOptionNames[CliArgument.iconList]!,
       abbr: 'l',
       help: 'Generate a list of icons.',

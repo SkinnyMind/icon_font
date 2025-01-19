@@ -134,9 +134,7 @@ class FlutterClassGenerator {
       '',
       '/// List of all icons in this font.',
       'static const List<IconData> values = <IconData>[',
-      for (var i = 0; i < _iconVarNames.length; i++) ...[
-        '${_iconVarNames[i]},',
-      ],
+      for (final iconName in _iconVarNames) ...['$iconName,'],
       '];',
     ].join('\n');
   }
