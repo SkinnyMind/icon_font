@@ -39,12 +39,14 @@ class FlutterClassGenerator {
     String? fontFileName,
     String? package,
     int? indent,
+    bool? iconList = false,
   })  : _indent = ' ' * (indent ?? _kDefaultIndent),
         _className = _getVarName(className ?? _kDefaultClassName),
         _familyName = familyName ?? kDefaultFontFamily,
         _fontFileName = fontFileName ?? _kDefaultFontFileName,
         _iconVarNames = _generateVariableNames(glyphList: glyphList),
-        _package = package?.isEmpty ?? true ? null : package;
+        _package = package?.isEmpty ?? true ? null : package,
+        _iconList = iconList ?? false;
 
   final List<GenericGlyph> glyphList;
   final String _fontFileName;
@@ -53,6 +55,7 @@ class FlutterClassGenerator {
   final String _indent;
   final String? _package;
   final List<String> _iconVarNames;
+  final bool _iconList;
 
   static List<String> _generateVariableNames({
     required List<GenericGlyph> glyphList,
@@ -129,6 +132,18 @@ class FlutterClassGenerator {
     ];
   }
 
+  String _generateIconList() {
+    return [
+      '',
+      '/// List of all icons in this font.',
+      'static const List<IconData> values = <IconData>[',
+      for (var i = 0; i < _iconVarNames.length; i++) ...[
+        '${_iconVarNames[i]},',
+      ],
+      '];',
+    ].join('\n');
+  }
+
   /// Generates content for a class' file.
   String generate() {
     final classContent = [
@@ -138,6 +153,7 @@ class FlutterClassGenerator {
       if (_hasPackage) _fontPackageConst,
       for (var i = 0; i < glyphList.length; i++)
         ..._generateIconConst(index: i),
+      if (_iconList) _generateIconList(),
     ];
 
     final classContentString =
