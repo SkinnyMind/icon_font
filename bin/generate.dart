@@ -102,6 +102,7 @@ void _run(CliArguments parsedArgs) {
       fontFileName: fontFileName,
       familyName: otfResult.font.familyName,
       package: parsedArgs.fontPackage,
+      iconList: parsedArgs.iconList,
     );
 
     if (parsedArgs.format ?? kDefaultFormat) {

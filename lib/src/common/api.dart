@@ -94,6 +94,7 @@ String generateFlutterClass({
   String? fontFileName,
   String? package,
   int? indent,
+  bool? iconList,
 }) {
   final generator = FlutterClassGenerator(
     glyphList: glyphList,
@@ -102,6 +103,7 @@ String generateFlutterClass({
     fontFileName: fontFileName,
     familyName: familyName,
     package: package,
+    iconList: iconList,
   );
 
   return generator.generate();

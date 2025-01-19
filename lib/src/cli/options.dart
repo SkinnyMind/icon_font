@@ -28,7 +28,12 @@ void defineOptions({required ArgParser argParser}) {
     )
     ..addFlag(
       kOptionNames[CliArgument.format]!,
-      help: 'Formate dart generated code.',
+      help: 'Format dart generated code.',
+    )
+    ..addFlag(
+      kOptionNames[CliArgument.iconList]!,
+      abbr: 'l',
+      help: 'Generate a list of icons.',
     )
     ..addSeparator('Font options:')
     ..addOption(

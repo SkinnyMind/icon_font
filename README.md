@@ -49,6 +49,8 @@ Flutter class options:
   Name of a package that provides a font. Used to provide a font through package dependency.
 - `--[no-]format`
   Format dart generated code.
+- `-l` or `--list`
+  Generate a list of icons (Can be accessed through `ClassName.values`).
 
 Font options:
 
@@ -92,8 +94,8 @@ flutter:
 
 ## Config file
 
-icon*font's configuration can also be placed in yaml file.
-Add \_icon_font* section to either `pubspec.yaml` or `icon_font.yaml` file:
+icon_font's configuration can also be placed in yaml file.
+Add `icon_font` section to either `pubspec.yaml` or `icon_font.yaml` file:
 
 ```yaml
 icon_font:
@@ -104,6 +106,7 @@ icon_font:
   class_name: "MyIcons"
   package: my_font_package
   format: true
+  list: true
 
   font_name: "My Icons"
   normalize: true

@@ -44,6 +44,7 @@ void main() {
         '--verbose',
         '--config-file=test/config.yaml',
         '--package=test_package',
+        '--list',
       ];
 
       final parsedArgs = parseArgsAndConfig(argParser: argParser, args: args);
@@ -59,6 +60,7 @@ void main() {
       expect(parsedArgs.verbose, isTrue);
       expect(parsedArgs.configFile?.path, 'test/config.yaml');
       expect(parsedArgs.fontPackage, 'test_package');
+      expect(parsedArgs.iconList, isTrue);
     });
 
     test('All arguments with defaults', () {
@@ -82,6 +84,7 @@ void main() {
       expect(parsedArgs.verbose, isFalse);
       expect(parsedArgs.configFile, isNull);
       expect(parsedArgs.fontPackage, isNull);
+      expect(parsedArgs.iconList, isFalse);
     });
 
     test('Help', () {
@@ -104,6 +107,7 @@ void main() {
         '--recursive',
         '--verbose',
         '--help',
+        '--list',
       ]);
       expectCliHelpException([
         './asdasd/sad/sad/asd',
@@ -124,6 +128,7 @@ void main() {
         '--recursive',
         '--verbose',
         '--package=no',
+        '--list',
         '--config-file=test/assets/test_config.yaml',
       ];
 
@@ -141,6 +146,7 @@ void main() {
       expect(parsedArgs.verbose, isFalse);
       expect(parsedArgs.configFile, isNull);
       expect(parsedArgs.fontPackage, 'test_package');
+      expect(parsedArgs.iconList, isTrue);
     });
 
     test('No arguments and config', () {
@@ -162,6 +168,7 @@ void main() {
       expect(parsedArgs.verbose, isFalse);
       expect(parsedArgs.configFile, isNull);
       expect(parsedArgs.fontPackage, 'test_package');
+      expect(parsedArgs.iconList, isTrue);
     });
   });
 
@@ -211,6 +218,7 @@ icon_font:
   output_class_file: lib/test_font.dart
   class_name: MyIcons
   package: test_package
+  list: true
 
   font_name: My Icons
   normalize: false
@@ -231,6 +239,7 @@ icon_font:
       expect(parsedArgs.recursive, isTrue);
       expect(parsedArgs.verbose, isTrue);
       expect(parsedArgs.fontPackage, 'test_package');
+      expect(parsedArgs.iconList, isTrue);
     });
 
     test('All arguments with defaults', () {
@@ -251,6 +260,7 @@ icon_font:
       expect(parsedArgs.recursive, isNull);
       expect(parsedArgs.verbose, isNull);
       expect(parsedArgs.fontPackage, isNull);
+      expect(parsedArgs.iconList, isNull);
     });
 
     test('Type validation', () {
@@ -301,6 +311,12 @@ icon_font:
   input_svg_dir: ./
   output_font_file: generated_font.otf
   package: 1
+      ''');
+      expectCliArgumentException('''
+icon_font:
+  input_svg_dir: ./
+  output_font_file: generated_font.otf
+  list: 1
       ''');
     });
   });

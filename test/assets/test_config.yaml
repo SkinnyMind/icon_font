@@ -4,11 +4,12 @@ version: 1.0
 icon_font:
   input_svg_dir: ./
   output_font_file: generated_font.otf
-  
+
   output_class_file: lib/test_font.dart
   class_name: MyIcons
   package: test_package
   format: true
+  list: true
 
   font_name: My Icons
   normalize: false
