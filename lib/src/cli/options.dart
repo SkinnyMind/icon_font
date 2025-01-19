@@ -6,7 +6,7 @@ void defineOptions({required ArgParser argParser}) {
   argParser
     ..addSeparator('Flutter class options:')
     ..addOption(
-      kOptionNames[CliArgument.classFile]!,
+      CliArgument.classFile.optionName,
       abbr: 'o',
       help:
           'Output path for Flutter-compatible class that contains identifiers '
@@ -14,63 +14,63 @@ void defineOptions({required ArgParser argParser}) {
       valueHelp: 'path',
     )
     ..addOption(
-      kOptionNames[CliArgument.className]!,
+      CliArgument.className.optionName,
       abbr: 'c',
       help: 'Name for a generated class.',
       valueHelp: 'name',
     )
     ..addOption(
-      kOptionNames[CliArgument.fontPackage]!,
+      CliArgument.fontPackage.optionName,
       abbr: 'f',
       help: 'Name of a package that provides a font. Used to provide a font '
           'through package dependency.',
       valueHelp: 'name',
     )
     ..addFlag(
-      kOptionNames[CliArgument.iconList]!,
+      CliArgument.iconList.optionName,
       abbr: 'l',
       help: 'Generate a list of icons.',
     )
     ..addSeparator('Font options:')
     ..addOption(
-      kOptionNames[CliArgument.fontName]!,
+      CliArgument.fontName.optionName,
       abbr: 'n',
       help: 'Name for a generated font.',
       valueHelp: 'name',
     )
     ..addFlag(
-      kOptionNames[CliArgument.normalize]!,
+      CliArgument.normalize.optionName,
       help: 'Enables glyph normalization for the font. Disable this if every '
           'icon has the same size and positioning.',
       defaultsTo: true,
     )
     ..addFlag(
-      kOptionNames[CliArgument.ignoreShapes]!,
+      CliArgument.ignoreShapes.optionName,
       help: 'Disables SVG shape-to-path conversion (circle, rect, etc.).',
       defaultsTo: true,
     )
     ..addSeparator('Other options:')
     ..addOption(
-      kOptionNames[CliArgument.configFile]!,
+      CliArgument.configFile.optionName,
       abbr: 'z',
       help: 'Path to icon_font yaml configuration file. pubspec.yaml '
           'and icon_font.yaml files are used by default.',
       valueHelp: 'path',
     )
     ..addFlag(
-      kOptionNames[CliArgument.recursive]!,
+      CliArgument.recursive.optionName,
       abbr: 'r',
       help: 'Recursively look for .svg files.',
       negatable: false,
     )
     ..addFlag(
-      kOptionNames[CliArgument.verbose]!,
+      CliArgument.verbose.optionName,
       abbr: 'v',
       help: 'Display every logging message.',
       negatable: false,
     )
     ..addFlag(
-      kOptionNames[CliArgument.help]!,
+      CliArgument.help.optionName,
       abbr: 'h',
       help: 'Shows this usage information.',
       negatable: false,
