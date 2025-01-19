@@ -1,13 +1,13 @@
 import 'dart:typed_data';
 
-import 'package:icon_font_generator/src/common/codable/binary.dart';
-import 'package:icon_font_generator/src/common/constant.dart';
-import 'package:icon_font_generator/src/otf/debugger.dart';
-import 'package:icon_font_generator/src/otf/table/abstract.dart';
-import 'package:icon_font_generator/src/otf/table/table_record_entry.dart';
-import 'package:icon_font_generator/src/utils/enum_class.dart';
-import 'package:icon_font_generator/src/utils/otf.dart';
-import 'package:icon_font_generator/src/utils/ucs2.dart';
+import 'package:icon_font/src/common/codable/binary.dart';
+import 'package:icon_font/src/common/constant.dart';
+import 'package:icon_font/src/otf/debugger.dart';
+import 'package:icon_font/src/otf/table/abstract.dart';
+import 'package:icon_font/src/otf/table/table_record_entry.dart';
+import 'package:icon_font/src/utils/enum_class.dart';
+import 'package:icon_font/src/utils/otf.dart';
+import 'package:icon_font/src/utils/ucs2.dart';
 
 const _kNameRecordSize = 12;
 

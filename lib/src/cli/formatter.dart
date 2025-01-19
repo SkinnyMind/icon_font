@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:icon_font_generator/src/cli/arguments.dart';
+import 'package:icon_font/src/cli/arguments.dart';
 
 typedef CliArgumentFormatter = Object Function(String arg);
 

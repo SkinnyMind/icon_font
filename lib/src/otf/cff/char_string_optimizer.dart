@@ -1,5 +1,5 @@
-import 'package:icon_font_generator/src/otf/cff/char_string.dart';
-import 'package:icon_font_generator/src/otf/cff/char_string_operator.dart';
+import 'package:icon_font/src/otf/cff/char_string.dart';
+import 'package:icon_font/src/otf/cff/char_string_operator.dart';
 
 class CharStringOptimizer {
   CharStringOptimizer({required bool isCFF1})

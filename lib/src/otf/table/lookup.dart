@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 
-import 'package:icon_font_generator/src/common/codable/binary.dart';
-import 'package:icon_font_generator/src/otf/debugger.dart';
-import 'package:icon_font_generator/src/otf/table/coverage.dart';
-import 'package:icon_font_generator/src/utils/otf.dart';
+import 'package:icon_font/src/common/codable/binary.dart';
+import 'package:icon_font/src/otf/debugger.dart';
+import 'package:icon_font/src/otf/table/coverage.dart';
+import 'package:icon_font/src/utils/otf.dart';
 
 abstract class SubstitutionSubtable implements BinaryCodable {
   const SubstitutionSubtable();

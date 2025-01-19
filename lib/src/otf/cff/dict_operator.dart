@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:icon_font_generator/src/otf/cff/operator.dart';
+import 'package:icon_font/src/otf/cff/operator.dart';
 
 // Top DICT operators
 

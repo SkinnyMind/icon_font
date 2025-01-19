@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:icon_font_generator/src/common/codable/binary.dart';
-import 'package:icon_font_generator/src/otf/debugger.dart';
+import 'package:icon_font/src/common/codable/binary.dart';
+import 'package:icon_font/src/otf/debugger.dart';
 
 const kDefaultCoverageTable = CoverageTableFormat1(
   coverageFormat: 1,

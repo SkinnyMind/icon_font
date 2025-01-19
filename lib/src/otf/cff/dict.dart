@@ -1,11 +1,11 @@
 import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
-import 'package:icon_font_generator/src/common/codable/binary.dart';
-import 'package:icon_font_generator/src/otf/cff/operand.dart';
-import 'package:icon_font_generator/src/otf/cff/operator.dart';
-import 'package:icon_font_generator/src/utils/exception.dart';
-import 'package:icon_font_generator/src/utils/otf.dart';
+import 'package:icon_font/src/common/codable/binary.dart';
+import 'package:icon_font/src/otf/cff/operand.dart';
+import 'package:icon_font/src/otf/cff/operator.dart';
+import 'package:icon_font/src/utils/exception.dart';
+import 'package:icon_font/src/utils/otf.dart';
 
 const _kOperatorEscapeByte = 0x0C;
 

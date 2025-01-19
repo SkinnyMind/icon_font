@@ -3,9 +3,9 @@ import 'dart:math' as math;
 
 import 'package:args/args.dart';
 import 'package:collection/collection.dart';
-import 'package:icon_font_generator/src/cli/formatter.dart';
-import 'package:icon_font_generator/src/utils/enum_class.dart';
-import 'package:icon_font_generator/src/utils/logger.dart';
+import 'package:icon_font/src/cli/formatter.dart';
+import 'package:icon_font/src/utils/enum_class.dart';
+import 'package:icon_font/src/utils/logger.dart';
 import 'package:yaml/yaml.dart';
 
 const _kDefaultConfigPathList = ['pubspec.yaml', 'icon_font.yaml'];

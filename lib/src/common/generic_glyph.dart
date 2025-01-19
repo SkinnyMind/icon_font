@@ -1,17 +1,17 @@
 import 'dart:math' as math;
 
-import 'package:icon_font_generator/src/common/outline.dart';
-import 'package:icon_font_generator/src/otf/cff/char_string.dart';
-import 'package:icon_font_generator/src/otf/cff/char_string_optimizer.dart';
-import 'package:icon_font_generator/src/otf/table/glyph/flag.dart';
-import 'package:icon_font_generator/src/otf/table/glyph/header.dart';
-import 'package:icon_font_generator/src/otf/table/glyph/simple.dart';
-import 'package:icon_font_generator/src/svg/outline_converter.dart';
-import 'package:icon_font_generator/src/svg/path.dart';
-import 'package:icon_font_generator/src/svg/svg.dart';
-import 'package:icon_font_generator/src/utils/logger.dart';
-import 'package:icon_font_generator/src/utils/misc.dart';
-import 'package:icon_font_generator/src/utils/otf.dart';
+import 'package:icon_font/src/common/outline.dart';
+import 'package:icon_font/src/otf/cff/char_string.dart';
+import 'package:icon_font/src/otf/cff/char_string_optimizer.dart';
+import 'package:icon_font/src/otf/table/glyph/flag.dart';
+import 'package:icon_font/src/otf/table/glyph/header.dart';
+import 'package:icon_font/src/otf/table/glyph/simple.dart';
+import 'package:icon_font/src/svg/outline_converter.dart';
+import 'package:icon_font/src/svg/path.dart';
+import 'package:icon_font/src/svg/svg.dart';
+import 'package:icon_font/src/utils/logger.dart';
+import 'package:icon_font/src/utils/misc.dart';
+import 'package:icon_font/src/utils/otf.dart';
 
 /// Metadata for a generic glyph.
 class GenericGlyphMetadata {

@@ -1,10 +1,10 @@
 import 'dart:typed_data';
 
-import 'package:icon_font_generator/src/otf/debugger.dart';
-import 'package:icon_font_generator/src/otf/otf.dart';
-import 'package:icon_font_generator/src/otf/table/all.dart';
-import 'package:icon_font_generator/src/utils/exception.dart';
-import 'package:icon_font_generator/src/utils/otf.dart';
+import 'package:icon_font/src/otf/debugger.dart';
+import 'package:icon_font/src/otf/otf.dart';
+import 'package:icon_font/src/otf/table/all.dart';
+import 'package:icon_font/src/utils/exception.dart';
+import 'package:icon_font/src/utils/otf.dart';
 
 /// A helper for reading an OpenType font from a binary data.
 class OTFReader {

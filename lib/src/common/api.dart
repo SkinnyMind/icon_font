@@ -1,8 +1,8 @@
-import 'package:icon_font_generator/src/common/generic_glyph.dart';
-import 'package:icon_font_generator/src/otf.dart';
-import 'package:icon_font_generator/src/svg.dart';
-import 'package:icon_font_generator/src/utils/flutter_class_gen.dart';
-import 'package:icon_font_generator/src/utils/logger.dart';
+import 'package:icon_font/src/common/generic_glyph.dart';
+import 'package:icon_font/src/otf.dart';
+import 'package:icon_font/src/svg.dart';
+import 'package:icon_font/src/utils/flutter_class_gen.dart';
+import 'package:icon_font/src/utils/logger.dart';
 
 /// Result of svg-to-otf conversion.
 ///

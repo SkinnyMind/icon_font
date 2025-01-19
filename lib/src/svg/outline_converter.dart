@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
-import 'package:icon_font_generator/src/common/outline.dart';
-import 'package:icon_font_generator/src/svg/path.dart';
-import 'package:icon_font_generator/src/svg/svg.dart';
+import 'package:icon_font/src/common/outline.dart';
+import 'package:icon_font/src/svg/path.dart';
+import 'package:icon_font/src/svg/svg.dart';
 import 'package:path_parsing/path_parsing.dart';
 import 'package:vector_math/vector_math.dart';
 

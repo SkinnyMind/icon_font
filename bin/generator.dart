@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:dart_style/dart_style.dart';
-import 'package:icon_font_generator/src/cli/arguments.dart';
-import 'package:icon_font_generator/src/cli/options.dart';
-import 'package:icon_font_generator/src/common/api.dart';
-import 'package:icon_font_generator/src/otf/io.dart';
-import 'package:icon_font_generator/src/utils/logger.dart';
+import 'package:icon_font/src/cli/arguments.dart';
+import 'package:icon_font/src/cli/options.dart';
+import 'package:icon_font/src/common/api.dart';
+import 'package:icon_font/src/otf/io.dart';
+import 'package:icon_font/src/utils/logger.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 

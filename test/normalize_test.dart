@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:icon_font_generator/src/common/generic_glyph.dart';
-import 'package:icon_font_generator/src/otf/defaults.dart';
-import 'package:icon_font_generator/src/otf/otf.dart';
-import 'package:icon_font_generator/src/svg/svg.dart';
+import 'package:icon_font/src/common/generic_glyph.dart';
+import 'package:icon_font/src/otf/defaults.dart';
+import 'package:icon_font/src/otf/otf.dart';
+import 'package:icon_font/src/svg/svg.dart';
 import 'package:test/test.dart';
 
 import 'constant.dart';

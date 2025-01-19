@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:icon_font_generator/src/common/codable/binary.dart';
+import 'package:icon_font/src/common/codable/binary.dart';
 
 class PascalString implements BinaryCodable {
   PascalString({required this.string, required this.length});

@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:icon_font_generator/src/otf/table/head.dart';
-import 'package:icon_font_generator/src/utils/misc.dart';
+import 'package:icon_font/src/otf/table/head.dart';
+import 'package:icon_font/src/utils/misc.dart';
 import 'package:meta/meta.dart';
 
 const String kHeadTag = 'head';
