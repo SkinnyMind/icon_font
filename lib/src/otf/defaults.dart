@@ -6,7 +6,7 @@ import 'package:icon_font/src/utils/misc.dart';
 import 'package:icon_font/src/utils/otf.dart';
 
 const kDefaultAchVendID = '    ';
-const kDefaultFontFamily = 'icon_font_generator Icons';
+const kDefaultFontFamily = 'icon_font Icons';
 const kDefaultTrueTypeUnitsPerEm = 1024; // A power of two is recommended
 const kDefaultOpenTypeUnitsPerEm = 1000;
 const kDefaultBaselineExtension = 150;

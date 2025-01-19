@@ -7,7 +7,7 @@ import 'package:recase/recase.dart';
 const _kUnnamedIconName = 'unnamed';
 const _kDefaultIndent = 2;
 const _kDefaultClassName = 'UiIcons';
-const _kDefaultFontFileName = 'icon_font_generator_icons.otf';
+const _kDefaultFontFileName = 'icon_font_icons.otf';
 
 /// Removes any characters that are not valid for variable name.
 ///
