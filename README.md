@@ -4,6 +4,8 @@ The icon_font package provides an easy way to convert SVG icons to OpenType font
 and generate Flutter-compatible class that contains identifiers for the icons
 (just like [CupertinoIcons][] or [Icons][] classes).
 
+> Note: To have generated icon names in camel case, svg files should be named as `icon_name.svg` or `iconName.svg`
+
 The package is written fully in Dart and doesn't require any external dependency.
 Compatible with dart2js and dart2native.
 
