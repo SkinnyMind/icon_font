@@ -109,7 +109,6 @@ class FlutterClassGenerator {
     final glyphMeta = glyphList[index].metadata;
 
     final charCode = glyphMeta.charCode!;
-    final iconName = glyphMeta.name!;
 
     final varName = _iconVarNames[index];
     final hexCode = charCode.toRadixString(16);
@@ -123,9 +122,7 @@ class FlutterClassGenerator {
 
     return [
       '',
-      '/// Font icon named "__${iconName}__"',
       if (glyphMeta.preview != null) ...[
-        '///',
         "/// <image width='32px' src='data:image/svg+xml;base64,${glyphMeta.preview}'>",
       ],
       'static const IconData $varName = IconData(0x$hexCode, $posParamString);',
