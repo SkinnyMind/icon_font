@@ -3,7 +3,7 @@ version: 4.0.0
 description: >-
   Converts SVG icons to OTF font and generates Flutter-compatible class.
   Provides an API and a CLI tool.
-homepage: https://github.com/SkinnyMind/icon_font_generator
+homepage: https://github.com/SkinnyMind/icon_font
 environment:
   sdk: ">=3.6.0 <4.0.0"
 

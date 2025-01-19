@@ -65,7 +65,7 @@ Font options:
 Other options:
 
 - `-z` or `--config-file=<path>`
-  Path to icon_font_generator yaml configuration file.
+  Path to icon_font yaml configuration file.
   pubspec.yaml and icon_font.yaml files are used by default.
 - `-r` or `--recursive`
   Recursively look for .svg files.
@@ -120,8 +120,8 @@ It's possible to specify any other config file by using `--config-file` option.
 
 [svgToOtf][] and [generateFlutterClass][] functions can be used for generating font and Flutter class.
 
-[svgToOtf]: https://pub.dev/documentation/icon_font_generator/latest/icon_font_generator/svgToOtf.html
-[generateFlutterClass]: https://pub.dev/documentation/icon_font_generator/latest/icon_font_generator/generateFlutterClass.html
+[svgToOtf]: https://pub.dev/documentation/icon_font/latest/icon_font/svgToOtf.html
+[generateFlutterClass]: https://pub.dev/documentation/icon_font/latest/icon_font/generateFlutterClass.html
 
 ## Notes
 

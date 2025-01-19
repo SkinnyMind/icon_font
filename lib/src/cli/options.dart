@@ -52,8 +52,8 @@ void defineOptions({required ArgParser argParser}) {
     ..addOption(
       kOptionNames[CliArgument.configFile]!,
       abbr: 'z',
-      help: 'Path to icon_font_generator yaml configuration file. pubspec.yaml '
-          'and icon_font_generator.yaml files are used by default.',
+      help: 'Path to icon_font yaml configuration file. pubspec.yaml '
+          'and icon_font.yaml files are used by default.',
       valueHelp: 'path',
     )
     ..addFlag(

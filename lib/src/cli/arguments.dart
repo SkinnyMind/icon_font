@@ -208,7 +208,7 @@ MapEntry<CliArgument, Object?>? _mapConfigKeyEntry(
 /// Parses config file.
 ///
 /// Returns an instance of [CliArguments] containing all parsed data or null,
-/// if 'icon_font_generator' key is not present in config file.
+/// if 'icon_font' key is not present in config file.
 Map<CliArgument, Object?>? parseConfig({required String config}) {
   final yamlMap = loadYaml(config) as Object?;
 
@@ -229,7 +229,7 @@ Map<CliArgument, Object?>? parseConfig({required String config}) {
 }
 
 /// Parses argument list and config file, validates parsed data.
-/// Config is used, if it contains 'icon_font_generator' section.
+/// Config is used, if it contains 'icon_font' section.
 ///
 /// Throws [CliHelpException], if 'help' option is present.
 /// Throws [CliArgumentException], if there is an error in arg parsing.
