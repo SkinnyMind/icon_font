@@ -3,99 +3,75 @@ import 'dart:math' as math;
 
 import 'package:args/args.dart';
 import 'package:icon_font/src/cli/formatter.dart';
-import 'package:icon_font/src/utils/enum_class.dart';
 import 'package:icon_font/src/utils/logger.dart';
 import 'package:yaml/yaml.dart';
 
 const _kDefaultConfigPathList = ['pubspec.yaml', 'icon_font.yaml'];
-const _kPositionalArguments = [CliArgument.svgDir, CliArgument.fontFile];
-
-const _kArgAllowedTypes = <CliArgument, List<Type>>{
-  CliArgument.svgDir: [String],
-  CliArgument.fontFile: [String],
-  CliArgument.classFile: [String],
-  CliArgument.className: [String],
-  CliArgument.fontPackage: [String],
-  CliArgument.fontName: [String],
-  CliArgument.normalize: [bool],
-  CliArgument.ignoreShapes: [bool],
-  CliArgument.recursive: [bool],
-  CliArgument.iconList: [bool],
-  CliArgument.verbose: [bool],
-  CliArgument.help: [bool],
-  CliArgument.configFile: [String],
-};
 
 const kDefaultVerbose = false;
 const kDefaultIconList = false;
 const kDefaultRecursive = false;
 
-const kOptionNames = EnumClass<CliArgument, String>({
-  // svgDir and fontFile are not options
-
-  CliArgument.classFile: 'output-class-file',
-  CliArgument.className: 'class-name',
-  CliArgument.fontPackage: 'package',
-  CliArgument.iconList: 'list',
-
-  CliArgument.fontName: 'font-name',
-  CliArgument.normalize: 'normalize',
-  CliArgument.ignoreShapes: 'ignore-shapes',
-
-  CliArgument.recursive: 'recursive',
-  CliArgument.verbose: 'verbose',
-
-  CliArgument.help: 'help',
-  CliArgument.configFile: 'config-file',
-});
-
-const kConfigKeys = EnumClass<CliArgument, String>({
-  CliArgument.svgDir: 'input_svg_dir',
-  CliArgument.fontFile: 'output_font_file',
-
-  CliArgument.classFile: 'output_class_file',
-  CliArgument.className: 'class_name',
-  CliArgument.fontPackage: 'package',
-  CliArgument.iconList: 'list',
-
-  CliArgument.fontName: 'font_name',
-  CliArgument.normalize: 'normalize',
-  CliArgument.ignoreShapes: 'ignore_shapes',
-
-  CliArgument.recursive: 'recursive',
-  CliArgument.verbose: 'verbose',
-
-  // help and configFile are not part of config
-});
-
-final Map<CliArgument, String> argumentNames = {
-  ...kConfigKeys.map,
-  ...kOptionNames.map,
-};
-
 enum CliArgument {
-  // Required
-  svgDir,
-  fontFile,
+  // Required and not options
+  svgDir(optionName: '', configName: 'input_svg_dir', allowedType: String),
+  fontFile(optionName: '', configName: 'output_font_file', allowedType: String),
 
   // Class-related
-  classFile,
-  className,
-  fontPackage,
-  iconList,
+  classFile(
+    optionName: 'output-class-file',
+    configName: 'output_class_file',
+    allowedType: String,
+  ),
+  className(
+    optionName: 'class-name',
+    configName: 'class_name',
+    allowedType: String,
+  ),
+  fontPackage(
+    optionName: 'package',
+    configName: 'package',
+    allowedType: String,
+  ),
+  iconList(optionName: 'list', configName: 'list', allowedType: bool),
 
   // Font-related
-  fontName,
-  ignoreShapes,
-  normalize,
+  fontName(
+    optionName: 'font-name',
+    configName: 'font_name',
+    allowedType: String,
+  ),
+  ignoreShapes(
+    optionName: 'ignore-shapes',
+    configName: 'ignore_shapes',
+    allowedType: bool,
+  ),
+  normalize(
+    optionName: 'normalize',
+    configName: 'normalize',
+    allowedType: bool,
+  ),
 
   // Others
-  recursive,
-  verbose,
+  recursive(
+    optionName: 'recursive',
+    configName: 'recursive',
+    allowedType: bool,
+  ),
+  verbose(optionName: 'verbose', configName: 'verbose', allowedType: bool),
 
-  // Only in CLI
-  help,
-  configFile,
+  // Only in CLI, not part of the config
+  help(optionName: 'help', configName: '', allowedType: bool),
+  configFile(optionName: 'config-file', configName: '', allowedType: String);
+
+  const CliArgument({
+    required this.optionName,
+    required this.configName,
+    required this.allowedType,
+  });
+  final String optionName;
+  final String configName;
+  final Type allowedType;
 }
 
 /// Contains all the parsed data for the application.
@@ -168,17 +144,21 @@ Map<CliArgument, Object?> parseArguments({
     throw CliArgumentException(message: err.message);
   }
 
-  if (argResults['help'] as bool) {
+  if (argResults.flag(CliArgument.help.optionName)) {
     throw CliHelpException();
   }
 
-  final posArgsLength =
-      math.min(_kPositionalArguments.length, argResults.rest.length);
+  final options = CliArgument.values.where((arg) => arg.optionName.isNotEmpty);
+  final positionalArgs = CliArgument.values.where(
+    (arg) => arg.optionName.isEmpty,
+  );
+  final posArgsLength = math.min(positionalArgs.length, argResults.rest.length);
 
   final rawArgMap = <CliArgument, Object?>{
-    for (final e in kOptionNames.entries) e.key: argResults[e.value] as Object?,
+    for (final argument in options)
+      argument: argResults[argument.optionName] as Object?,
     for (var i = 0; i < posArgsLength; i++)
-      _kPositionalArguments[i]: argResults.rest[i],
+      positionalArgs.elementAt(i): argResults.rest[i],
   };
 
   return rawArgMap;
@@ -195,8 +175,12 @@ MapEntry<CliArgument, Object?>? _mapConfigKeyEntry(
     return null;
   }
 
-  final key = kConfigKeys.getKeyForValue(rawKey);
-  if (key == null) {
+  late final CliArgument key;
+  final configNames =
+      CliArgument.values.where((arg) => arg.configName.isNotEmpty);
+  try {
+    key = configNames.firstWhere((e) => e.configName == rawKey);
+  } on StateError catch (_) {
     logUnknown();
     return null;
   }
@@ -215,14 +199,14 @@ Map<CliArgument, Object?>? parseConfig({required String config}) {
     return null;
   }
 
-  final iconFontGeneratoryamlmap = yamlMap['icon_font'] as Object?;
+  final iconFontGeneratorYamlmap = yamlMap['icon_font'] as Object?;
 
-  if (iconFontGeneratoryamlmap is! YamlMap) {
+  if (iconFontGeneratorYamlmap is! YamlMap) {
     return null;
   }
 
   final entries =
-      iconFontGeneratoryamlmap.entries.map(_mapConfigKeyEntry).nonNulls;
+      iconFontGeneratorYamlmap.entries.map(_mapConfigKeyEntry).nonNulls;
 
   return Map<CliArgument, Object?>.fromEntries(entries);
 }
@@ -275,17 +259,15 @@ extension CliArgumentMapExtension on Map<CliArgument, Object?> {
   ///
   /// Throws [CliArgumentException], if argument is not valid.
   void _validateRaw() {
-    // Validating types
-    for (final e in _kArgAllowedTypes.entries) {
-      final arg = e.key;
+    for (final arg in CliArgument.values) {
       final argType = this[arg].runtimeType;
-      final allowedTypes = e.value;
 
-      if (argType != Null && !allowedTypes.contains(argType)) {
+      if (argType != Null && arg.allowedType != argType) {
+        final argName =
+            arg.optionName.isNotEmpty ? arg.optionName : arg.configName;
         throw CliArgumentException(
-          message: "'${argumentNames[arg]}' argument's type "
-              'must be one of following: $allowedTypes, '
-              "instead got '$argType'.",
+          message: "'$argName' argument's type "
+              "must be : ${arg.allowedType}, instead got '$argType'.",
         );
       }
     }
