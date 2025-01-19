@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:icon_font_generator/src/otf/otf.dart';
-import 'package:icon_font_generator/src/otf/reader.dart';
-import 'package:icon_font_generator/src/otf/writer.dart';
-import 'package:icon_font_generator/src/utils/logger.dart';
+import 'package:icon_font/src/otf/otf.dart';
+import 'package:icon_font/src/otf/reader.dart';
+import 'package:icon_font/src/otf/writer.dart';
+import 'package:icon_font/src/utils/logger.dart';
 import 'package:path/path.dart' as p;
 
 /// Reads OpenType font from a file.

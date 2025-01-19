@@ -1,7 +1,7 @@
-import 'package:icon_font_generator/src/svg/path.dart';
-import 'package:icon_font_generator/src/svg/shapes.dart';
-import 'package:icon_font_generator/src/svg/unknown_element.dart';
-import 'package:icon_font_generator/src/utils/svg.dart';
+import 'package:icon_font/src/svg/path.dart';
+import 'package:icon_font/src/svg/shapes.dart';
+import 'package:icon_font/src/svg/unknown_element.dart';
+import 'package:icon_font/src/utils/svg.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:xml/xml.dart';
 

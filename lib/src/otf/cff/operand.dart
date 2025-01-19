@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:icon_font_generator/src/common/codable/binary.dart';
-import 'package:icon_font_generator/src/utils/exception.dart';
+import 'package:icon_font/src/common/codable/binary.dart';
+import 'package:icon_font/src/utils/exception.dart';
 
 const _kRealNumberTerminator = 0xF;
 

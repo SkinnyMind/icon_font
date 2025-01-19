@@ -1,6 +1,6 @@
-import 'package:icon_font_generator/src/common/constant.dart';
-import 'package:icon_font_generator/src/common/generic_glyph.dart';
-import 'package:icon_font_generator/src/otf/defaults.dart';
+import 'package:icon_font/src/common/constant.dart';
+import 'package:icon_font/src/common/generic_glyph.dart';
+import 'package:icon_font/src/otf/defaults.dart';
 import 'package:path/path.dart' as p;
 import 'package:recase/recase.dart';
 

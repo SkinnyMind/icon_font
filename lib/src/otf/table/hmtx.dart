@@ -1,13 +1,13 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
 
-import 'package:icon_font_generator/src/common/codable/binary.dart';
-import 'package:icon_font_generator/src/common/generic_glyph.dart';
-import 'package:icon_font_generator/src/otf/table/abstract.dart';
-import 'package:icon_font_generator/src/otf/table/hhea.dart';
-import 'package:icon_font_generator/src/otf/table/table_record_entry.dart';
-import 'package:icon_font_generator/src/utils/misc.dart';
-import 'package:icon_font_generator/src/utils/otf.dart';
+import 'package:icon_font/src/common/codable/binary.dart';
+import 'package:icon_font/src/common/generic_glyph.dart';
+import 'package:icon_font/src/otf/table/abstract.dart';
+import 'package:icon_font/src/otf/table/hhea.dart';
+import 'package:icon_font/src/otf/table/table_record_entry.dart';
+import 'package:icon_font/src/utils/misc.dart';
+import 'package:icon_font/src/utils/otf.dart';
 
 const _kLongHorMetricSize = 4;
 

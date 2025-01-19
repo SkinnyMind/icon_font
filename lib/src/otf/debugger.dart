@@ -1,4 +1,4 @@
-import 'package:icon_font_generator/src/utils/logger.dart';
+import 'package:icon_font/src/utils/logger.dart';
 
 void _debug(String message) => logger.w(message);
 

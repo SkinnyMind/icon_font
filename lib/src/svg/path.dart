@@ -1,5 +1,5 @@
-import 'package:icon_font_generator/src/svg/element.dart';
-import 'package:icon_font_generator/src/utils/exception.dart';
+import 'package:icon_font/src/svg/element.dart';
+import 'package:icon_font/src/utils/exception.dart';
 import 'package:xml/xml.dart';
 
 class PathElement extends SvgElement {

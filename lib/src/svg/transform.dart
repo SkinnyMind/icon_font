@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:icon_font_generator/src/utils/enum_class.dart';
+import 'package:icon_font/src/utils/enum_class.dart';
 import 'package:vector_math/vector_math.dart';
 
 enum TransformType { matrix, translate, scale, rotate, skewX, skewY }

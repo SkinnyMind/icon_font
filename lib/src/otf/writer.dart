@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:icon_font_generator/src/otf/otf.dart';
+import 'package:icon_font/src/otf/otf.dart';
 
 /// A helper for writing an OpenType font as a binary data.
 class OTFWriter {

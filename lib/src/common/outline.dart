@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:icon_font_generator/src/utils/misc.dart';
+import 'package:icon_font/src/utils/misc.dart';
 
 /// How shapes with more than one closed outlines are filled.
 ///

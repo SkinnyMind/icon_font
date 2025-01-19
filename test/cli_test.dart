@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:args/args.dart';
-import 'package:icon_font_generator/src/cli/arguments.dart';
-import 'package:icon_font_generator/src/cli/options.dart';
+import 'package:icon_font/src/cli/arguments.dart';
+import 'package:icon_font/src/cli/options.dart';
 import 'package:test/test.dart';
 
 void main() {

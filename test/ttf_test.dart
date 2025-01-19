@@ -2,13 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:icon_font_generator/src/common/generic_glyph.dart';
-import 'package:icon_font_generator/src/otf/io.dart';
-import 'package:icon_font_generator/src/otf/otf.dart';
-import 'package:icon_font_generator/src/otf/reader.dart';
-import 'package:icon_font_generator/src/otf/table/all.dart';
-import 'package:icon_font_generator/src/utils/misc.dart';
-import 'package:icon_font_generator/src/utils/otf.dart';
+import 'package:icon_font/src/common/generic_glyph.dart';
+import 'package:icon_font/src/otf/io.dart';
+import 'package:icon_font/src/otf/otf.dart';
+import 'package:icon_font/src/otf/reader.dart';
+import 'package:icon_font/src/otf/table/all.dart';
+import 'package:icon_font/src/utils/misc.dart';
+import 'package:icon_font/src/utils/otf.dart';
 import 'package:test/test.dart';
 
 import 'constant.dart';

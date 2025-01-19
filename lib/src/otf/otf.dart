@@ -1,13 +1,13 @@
 import 'dart:typed_data';
 
-import 'package:icon_font_generator/src/common/calculatable_offsets.dart';
-import 'package:icon_font_generator/src/common/codable/binary.dart';
-import 'package:icon_font_generator/src/common/generic_glyph.dart';
-import 'package:icon_font_generator/src/otf/defaults.dart';
-import 'package:icon_font_generator/src/otf/table/all.dart';
-import 'package:icon_font_generator/src/utils.dart';
-import 'package:icon_font_generator/src/utils/misc.dart';
-import 'package:icon_font_generator/src/utils/otf.dart';
+import 'package:icon_font/src/common/calculatable_offsets.dart';
+import 'package:icon_font/src/common/codable/binary.dart';
+import 'package:icon_font/src/common/generic_glyph.dart';
+import 'package:icon_font/src/otf/defaults.dart';
+import 'package:icon_font/src/otf/table/all.dart';
+import 'package:icon_font/src/utils.dart';
+import 'package:icon_font/src/utils/misc.dart';
+import 'package:icon_font/src/utils/otf.dart';
 
 /// Ordered list of table tags for encoding (Optimized Table Ordering)
 const _kTableTagsToEncode = {
