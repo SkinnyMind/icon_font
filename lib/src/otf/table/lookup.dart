@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:icon_font/src/common/codable/binary.dart';
 import 'package:icon_font/src/otf/debugger.dart';
 import 'package:icon_font/src/otf/table/coverage.dart';
-import 'package:icon_font/src/utils/otf.dart';
+import 'package:icon_font/src/utils/otf_utils.dart';
 
 abstract class SubstitutionSubtable implements BinaryCodable {
   const SubstitutionSubtable();
@@ -151,7 +151,7 @@ class LookupTable implements BinaryCodable {
   final List<SubstitutionSubtable> subtables;
 
   static bool _useMarkFilteringSet({required int lookupFlag}) =>
-      checkBitMask(value: lookupFlag, mask: 0x0010);
+      OtfUtils.checkBitMask(value: lookupFlag, mask: 0x0010);
 
   @override
   int get size {

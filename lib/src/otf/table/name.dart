@@ -4,8 +4,7 @@ import 'package:icon_font/src/common/codable/binary.dart';
 import 'package:icon_font/src/otf/debugger.dart';
 import 'package:icon_font/src/otf/table/abstract.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
-import 'package:icon_font/src/utils/otf.dart';
-import 'package:icon_font/src/utils/ucs2.dart';
+import 'package:icon_font/src/utils/otf_utils.dart';
 
 const _kNameRecordSize = 12;
 
@@ -44,7 +43,9 @@ const _kNameRecordTemplateList = [
 /// NOTE: There are more cases than this, but it will do for now.
 List<int> Function(String) _getEncoder({required NameRecord record}) {
   return switch (record.platformID) {
-    kPlatformWindows => toUCS2byteList,
+    kPlatformWindows => (string) => [
+          for (final code in string.codeUnits) ...[code >> 8, code & 0xFF],
+        ],
     _ => (string) => string.codeUnits,
   };
 }
@@ -54,7 +55,10 @@ List<int> Function(String) _getEncoder({required NameRecord record}) {
 /// NOTE: There are more cases than this, but it will do for now.
 String Function(List<int>) _getDecoder({required NameRecord record}) {
   return switch (record.platformID) {
-    kPlatformWindows => fromUCS2byteList,
+    kPlatformWindows => (byteList) => String.fromCharCodes([
+          for (var i = 0; i < byteList.length; i += 2)
+            byteList[i] << 8 | byteList[i + 1],
+        ]),
     _ => String.fromCharCodes,
   };
 }

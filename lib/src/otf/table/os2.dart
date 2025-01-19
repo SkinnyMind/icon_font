@@ -9,9 +9,9 @@ import 'package:icon_font/src/otf/table/head.dart';
 import 'package:icon_font/src/otf/table/hhea.dart';
 import 'package:icon_font/src/otf/table/hmtx.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
-import 'package:icon_font/src/utils/exception.dart';
-import 'package:icon_font/src/utils/misc.dart';
-import 'package:icon_font/src/utils/otf.dart';
+import 'package:icon_font/src/utils/exceptions.dart';
+import 'package:icon_font/src/utils/konst.dart';
+import 'package:icon_font/src/utils/otf_utils.dart';
 
 const _kVersion0 = 0x0000;
 const _kVersion1 = 0x0001;

@@ -9,9 +9,10 @@ import 'package:icon_font/src/otf/table/glyph/simple.dart';
 import 'package:icon_font/src/svg/outline_converter.dart';
 import 'package:icon_font/src/svg/path.dart';
 import 'package:icon_font/src/svg/svg.dart';
+import 'package:icon_font/src/utils/extensions.dart';
+import 'package:icon_font/src/utils/konst.dart';
 import 'package:icon_font/src/utils/logger.dart';
-import 'package:icon_font/src/utils/misc.dart';
-import 'package:icon_font/src/utils/otf.dart';
+import 'package:icon_font/src/utils/otf_utils.dart';
 
 /// Metadata for a generic glyph.
 class GenericGlyphMetadata {
@@ -191,10 +192,10 @@ class GenericGlyph {
     final endPoints = _getEndPoints();
     final pointList = _getPointList();
 
-    final relX = absToRelCoordinates(
+    final relX = OtfUtils.absToRelCoordinates(
       absCoordinates: pointList.map((e) => e.x.toInt()).toList(),
     );
-    final relY = absToRelCoordinates(
+    final relY = OtfUtils.absToRelCoordinates(
       absCoordinates: pointList.map((e) => e.y.toInt()).toList(),
     );
 
@@ -236,9 +237,9 @@ class GenericGlyph {
     final absYcoordinates = pointList.map((p) => p.y.toInt()).toList();
 
     final relXcoordinates =
-        absToRelCoordinates(absCoordinates: absXcoordinates);
+        OtfUtils.absToRelCoordinates(absCoordinates: absXcoordinates);
     final relYcoordinates =
-        absToRelCoordinates(absCoordinates: absYcoordinates);
+        OtfUtils.absToRelCoordinates(absCoordinates: absYcoordinates);
 
     final xMin = absXcoordinates.fold<int>(kInt32Max, math.min);
     final yMin = absYcoordinates.fold<int>(kInt32Max, math.min);

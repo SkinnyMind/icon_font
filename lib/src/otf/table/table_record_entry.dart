@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:icon_font/src/common/codable/binary.dart';
-import 'package:icon_font/src/utils/otf.dart';
+import 'package:icon_font/src/utils/otf_utils.dart';
 
 const kTableRecordEntryLength = 16;
 

@@ -5,9 +5,9 @@ import 'package:icon_font/src/common/codable/binary.dart';
 import 'package:icon_font/src/common/generic_glyph.dart';
 import 'package:icon_font/src/otf/defaults.dart';
 import 'package:icon_font/src/otf/table/all.dart';
-import 'package:icon_font/src/utils.dart';
-import 'package:icon_font/src/utils/misc.dart';
-import 'package:icon_font/src/utils/otf.dart';
+import 'package:icon_font/src/utils/exceptions.dart';
+import 'package:icon_font/src/utils/konst.dart';
+import 'package:icon_font/src/utils/otf_utils.dart';
 
 /// Ordered list of table tags for encoding (Optimized Table Ordering)
 const _kTableTagsToEncode = {
@@ -270,13 +270,13 @@ class OpenTypeFont implements BinaryCodable {
 
       table.entry = TableRecordEntry(
         tag: tag,
-        checkSum: calculateTableChecksum(encodedTable: encodedTable),
+        checkSum: OtfUtils.calculateTableChecksum(encodedTable: encodedTable),
         offset: currentTableOffset,
         length: tableSize,
       );
       entryList.add(table.entry!);
 
-      currentTableOffset += getPaddedTableSize(actualSize: tableSize);
+      currentTableOffset += OtfUtils.getPaddedTableSize(actualSize: tableSize);
     }
 
     // The directory entry tags must be in ascending order
@@ -292,14 +292,16 @@ class OpenTypeFont implements BinaryCodable {
     offsetTable.encodeToBinary(byteData.sublistView(0, kOffsetTableLength));
 
     // Setting checksum for whole font in the head table
-    final fontChecksum = calculateFontChecksum(byteData: byteData);
+    final fontChecksum = OtfUtils.calculateFontChecksum(byteData: byteData);
     byteData.setUint32(head.entry!.offset + 8, fontChecksum);
   }
 
   int get entryListSize => kTableRecordEntryLength * tableMap.length;
 
-  int get tableListSize => tableMap.values
-      .fold<int>(0, (p, t) => p + getPaddedTableSize(actualSize: t.size));
+  int get tableListSize => tableMap.values.fold<int>(
+        0,
+        (p, t) => p + OtfUtils.getPaddedTableSize(actualSize: t.size),
+      );
 
   @override
   int get size => kOffsetTableLength + entryListSize + tableListSize;

@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:icon_font/src/otf/table/abstract.dart';
 import 'package:icon_font/src/otf/table/glyf.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
-import 'package:icon_font/src/utils/otf.dart';
+import 'package:icon_font/src/utils/otf_utils.dart';
 
 class IndexToLocationTable extends FontTable {
   IndexToLocationTable({
@@ -45,7 +45,7 @@ class IndexToLocationTable extends FontTable {
 
     for (final glyph in glyf.glyphList) {
       offsets.add(offset);
-      offset += getPaddedTableSize(actualSize: glyph.size);
+      offset += OtfUtils.getPaddedTableSize(actualSize: glyph.size);
     }
 
     offsets.add(offset);

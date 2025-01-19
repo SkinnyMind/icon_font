@@ -2,8 +2,8 @@ import 'dart:math' as math;
 
 import 'package:icon_font/src/common/generic_glyph.dart';
 import 'package:icon_font/src/common/outline.dart';
-import 'package:icon_font/src/utils/misc.dart';
-import 'package:icon_font/src/utils/otf.dart';
+import 'package:icon_font/src/utils/konst.dart';
+import 'package:icon_font/src/utils/otf_utils.dart';
 
 const kDefaultAchVendID = '    ';
 const kDefaultFontFamily = 'icon_font Icons';
