@@ -1,4 +1,3 @@
-import 'package:icon_font/src/common/constant.dart';
 import 'package:icon_font/src/common/generic_glyph.dart';
 import 'package:icon_font/src/otf/defaults.dart';
 import 'package:path/path.dart' as p;
@@ -146,9 +145,6 @@ class FlutterClassGenerator {
 
     return '''// Generated code: do not hand-edit.
 
-// Generated using $kVendorName.
-// Copyright © ${DateTime.now().year} $kVendorName ($kVendorUrl).
-
 import 'package:flutter/widgets.dart';
 
 /// Identifiers for the icons.
@@ -167,7 +163,7 @@ import 'package:flutter/widgets.dart';
 ///   fonts:
 ///     - family: $_familyName
 ///       fonts:
-///         - asset: fonts/$_fontFileName
+///         - asset: packages/package_name/fonts/$_fontFileName
 /// ```
 class $_className {
 $classContentString
