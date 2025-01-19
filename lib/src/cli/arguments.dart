@@ -27,7 +27,6 @@ const _kArgAllowedTypes = <CliArgument, List<Type>>{
 };
 
 const kDefaultVerbose = false;
-const kDefaultFormat = true;
 const kDefaultIconList = false;
 const kDefaultRecursive = false;
 
