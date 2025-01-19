@@ -1,11 +1,9 @@
 import 'dart:typed_data';
 
 import 'package:icon_font/src/common/codable/binary.dart';
-import 'package:icon_font/src/common/constant.dart';
 import 'package:icon_font/src/otf/debugger.dart';
 import 'package:icon_font/src/otf/table/abstract.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
-import 'package:icon_font/src/utils/enum_class.dart';
 import 'package:icon_font/src/utils/otf.dart';
 import 'package:icon_font/src/utils/ucs2.dart';
 
@@ -14,49 +12,15 @@ const _kNameRecordSize = 12;
 const _kFormat0 = 0x0;
 
 enum NameID {
-  /// 0:  Copyright notice.
-  copyright,
-
-  /// 1:  Font Family name.
   fontFamily,
-
-  /// 2:  Font Subfamily name.
   fontSubfamily,
-
-  /// 3:  Unique font identifier
   uniqueID,
-
-  /// 4:  Full font name
   fullFontName,
-
-  /// 5:  Version string.
   version,
-
-  /// 6:  PostScript name.
   postScriptName,
-
-  /// 8:  Manufacturer Name.
   manufacturer,
-
-  /// 10: Description
   description,
-
-  /// 11: URL of font vendor
-  urlVendor,
 }
-
-const _kNameIDmap = EnumClass<NameID, int>({
-  NameID.copyright: 0,
-  NameID.fontFamily: 1,
-  NameID.fontSubfamily: 2,
-  NameID.uniqueID: 3,
-  NameID.fullFontName: 4,
-  NameID.version: 5,
-  NameID.postScriptName: 6,
-  NameID.manufacturer: 8,
-  NameID.description: 10,
-  NameID.urlVendor: 11,
-});
 
 /// List of name record templates, sorted by platform and encoding ID
 const _kNameRecordTemplateList = [
@@ -300,20 +264,14 @@ class NamingTableFormat0 extends NamingTable {
     required String? description,
     required Revision revision,
   }) {
-    final now = DateTime.now();
-
-    /// Values for name ids in sorted order
     final stringForNameMap = <NameID, String>{
-      NameID.copyright: 'Copyright $kVendorName ${now.year}',
       NameID.fontFamily: fontName,
       NameID.fontSubfamily: 'Regular',
       NameID.uniqueID: fontName,
       NameID.fullFontName: fontName,
       NameID.version: 'Version ${revision.major}.${revision.minor}',
       NameID.postScriptName: fontName.getPostScriptString(),
-      NameID.manufacturer: kVendorName,
-      NameID.description: description ?? 'Generated using $kVendorName',
-      NameID.urlVendor: kVendorUrl,
+      NameID.description: description ?? '',
     };
 
     final stringList = [
@@ -331,7 +289,7 @@ class NamingTableFormat0 extends NamingTable {
         final units = encoder(entry.value);
 
         final record = recordTemplate.copyWith(
-          nameID: _kNameIDmap.getValueForKey(entry.key),
+          nameID: NameID.values.indexOf(entry.key),
           length: units.length,
           offset: stringOffset,
         );
@@ -413,7 +371,7 @@ class NamingTableFormat0 extends NamingTable {
 
   @override
   String? getStringByNameId(NameID nameId) {
-    final nameID = _kNameIDmap.getValueForKey(nameId);
+    final nameID = NameID.values.indexOf(nameId);
     final familyIndex =
         header.nameRecordList.indexWhere((e) => e.nameID == nameID);
 

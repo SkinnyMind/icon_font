@@ -1,20 +1,10 @@
 import 'dart:math' as math;
 
-import 'package:icon_font/src/utils/enum_class.dart';
 import 'package:vector_math/vector_math.dart';
 
 enum TransformType { matrix, translate, scale, rotate, skewX, skewY }
 
-const _kTransformNameMap = EnumClass<TransformType, String>({
-  TransformType.matrix: 'matrix',
-  TransformType.translate: 'translate',
-  TransformType.scale: 'scale',
-  TransformType.rotate: 'rotate',
-  TransformType.skewX: 'skewX',
-  TransformType.skewY: 'skewY',
-});
-
-final _joinedTransformNames = _kTransformNameMap.values.join('|');
+final _joinedTransformNames = TransformType.values.join('|');
 
 // Taken from svgicons2svgfont
 final _transformRegExp = RegExp('($_joinedTransformNames)s*(([^)]*))s*');
@@ -33,7 +23,8 @@ class Transform {
 
     final transforms = _transformRegExp.allMatches(string).map((m) {
       final name = m.group(1)!;
-      final type = _kTransformNameMap.getKeyForValue(name);
+      final type =
+          TransformType.values.firstWhere((value) => name == value.name);
 
       final parameterString = m.group(2)!;
       final parameterMatches =
