@@ -9,11 +9,11 @@ void main() {
   final argParser = ArgParser();
 
   group('Arguments', () {
-    defineOptions(argParser: argParser);
+    Options.define(argParser: argParser);
 
     void expectCliArgumentException(List<String> args) {
       expect(
-        () => parseArgsAndConfig(argParser: argParser, args: args),
+        () => Arguments.parseArgsAndConfig(argParser: argParser, args: args),
         throwsA(const TypeMatcher<CliArgumentException>()),
       );
     }
@@ -47,7 +47,10 @@ void main() {
         '--list',
       ];
 
-      final parsedArgs = parseArgsAndConfig(argParser: argParser, args: args);
+      final parsedArgs = Arguments.parseArgsAndConfig(
+        argParser: argParser,
+        args: args,
+      );
 
       expect(parsedArgs.svgDir.path, args.first);
       expect(parsedArgs.fontFile.path, args[1]);
@@ -71,7 +74,10 @@ void main() {
         '--ignore-shapes',
       ];
 
-      final parsedArgs = parseArgsAndConfig(argParser: argParser, args: args);
+      final parsedArgs = Arguments.parseArgsAndConfig(
+        argParser: argParser,
+        args: args,
+      );
 
       expect(parsedArgs.svgDir.path, args.first);
       expect(parsedArgs.fontFile.path, args[1]);
@@ -90,7 +96,7 @@ void main() {
     test('Help', () {
       void expectCliHelpException(List<String> args) {
         expect(
-          () => parseArgsAndConfig(argParser: argParser, args: args),
+          () => Arguments.parseArgsAndConfig(argParser: argParser, args: args),
           throwsA(const TypeMatcher<CliHelpException>()),
         );
       }
@@ -132,7 +138,10 @@ void main() {
         '--config-file=test/assets/test_config.yaml',
       ];
 
-      final parsedArgs = parseArgsAndConfig(argParser: argParser, args: args);
+      final parsedArgs = Arguments.parseArgsAndConfig(
+        argParser: argParser,
+        args: args,
+      );
 
       expect(parsedArgs.svgDir.path, './');
       expect(parsedArgs.fontFile.path, 'generated_font.otf');
@@ -153,7 +162,10 @@ void main() {
         '--config-file=test/assets/test_config.yaml',
       ];
 
-      final parsedArgs = parseArgsAndConfig(argParser: argParser, args: args);
+      final parsedArgs = Arguments.parseArgsAndConfig(
+        argParser: argParser,
+        args: args,
+      );
 
       expect(parsedArgs.svgDir.path, './');
       expect(parsedArgs.fontFile.path, 'generated_font.otf');
@@ -177,7 +189,7 @@ void main() {
 
     CliArguments parseConfig(String config) {
       configFile.writeAsStringSync(config);
-      return parseArgsAndConfig(argParser: argParser, args: []);
+      return Arguments.parseArgsAndConfig(argParser: argParser, args: []);
     }
 
     void expectCliArgumentException(String cfg) {

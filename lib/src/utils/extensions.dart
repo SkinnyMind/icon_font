@@ -1,9 +1,27 @@
+import 'dart:math' as math;
 import 'package:icon_font/src/svg/element.dart';
 import 'package:icon_font/src/svg/shapes.dart';
 import 'package:icon_font/src/svg/transform.dart';
 import 'package:icon_font/src/svg/unknown_element.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:xml/xml.dart';
+
+extension MockableDateTime on DateTime {
+  static DateTime? mockedDate;
+
+  static DateTime now() => mockedDate ?? DateTime.now();
+}
+
+extension PointExt<T extends num> on math.Point<T> {
+  math.Point<int> toIntPoint() => math.Point<int>(x.toInt(), y.toInt());
+
+  math.Point<double> toDoublePoint() =>
+      math.Point<double>(x.toDouble(), y.toDouble());
+
+  math.Point<num> getReflectionOf(math.Point<T> point) {
+    return math.Point<num>(2 * x - point.x, 2 * y - point.y);
+  }
+}
 
 extension XmlElementExt on XmlElement {
   num? getScalarAttribute(

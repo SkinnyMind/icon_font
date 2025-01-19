@@ -6,8 +6,7 @@ import 'package:icon_font/src/otf/debugger.dart';
 import 'package:icon_font/src/otf/defaults.dart';
 import 'package:icon_font/src/otf/table/abstract.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
-import 'package:icon_font/src/utils/otf.dart';
-import 'package:icon_font/src/utils/pascal_string.dart';
+import 'package:icon_font/src/utils/otf_utils.dart';
 
 const _kVersion20 = 0x00020000;
 const _kVersion30 = 0x00030000;
@@ -563,3 +562,39 @@ const _kMacStandardGlyphNames = [
   'ccaron',
   'dcroat',
 ];
+
+class PascalString implements BinaryCodable {
+  PascalString({required this.string, required this.length});
+
+  factory PascalString.fromByteData({
+    required ByteData byteData,
+    required int offset,
+  }) {
+    final length = byteData.getUint8(offset++);
+    final bytes = List.generate(length, (i) => byteData.getUint8(offset + i));
+    return PascalString(string: String.fromCharCodes(bytes), length: length);
+  }
+
+  factory PascalString.fromString(String string) =>
+      PascalString(string: string, length: string.length);
+
+  final String string;
+  final int length;
+
+  @override
+  int get size => length + 1;
+
+  @override
+  String toString() => string;
+
+  @override
+  void encodeToBinary(ByteData byteData) {
+    byteData.setUint8(0, length);
+
+    var offset = 1;
+
+    for (final charCode in string.codeUnits) {
+      byteData.setUint8(offset++, charCode);
+    }
+  }
+}

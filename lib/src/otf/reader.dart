@@ -3,8 +3,8 @@ import 'dart:typed_data';
 import 'package:icon_font/src/otf/debugger.dart';
 import 'package:icon_font/src/otf/otf.dart';
 import 'package:icon_font/src/otf/table/all.dart';
-import 'package:icon_font/src/utils/exception.dart';
-import 'package:icon_font/src/utils/otf.dart';
+import 'package:icon_font/src/utils/exceptions.dart';
+import 'package:icon_font/src/utils/otf_utils.dart';
 
 /// A helper for reading an OpenType font from a binary data.
 class OTFReader {
@@ -158,8 +158,9 @@ class OTFReader {
         tableOffset,
         tableOffset + tableLength,
       );
-      final actualChecksum =
-          calculateTableChecksum(encodedTable: tableByteData);
+      final actualChecksum = OtfUtils.calculateTableChecksum(
+        encodedTable: tableByteData,
+      );
       final expectedChecksum = entry.checkSum;
 
       if (actualChecksum != expectedChecksum) {
@@ -167,7 +168,9 @@ class OTFReader {
       }
     }
 
-    final actualFontChecksum = calculateFontChecksum(byteData: byteDataCopy);
+    final actualFontChecksum = OtfUtils.calculateFontChecksum(
+      byteData: byteDataCopy,
+    );
 
     if (_font.head.checkSumAdjustment != actualFontChecksum) {
       throw ChecksumException.font();

@@ -7,7 +7,7 @@ import 'package:icon_font/src/otf/table/feature_list.dart';
 import 'package:icon_font/src/otf/table/lookup.dart';
 import 'package:icon_font/src/otf/table/script_list.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
-import 'package:icon_font/src/utils/otf.dart';
+import 'package:icon_font/src/utils/otf_utils.dart';
 
 class GlyphSubstitutionTableHeader implements BinaryCodable {
   GlyphSubstitutionTableHeader({

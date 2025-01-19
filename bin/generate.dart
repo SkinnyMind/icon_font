@@ -18,12 +18,13 @@ final formatter = DartFormatter(
 );
 
 void main(List<String> args) {
-  defineOptions(argParser: _argParser);
+  Options.define(argParser: _argParser);
 
   late final CliArguments parsedArgs;
 
   try {
-    parsedArgs = parseArgsAndConfig(argParser: _argParser, args: args);
+    parsedArgs =
+        Arguments.parseArgsAndConfig(argParser: _argParser, args: args);
   } on CliArgumentException catch (e) {
     _usageError(e.message);
   } on CliHelpException {
@@ -44,8 +45,8 @@ void main(List<String> args) {
 void _run(CliArguments parsedArgs) {
   final stopwatch = Stopwatch()..start();
 
-  final isRecursive = parsedArgs.recursive ?? kDefaultRecursive;
-  final isVerbose = parsedArgs.verbose ?? kDefaultVerbose;
+  final isRecursive = parsedArgs.recursive ?? false;
+  final isVerbose = parsedArgs.verbose ?? false;
 
   if (isVerbose) {
     logger.setFilterLevel(Level.trace);
@@ -81,7 +82,7 @@ void _run(CliArguments parsedArgs) {
       p.basenameWithoutExtension(f.path): File(f.path).readAsStringSync(),
   };
 
-  final otfResult = svgToOtf(
+  final otfResult = IconFont.svgToOtf(
     svgMap: svgMap,
     ignoreShapes: parsedArgs.ignoreShapes,
     normalize: parsedArgs.normalize,
@@ -96,7 +97,7 @@ void _run(CliArguments parsedArgs) {
   } else {
     final fontFileName = p.basename(parsedArgs.fontFile.path);
 
-    var classString = generateFlutterClass(
+    var classString = IconFont.generateFlutterClass(
       glyphList: otfResult.glyphList,
       className: parsedArgs.className,
       fontFileName: fontFileName,

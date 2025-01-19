@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:icon_font/src/svg/element.dart';
 import 'package:icon_font/src/svg/path.dart';
-import 'package:icon_font/src/utils/svg.dart';
+import 'package:icon_font/src/utils/extensions.dart';
 import 'package:xml/xml.dart';
 
 /// Element convertable to path.

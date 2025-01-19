@@ -6,8 +6,8 @@ import 'package:icon_font/src/common/generic_glyph.dart';
 import 'package:icon_font/src/otf/table/abstract.dart';
 import 'package:icon_font/src/otf/table/hhea.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
-import 'package:icon_font/src/utils/misc.dart';
-import 'package:icon_font/src/utils/otf.dart';
+import 'package:icon_font/src/utils/konst.dart';
+import 'package:icon_font/src/utils/otf_utils.dart';
 
 const _kLongHorMetricSize = 4;
 

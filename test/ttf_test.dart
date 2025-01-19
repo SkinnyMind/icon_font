@@ -7,8 +7,8 @@ import 'package:icon_font/src/otf/io.dart';
 import 'package:icon_font/src/otf/otf.dart';
 import 'package:icon_font/src/otf/reader.dart';
 import 'package:icon_font/src/otf/table/all.dart';
-import 'package:icon_font/src/utils/misc.dart';
-import 'package:icon_font/src/utils/otf.dart';
+import 'package:icon_font/src/utils/extensions.dart';
+import 'package:icon_font/src/utils/otf_utils.dart';
 import 'package:test/test.dart';
 
 import 'constant.dart';

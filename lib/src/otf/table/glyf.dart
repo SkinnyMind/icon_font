@@ -8,7 +8,7 @@ import 'package:icon_font/src/otf/table/glyph/header.dart';
 import 'package:icon_font/src/otf/table/glyph/simple.dart';
 import 'package:icon_font/src/otf/table/loca.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
-import 'package:icon_font/src/utils/otf.dart';
+import 'package:icon_font/src/utils/otf_utils.dart';
 
 class GlyphDataTable extends FontTable {
   GlyphDataTable({
@@ -80,7 +80,7 @@ class GlyphDataTable extends FontTable {
   @override
   int get size => glyphList.fold<int>(
         0,
-        (p, v) => p + getPaddedTableSize(actualSize: v.size),
+        (p, v) => p + OtfUtils.getPaddedTableSize(actualSize: v.size),
       );
 
   int get maxPoints =>
@@ -102,7 +102,7 @@ class GlyphDataTable extends FontTable {
       }
 
       glyph.encodeToBinary(byteData.sublistView(offset, glyph.size));
-      offset += getPaddedTableSize(actualSize: glyph.size);
+      offset += OtfUtils.getPaddedTableSize(actualSize: glyph.size);
     }
   }
 }

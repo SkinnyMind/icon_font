@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:icon_font/src/common/codable/binary.dart';
 import 'package:icon_font/src/otf/table/glyph/flag.dart';
 import 'package:icon_font/src/otf/table/glyph/header.dart';
-import 'package:icon_font/src/utils/otf.dart';
+import 'package:icon_font/src/utils/otf_utils.dart';
 
 class SimpleGlyph implements BinaryCodable {
   SimpleGlyph({
@@ -108,8 +108,10 @@ class SimpleGlyph implements BinaryCodable {
       }
     }
 
-    final xAbsCoordinates = relToAbsCoordinates(relCoordinates: xCoordinates);
-    final yAbsCoordinates = relToAbsCoordinates(relCoordinates: yCoordinates);
+    final xAbsCoordinates =
+        OtfUtils.relToAbsCoordinates(relCoordinates: xCoordinates);
+    final yAbsCoordinates =
+        OtfUtils.relToAbsCoordinates(relCoordinates: yCoordinates);
 
     final points = [
       for (var i = 0; i < xAbsCoordinates.length; i++)
@@ -210,9 +212,9 @@ class SimpleGlyph implements BinaryCodable {
     final yAbsCoordinates = pointList.map((e) => e.y.toInt()).toList();
 
     final xRelCoordinates =
-        absToRelCoordinates(absCoordinates: xAbsCoordinates);
+        OtfUtils.absToRelCoordinates(absCoordinates: xAbsCoordinates);
     final yRelCoordinates =
-        absToRelCoordinates(absCoordinates: yAbsCoordinates);
+        OtfUtils.absToRelCoordinates(absCoordinates: yAbsCoordinates);
 
     for (var i = 0; i < numberOfPoints; i++) {
       final short = flags[i].xShortVector;

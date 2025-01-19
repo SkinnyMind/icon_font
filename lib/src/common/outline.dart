@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:icon_font/src/utils/misc.dart';
+import 'package:icon_font/src/utils/extensions.dart';
 
 /// How shapes with more than one closed outlines are filled.
 ///
@@ -141,12 +141,12 @@ class Outline {
       final qp0 = pointList[i - 1];
       final qp1 = pointList[i];
       final qp2 = i + 1 < pointList.length ? pointList[i + 1] : pointList.first;
+      final replacements = [
+        qp0 + (qp1 - qp0) * (2 / 3),
+        qp2 + (qp1 - qp2) * (2 / 3),
+      ];
 
-      pointList.replaceRange(
-        i,
-        i + 1,
-        quadCurveToCubic(qp0: qp0, qp1: qp1, qp2: qp2),
-      );
+      pointList.replaceRange(i, i + 1, replacements);
       isOnCurveList.insert(i, false);
       i++;
     }
