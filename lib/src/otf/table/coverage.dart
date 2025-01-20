@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:icon_font/src/common/codable/binary.dart';
-import 'package:icon_font/src/otf/debugger.dart';
+import 'package:icon_font/src/utils/logger.dart';
 
 const kDefaultCoverageTable = CoverageTableFormat1(
   coverageFormat: 1,
@@ -25,7 +25,7 @@ abstract class CoverageTable implements BinaryCodable {
           offset: offset,
         );
       default:
-        debugUnsupportedTableFormat('Coverage', format);
+        Log.unsupportedTableFormat('Coverage', format);
         return null;
     }
   }

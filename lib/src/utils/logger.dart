@@ -1,32 +1,29 @@
 import 'package:logger/logger.dart';
 
-export 'package:logger/logger.dart';
+class Log {
+  const Log._();
 
-final _filter = ProductionFilter();
-
-final Logger logger = Logger(
-  filter: _filter,
-  printer: SimplePrinter(),
-  level: Level.info,
-);
-
-extension LoggerExt on Logger {
+  static final Logger logger = Logger(
+    filter: ProductionFilter(),
+    printer: SimplePrinter(),
+    level: Level.info,
+  );
   static final Set<int> _loggedOnce = {};
 
-  void logOnce(Level level, Object message) {
+  static void once(Level level, Object message) {
     final hashCode = message.hashCode;
 
     if (_loggedOnce.contains(hashCode)) {
       return;
     }
 
-    log(level, message);
+    logger.log(level, message);
     _loggedOnce.add(hashCode);
   }
 
-  // Should convert to setter, but works for now
-  // ignore: use_setters_to_change_properties
-  void setFilterLevel(Level level) {
-    _filter.level = level;
-  }
+  static void unsupportedTableVersion(String tableName, int version) =>
+      logger.w('Unsupported $tableName table version: $version');
+
+  static void unsupportedTableFormat(String tableName, int format) =>
+      logger.w('Unsupported $tableName table format: $format');
 }

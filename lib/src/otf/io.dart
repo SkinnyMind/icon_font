@@ -20,7 +20,7 @@ void writeToFile({required String path, required OpenTypeFont font}) {
   final extension = p.extension(file.path).toLowerCase();
 
   if (extension != '.otf' && font.isOpenType) {
-    logger.w('A font that contains only CFF outline data should have an '
+    Log.logger.w('A font that contains only CFF outline data should have an '
         '.OTF extension.');
   }
 

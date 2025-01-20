@@ -2,10 +2,10 @@ import 'dart:typed_data';
 
 import 'package:icon_font/src/common/codable/binary.dart';
 import 'package:icon_font/src/common/generic_glyph.dart';
-import 'package:icon_font/src/otf/debugger.dart';
 import 'package:icon_font/src/otf/table/abstract.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
 import 'package:icon_font/src/utils/extensions.dart';
+import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
 const _kVersion20 = 0x00020000;
@@ -106,7 +106,7 @@ abstract class PostScriptData implements BinaryCodable {
       case _kVersion30:
         return PostScriptVersion30();
       default:
-        debugUnsupportedTableVersion(kPostTag, version);
+        Log.unsupportedTableVersion(kPostTag, version);
         return null;
     }
   }

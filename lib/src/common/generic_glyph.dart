@@ -13,6 +13,7 @@ import 'package:icon_font/src/utils/extensions.dart';
 import 'package:icon_font/src/utils/konst.dart';
 import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
+import 'package:logger/logger.dart';
 
 /// Metadata for a generic glyph.
 class GenericGlyphMetadata {
@@ -178,7 +179,7 @@ class GenericGlyph {
       }
 
       if (outline.fillRule == FillRule.evenodd) {
-        logger.logOnce(
+        Log.once(
           Level.warning,
           'Some of the outlines are using even-odd fill rule. Make sure using '
           'a non-zero winding number fill rule for OpenType outlines.',

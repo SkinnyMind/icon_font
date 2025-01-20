@@ -30,14 +30,14 @@ void main(List<String> args) {
   } on CliHelpException {
     _printHelp();
   } on YamlException catch (e) {
-    logger.e(e.toString());
+    Log.logger.e(e.toString());
     exit(66);
   }
 
   try {
     _run(parsedArgs);
   } on Object catch (e) {
-    logger.e(e.toString());
+    Log.logger.e(e.toString());
     exit(65);
   }
 }
@@ -46,24 +46,19 @@ void _run(CliArguments parsedArgs) {
   final stopwatch = Stopwatch()..start();
 
   final isRecursive = parsedArgs.recursive ?? false;
-  final isVerbose = parsedArgs.verbose ?? false;
-
-  if (isVerbose) {
-    logger.setFilterLevel(Level.trace);
-  }
 
   final hasClassFile = parsedArgs.classFile != null;
   if (hasClassFile && !parsedArgs.classFile!.existsSync()) {
     parsedArgs.classFile!.createSync(recursive: true);
   } else if (hasClassFile) {
-    logger.t('Output file for a Flutter class already exists '
+    Log.logger.t('Output file for a Flutter class already exists '
         '(${parsedArgs.classFile!.path}) - overwriting it');
   }
 
   if (!parsedArgs.fontFile.existsSync()) {
     parsedArgs.fontFile.createSync(recursive: true);
   } else {
-    logger.t('Output file for a font file already exists '
+    Log.logger.t('Output file for a font file already exists '
         '(${parsedArgs.fontFile.path}) - overwriting it');
   }
 
@@ -73,7 +68,7 @@ void _run(CliArguments parsedArgs) {
       .toList();
 
   if (svgFileList.isEmpty) {
-    logger.w("The input directory doesn't contain any SVG file "
+    Log.logger.w("The input directory doesn't contain any SVG file "
         "(${parsedArgs.svgDir.path}).");
   }
 
@@ -92,7 +87,7 @@ void _run(CliArguments parsedArgs) {
   writeToFile(path: parsedArgs.fontFile.path, font: otfResult.font);
 
   if (parsedArgs.classFile == null) {
-    logger.t('No output path for Flutter class was specified - '
+    Log.logger.t('No output path for Flutter class was specified - '
         'skipping class generation.');
   } else {
     final fontFileName = p.basename(parsedArgs.fontFile.path);
@@ -106,13 +101,13 @@ void _run(CliArguments parsedArgs) {
       iconList: parsedArgs.iconList,
     );
 
-    logger.i('Formatting generated Flutter class.');
+    Log.logger.i('Formatting generated Flutter class.');
     classString = formatter.format(classString);
 
     parsedArgs.classFile!.writeAsStringSync(classString);
   }
 
-  logger.i('Generated in ${stopwatch.elapsedMilliseconds}ms');
+  Log.logger.i('Generated in ${stopwatch.elapsedMilliseconds}ms');
 }
 
 void _printHelp() {

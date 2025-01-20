@@ -3,6 +3,7 @@ import 'package:icon_font/src/otf/otf.dart';
 import 'package:icon_font/src/svg/svg.dart';
 import 'package:icon_font/src/utils/konst.dart';
 import 'package:icon_font/src/utils/logger.dart';
+import 'package:logger/logger.dart';
 import 'package:path/path.dart' as p;
 import 'package:recase/recase.dart';
 
@@ -45,7 +46,7 @@ class IconFont {
     if (!normalize) {
       for (var i = 1; i < svgList.length; i++) {
         if (svgList[i - 1].viewBox.height != svgList[i].viewBox.height) {
-          logger.logOnce(
+          Log.once(
               Level.warning,
               'Some SVG files contain different view box height, '
               'while normalization option is disabled. '
