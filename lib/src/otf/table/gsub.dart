@@ -1,13 +1,13 @@
 import 'dart:typed_data';
 
 import 'package:icon_font/src/common/codable/binary.dart';
-import 'package:icon_font/src/otf/debugger.dart';
 import 'package:icon_font/src/otf/table/abstract.dart';
 import 'package:icon_font/src/otf/table/feature_list.dart';
 import 'package:icon_font/src/otf/table/lookup.dart';
 import 'package:icon_font/src/otf/table/script_list.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
 import 'package:icon_font/src/utils/extensions.dart';
+import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
 class GlyphSubstitutionTableHeader implements BinaryCodable {
@@ -31,7 +31,7 @@ class GlyphSubstitutionTableHeader implements BinaryCodable {
     final isV10 = version == const Revision(1, 0);
 
     if (!isV10) {
-      debugUnsupportedTableVersion(kGSUBTag, version.int32value);
+      Log.unsupportedTableVersion(kGSUBTag, version.int32value);
     }
 
     return GlyphSubstitutionTableHeader(

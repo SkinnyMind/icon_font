@@ -66,12 +66,6 @@ class Options {
         negatable: false,
       )
       ..addFlag(
-        CliArgument.verbose.optionName,
-        abbr: 'v',
-        help: 'Display every logging message.',
-        negatable: false,
-      )
-      ..addFlag(
         CliArgument.help.optionName,
         abbr: 'h',
         help: 'Shows this usage information.',

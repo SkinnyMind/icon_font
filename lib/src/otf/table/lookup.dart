@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 
 import 'package:icon_font/src/common/codable/binary.dart';
-import 'package:icon_font/src/otf/debugger.dart';
 import 'package:icon_font/src/otf/table/coverage.dart';
 import 'package:icon_font/src/utils/extensions.dart';
+import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
 abstract class SubstitutionSubtable implements BinaryCodable {
@@ -21,7 +21,7 @@ abstract class SubstitutionSubtable implements BinaryCodable {
           offset: offset,
         );
       default:
-        debugUnsupportedTableFormat('Lookup', lookupType);
+        Log.unsupportedTableFormat('Lookup', lookupType);
         return null;
     }
   }

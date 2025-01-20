@@ -11,7 +11,6 @@ import 'package:icon_font/src/otf/cff/dict_operator.dart' as op;
 import 'package:icon_font/src/otf/cff/index.dart';
 import 'package:icon_font/src/otf/cff/operand.dart';
 import 'package:icon_font/src/otf/cff/variations.dart';
-import 'package:icon_font/src/otf/debugger.dart';
 import 'package:icon_font/src/otf/table/abstract.dart';
 import 'package:icon_font/src/otf/table/head.dart';
 import 'package:icon_font/src/otf/table/hmtx.dart';
@@ -19,6 +18,7 @@ import 'package:icon_font/src/otf/table/name.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
 import 'package:icon_font/src/utils/extensions.dart';
 import 'package:icon_font/src/utils/konst.dart';
+import 'package:icon_font/src/utils/logger.dart';
 
 part '../cff/charset.dart';
 part '../cff/standard_string.dart';
@@ -44,7 +44,7 @@ abstract class CFFTable extends FontTable {
         return CFF2Table.fromByteData(byteData: byteData, entry: entry);
     }
 
-    debugUnsupportedTableVersion('CFF', major);
+    Log.unsupportedTableVersion('CFF', major);
     return null;
   }
 

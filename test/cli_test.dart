@@ -41,7 +41,6 @@ void main() {
         '--no-normalize',
         '--no-ignore-shapes',
         '--recursive',
-        '--verbose',
         '--config-file=test/config.yaml',
         '--package=test_package',
         '--list',
@@ -60,7 +59,6 @@ void main() {
       expect(parsedArgs.normalize, isFalse);
       expect(parsedArgs.ignoreShapes, isFalse);
       expect(parsedArgs.recursive, isTrue);
-      expect(parsedArgs.verbose, isTrue);
       expect(parsedArgs.configFile?.path, 'test/config.yaml');
       expect(parsedArgs.fontPackage, 'test_package');
       expect(parsedArgs.iconList, isTrue);
@@ -87,7 +85,6 @@ void main() {
       expect(parsedArgs.normalize, isTrue);
       expect(parsedArgs.ignoreShapes, isTrue);
       expect(parsedArgs.recursive, isFalse);
-      expect(parsedArgs.verbose, isFalse);
       expect(parsedArgs.configFile, isNull);
       expect(parsedArgs.fontPackage, isNull);
       expect(parsedArgs.iconList, isFalse);
@@ -111,7 +108,6 @@ void main() {
         '--no-normalize',
         '--no-ignore-shapes',
         '--recursive',
-        '--verbose',
         '--help',
         '--list',
       ]);
@@ -132,7 +128,6 @@ void main() {
         '--normalize',
         '--ignore-shapes',
         '--recursive',
-        '--verbose',
         '--package=no',
         '--list',
         '--config-file=test/assets/test_config.yaml',
@@ -151,7 +146,6 @@ void main() {
       expect(parsedArgs.normalize, isFalse);
       expect(parsedArgs.ignoreShapes, isFalse);
       expect(parsedArgs.recursive, isFalse);
-      expect(parsedArgs.verbose, isFalse);
       expect(parsedArgs.configFile, isNull);
       expect(parsedArgs.fontPackage, 'test_package');
       expect(parsedArgs.iconList, isTrue);
@@ -175,7 +169,6 @@ void main() {
       expect(parsedArgs.normalize, isFalse);
       expect(parsedArgs.ignoreShapes, isFalse);
       expect(parsedArgs.recursive, isFalse);
-      expect(parsedArgs.verbose, isFalse);
       expect(parsedArgs.configFile, isNull);
       expect(parsedArgs.fontPackage, 'test_package');
       expect(parsedArgs.iconList, isTrue);
@@ -234,7 +227,6 @@ icon_font:
   ignore_shapes: false
 
   recursive: true
-  verbose: true
       ''');
       final parsedArgs = rawParsedArgs;
 
@@ -246,7 +238,6 @@ icon_font:
       expect(parsedArgs.normalize, isFalse);
       expect(parsedArgs.ignoreShapes, isFalse);
       expect(parsedArgs.recursive, isTrue);
-      expect(parsedArgs.verbose, isTrue);
       expect(parsedArgs.fontPackage, 'test_package');
       expect(parsedArgs.iconList, isTrue);
     });
@@ -267,7 +258,6 @@ icon_font:
       expect(parsedArgs.normalize, isNull);
       expect(parsedArgs.ignoreShapes, isNull);
       expect(parsedArgs.recursive, isNull);
-      expect(parsedArgs.verbose, isNull);
       expect(parsedArgs.fontPackage, isNull);
       expect(parsedArgs.iconList, isNull);
     });
@@ -308,12 +298,6 @@ icon_font:
   input_svg_dir: ./
   output_font_file: generated_font.otf
   recursive: 1
-      ''');
-      expectCliArgumentException('''
-icon_font:
-  input_svg_dir: ./
-  output_font_file: generated_font.otf
-  verbose: 1
       ''');
       expectCliArgumentException('''
 icon_font:

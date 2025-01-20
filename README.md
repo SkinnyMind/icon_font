@@ -69,8 +69,6 @@ Other options:
   pubspec.yaml and icon_font.yaml files are used by default.
 - `-r` or `--recursive`
   Recursively look for .svg files.
-- `-v` or `--verbose`
-  Display every logging message.
 - `-h` or `--help`
   Shows usage information.
 
@@ -110,7 +108,6 @@ icon_font:
   ignore_shapes: true
 
   recursive: true
-  verbose: false
 ```
 
 `input_svg_dir` and `output_font_file` keys are required.

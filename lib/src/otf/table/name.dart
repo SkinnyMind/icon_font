@@ -1,10 +1,10 @@
 import 'dart:typed_data';
 
 import 'package:icon_font/src/common/codable/binary.dart';
-import 'package:icon_font/src/otf/debugger.dart';
 import 'package:icon_font/src/otf/table/abstract.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
 import 'package:icon_font/src/utils/extensions.dart';
+import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
 const _kNameRecordSize = 12;
@@ -165,7 +165,7 @@ class NamingTableFormat0Header implements BinaryCodable {
     final format = byteData.getUint16(entry.offset);
 
     if (format != _kFormat0) {
-      debugUnsupportedTableFormat(entry.tag, format);
+      Log.unsupportedTableFormat(entry.tag, format);
       return null;
     }
 
@@ -228,7 +228,7 @@ abstract class NamingTable extends FontTable {
           entry: entry,
         );
       default:
-        debugUnsupportedTableFormat(kNameTag, format);
+        Log.unsupportedTableFormat(kNameTag, format);
         return null;
     }
   }
@@ -247,7 +247,7 @@ abstract class NamingTable extends FontTable {
           revision: revision,
         );
       default:
-        debugUnsupportedTableFormat(kNameTag, format);
+        Log.unsupportedTableFormat(kNameTag, format);
         return null;
     }
   }

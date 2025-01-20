@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 
-import 'package:icon_font/src/otf/debugger.dart';
 import 'package:icon_font/src/otf/otf.dart';
 import 'package:icon_font/src/otf/table/all.dart';
 import 'package:icon_font/src/utils/exceptions.dart';
+import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
 /// A helper for reading an OpenType font from a binary data.
@@ -130,7 +130,7 @@ class OTFReader {
       case kCFF2Tag:
         return CFFTable.fromByteData(byteData: _byteData, entry: entry);
       default:
-        debugUnsupportedTable(entry.tag);
+        Log.logger.w('Unsupported table: ${entry.tag}');
         return null;
     }
   }

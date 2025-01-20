@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
 
-import 'package:icon_font/src/otf/debugger.dart';
 import 'package:icon_font/src/otf/table/abstract.dart';
 import 'package:icon_font/src/otf/table/cmap.dart';
 import 'package:icon_font/src/otf/table/gsub.dart';
@@ -12,6 +11,7 @@ import 'package:icon_font/src/otf/table/table_record_entry.dart';
 import 'package:icon_font/src/utils/exceptions.dart';
 import 'package:icon_font/src/utils/extensions.dart';
 import 'package:icon_font/src/utils/konst.dart';
+import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
 const _kVersion0 = 0x0000;
@@ -98,7 +98,7 @@ class OS2Table extends FontTable {
     final isV5 = version >= _kVersion5;
 
     if (version > _kVersion5) {
-      debugUnsupportedTableVersion(kOS2Tag, version);
+      Log.unsupportedTableVersion(kOS2Tag, version);
     }
 
     return OS2Table._(
@@ -339,7 +339,7 @@ class OS2Table extends FontTable {
     final isV5 = version >= _kVersion5;
 
     if (version > _kVersion5) {
-      debugUnsupportedTableVersion(kOS2Tag, version);
+      Log.unsupportedTableVersion(kOS2Tag, version);
     }
 
     byteData

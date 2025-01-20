@@ -26,7 +26,7 @@ abstract class CharsetEntry implements BinaryCodable {
       case _kFormat0:
       case _kFormat2:
       default:
-        debugUnsupportedTableFormat('charsets', format);
+        Log.unsupportedTableFormat('charsets', format);
     }
 
     return null;

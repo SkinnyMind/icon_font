@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 
-import 'package:icon_font/src/otf/debugger.dart';
 import 'package:icon_font/src/otf/table/abstract.dart';
 import 'package:icon_font/src/otf/table/glyf.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
+import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
 const _kVersion0 = 0x00005000;
@@ -114,7 +114,7 @@ class MaximumProfileTable extends FontTable {
         maxComponentDepth: data.getUint16(entry.offset + 30),
       );
     } else {
-      debugUnsupportedTableVersion(entry.tag, version);
+      Log.unsupportedTableVersion(entry.tag, version);
       return null;
     }
   }
@@ -160,7 +160,7 @@ class MaximumProfileTable extends FontTable {
         ..setUint16(28, maxComponentElements!)
         ..setUint16(30, maxComponentDepth!);
     } else if (version != _kVersion0) {
-      debugUnsupportedTableVersion(kMaxpTag, version);
+      Log.unsupportedTableVersion(kMaxpTag, version);
     }
   }
 

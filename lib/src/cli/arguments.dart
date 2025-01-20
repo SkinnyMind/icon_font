@@ -51,7 +51,7 @@ class Arguments {
     MapEntry<dynamic, dynamic> entry,
   ) {
     final dynamic rawKey = entry.key;
-    void logUnknown() => logger.w('Unknown config parameter "$rawKey"');
+    void logUnknown() => Log.logger.w('Unknown config parameter "$rawKey"');
 
     if (rawKey is! String) {
       logUnknown();
@@ -119,7 +119,7 @@ class Arguments {
         );
 
         if (parsedConfig != null) {
-          logger.i('Using config ${configFile.path}');
+          Log.logger.i('Using config ${configFile.path}');
           parsedArgs = parsedConfig;
           break;
         }
@@ -143,7 +143,6 @@ class CliArguments {
     required this.recursive,
     required this.ignoreShapes,
     required this.normalize,
-    required this.verbose,
     required this.configFile,
   });
 
@@ -165,7 +164,6 @@ class CliArguments {
       recursive: map[CliArgument.recursive] as bool?,
       ignoreShapes: map[CliArgument.ignoreShapes] as bool?,
       normalize: map[CliArgument.normalize] as bool?,
-      verbose: map[CliArgument.verbose] as bool?,
       configFile: map[CliArgument.configFile] as File?,
     );
   }
@@ -180,7 +178,6 @@ class CliArguments {
   final bool? recursive;
   final bool? ignoreShapes;
   final bool? normalize;
-  final bool? verbose;
   final File? configFile;
 }
 
@@ -230,7 +227,6 @@ enum CliArgument {
     configName: 'recursive',
     allowedType: bool,
   ),
-  verbose(optionName: 'verbose', configName: 'verbose', allowedType: bool),
 
   // Only in CLI, not part of the config
   help(optionName: 'help', configName: '', allowedType: bool),
