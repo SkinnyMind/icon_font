@@ -153,14 +153,15 @@ $classContent
     final iconNameSet = <String>{};
 
     return glyphList.map((g) {
-      final baseName = RegExp(r'^[a-zA-Z$].*')
-              .firstMatch(
-                p
-                    .basenameWithoutExtension(g.metadata.name!)
-                    .replaceAll(RegExp(r'[^a-zA-Z0-9_$]'), ''),
-              )
-              ?.group(0) ??
-          ''.camelCase;
+      final baseName = (RegExp(r'^[a-zA-Z$].*')
+                  .firstMatch(
+                    p
+                        .basenameWithoutExtension(g.metadata.name!)
+                        .replaceAll(RegExp(r'[^a-zA-Z0-9_$]'), ''),
+                  )
+                  ?.group(0) ??
+              '')
+          .camelCase;
       final usingDefaultName = baseName.isEmpty;
 
       var variableName = usingDefaultName ? 'unnamed' : baseName;
