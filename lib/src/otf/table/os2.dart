@@ -10,6 +10,7 @@ import 'package:icon_font/src/otf/table/hhea.dart';
 import 'package:icon_font/src/otf/table/hmtx.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
 import 'package:icon_font/src/utils/exceptions.dart';
+import 'package:icon_font/src/utils/extensions.dart';
 import 'package:icon_font/src/utils/konst.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
@@ -126,7 +127,9 @@ class OS2Table extends FontTable {
       ulUnicodeRange2: byteData.getUint32(entry.offset + 46),
       ulUnicodeRange3: byteData.getUint32(entry.offset + 50),
       ulUnicodeRange4: byteData.getUint32(entry.offset + 54),
-      achVendID: byteData.getTag(entry.offset + 58),
+      achVendID: String.fromCharCodes(
+        Uint8List.view(byteData.buffer, entry.offset + 58, 4),
+      ),
       fsSelection: byteData.getUint16(entry.offset + 62),
       usFirstCharIndex: byteData.getUint16(entry.offset + 64),
       usLastCharIndex: byteData.getUint16(entry.offset + 66),

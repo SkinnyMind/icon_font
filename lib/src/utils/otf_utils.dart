@@ -21,13 +21,8 @@ const kPlatformUnicode = 0;
 const kPlatformMacintosh = 1;
 const kPlatformWindows = 3;
 
-final _longDateTimeStart = DateTime.parse('1904-01-01T00:00:00.000Z');
-
 class OtfUtils {
   const OtfUtils._();
-
-  static String convertTagToString(Uint8List bytes) =>
-      String.fromCharCodes(bytes);
 
   static Uint8List convertStringToTag(String string) {
     assert(string.length == 4, "Tag's length must be equal 4");
@@ -116,66 +111,6 @@ class OtfUtils {
 
     return relCoordinates;
   }
-}
-
-extension OTFByteDateExt on ByteData {
-  int getFixed(int offset) => getUint16(offset);
-
-  void setFixed(int offset, int value) => setUint16(offset, value);
-
-  int getFWord(int offset) => getInt16(offset);
-
-  void setFWord(int offset, int value) => setInt16(offset, value);
-
-  int getUFWord(int offset) => getUint16(offset);
-
-  void setUFWord(int offset, int value) => setUint16(offset, value);
-
-  Uint8List getByteList(int offset, int length) => Uint8List.fromList(
-        [for (var i = 0; i < length; i++) getUint8(offset + i)],
-      );
-
-  void setByteList(int offset, Uint8List list) {
-    for (var i = 0; i < list.length; i++) {
-      setUint8(offset + i, list[i]);
-    }
-  }
-
-  String getTag(int offset) {
-    return OtfUtils.convertTagToString(Uint8List.view(buffer, offset, 4));
-  }
-
-  void setTag(int offset, String tag) {
-    var currentOffset = offset;
-    OtfUtils.convertStringToTag(tag)
-        .forEach((b) => setUint8(currentOffset++, b));
-  }
-
-  DateTime getDateTime(int offset) {
-    return _longDateTimeStart.add(Duration(seconds: getInt64(offset)));
-  }
-
-  void setDateTime(int offset, DateTime dateTime) {
-    setInt64(offset, dateTime.difference(_longDateTimeStart).inSeconds);
-  }
-
-  ByteData sublistView(int offset, [int? length]) {
-    return ByteData.sublistView(
-      this,
-      offset,
-      length == null ? null : offset + length,
-    );
-  }
-}
-
-extension OTFStringExt on String {
-  /// Returns ASCII-printable string
-  String getAsciiPrintable() =>
-      replaceAll(RegExp(r'([^\x00-\x7E]|[\(\[\]\(\)\{\}<>\/%])'), '');
-
-  /// Returns ASCII-printable and PostScript-compatible string
-  String getPostScriptString() =>
-      getAsciiPrintable().replaceAll(RegExp(r'[^\x21-\x7E]'), '');
 }
 
 @immutable

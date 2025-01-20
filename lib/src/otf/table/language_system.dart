@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:icon_font/src/common/codable/binary.dart';
-import 'package:icon_font/src/utils/otf_utils.dart';
+import 'package:icon_font/src/utils/extensions.dart';
 
 const kLangSysRecordSize = 6;
 
@@ -12,8 +12,11 @@ class LanguageSystemRecord implements BinaryCodable {
     required ByteData byteData,
     required int offset,
   }) {
+    final langSysTag = String.fromCharCodes(
+      Uint8List.view(byteData.buffer, offset, 4),
+    );
     return LanguageSystemRecord(
-      langSysTag: byteData.getTag(offset),
+      langSysTag: langSysTag,
       langSysOffset: byteData.getUint16(offset + 4),
     );
   }

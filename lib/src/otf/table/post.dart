@@ -6,6 +6,7 @@ import 'package:icon_font/src/otf/debugger.dart';
 import 'package:icon_font/src/otf/defaults.dart';
 import 'package:icon_font/src/otf/table/abstract.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
+import 'package:icon_font/src/utils/extensions.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
 const _kVersion20 = 0x00020000;
@@ -34,9 +35,9 @@ class PostScriptTableHeader implements BinaryCodable {
 
     return PostScriptTableHeader(
       version: version,
-      italicAngle: byteData.getFixed(entry.offset + 4),
-      underlinePosition: byteData.getFWord(entry.offset + 8),
-      underlineThickness: byteData.getFWord(entry.offset + 10),
+      italicAngle: byteData.getUint16(entry.offset + 4),
+      underlinePosition: byteData.getInt16(entry.offset + 8),
+      underlineThickness: byteData.getInt16(entry.offset + 10),
       isFixedPitch: byteData.getUint32(entry.offset + 12),
       minMemType42: byteData.getUint32(entry.offset + 16),
       maxMemType42: byteData.getUint32(entry.offset + 20),
@@ -76,9 +77,9 @@ class PostScriptTableHeader implements BinaryCodable {
   void encodeToBinary(ByteData byteData) {
     byteData
       ..setInt32(0, version.int32value)
-      ..setFixed(4, italicAngle)
-      ..setFWord(8, underlinePosition)
-      ..setFWord(10, underlineThickness)
+      ..setUint16(4, italicAngle)
+      ..setInt16(8, underlinePosition)
+      ..setInt16(10, underlineThickness)
       ..setUint32(12, isFixedPitch)
       ..setUint32(16, minMemType42)
       ..setUint32(20, maxMemType42)

@@ -4,7 +4,7 @@ import 'package:icon_font/src/common/calculatable_offsets.dart';
 import 'package:icon_font/src/common/codable/binary.dart';
 import 'package:icon_font/src/otf/cff/dict.dart';
 import 'package:icon_font/src/utils/exceptions.dart';
-import 'package:icon_font/src/utils/otf_utils.dart';
+import 'package:icon_font/src/utils/extensions.dart';
 
 class CFFIndex extends BinaryCodable {
   CFFIndex({
@@ -170,7 +170,11 @@ class CFFIndexWithData<T> implements BinaryCodable, CalculatableOffsets {
 
   void Function(ByteData, T) _getEncoder() {
     return switch (T) {
-      const (Uint8List) => (bd, list) => bd.setByteList(0, list as Uint8List),
+      const (Uint8List) => (bd, list) {
+          for (var i = 0; i < (list as Uint8List).length; i++) {
+            bd.setUint8(0 + i, list[i]);
+          }
+        },
       const (CFFDict) => (bd, dict) => (dict as CFFDict).encodeToBinary(bd),
       _ => throw UnsupportedError('No encoder for type $T'),
     };
