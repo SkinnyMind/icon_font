@@ -97,10 +97,9 @@ class IconFont {
     final iconVarNames = _generateVariableNames(glyphList: glyphList);
     iconList ??= false;
 
-    final replacedClassName = RegExp(r'^[a-zA-Z$].*')
-            .firstMatch(className.replaceAll(RegExp(r'[^a-zA-Z0-9_$]'), ''))
-            ?.group(0) ??
-        '';
+    final replacedClassName = className
+        .replaceAll(RegExp(r'[^a-zA-Z0-9_$]'), '')
+        .replaceFirstMapped(RegExp(r'^[^a-zA-Z$]'), (_) => '');
 
     final classContent = [
       'const $replacedClassName._();',
