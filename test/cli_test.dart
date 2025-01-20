@@ -204,7 +204,6 @@ void main() {
 icon_font:
   output_class_file: lib/test_font.dart
   class_name: MyCoolIcons
-  indent: 4
 
   font_name: My Cool Icons
       ''');
