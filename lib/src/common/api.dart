@@ -40,6 +40,8 @@ class IconFont {
         Svg.parse(name: e.key, xmlString: e.value, ignoreShapes: ignoreShapes),
     ];
 
+    svgList.sort((a, b) => a.name.compareTo(b.name));
+
     if (!normalize) {
       for (var i = 1; i < svgList.length; i++) {
         if (svgList[i - 1].viewBox.height != svgList[i].viewBox.height) {
@@ -188,7 +190,8 @@ $classContent
       iconNameSet.add(variableName);
 
       return variableName;
-    }).toList();
+    }).toList()
+      ..sort();
   }
 
   static List<String> _generateIconConst({
