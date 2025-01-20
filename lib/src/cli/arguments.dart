@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:args/args.dart';
-import 'package:icon_font/src/cli/formatter.dart';
+import 'package:icon_font/src/utils/extensions.dart';
 import 'package:icon_font/src/utils/logger.dart';
 import 'package:yaml/yaml.dart';
 
@@ -256,59 +256,3 @@ class CliArgumentException implements Exception {
 }
 
 class CliHelpException implements Exception {}
-
-extension CliArgumentMapExtension on Map<CliArgument, Object?> {
-  /// Validates raw CLI arguments.
-  ///
-  /// Throws [CliArgumentException], if argument is not valid.
-  void _validateRaw() {
-    for (final arg in CliArgument.values) {
-      final argType = this[arg].runtimeType;
-
-      if (argType != Null && arg.allowedType != argType) {
-        final argName =
-            arg.optionName.isNotEmpty ? arg.optionName : arg.configName;
-        throw CliArgumentException(
-          message: "'$argName' argument's type "
-              "must be : ${arg.allowedType}, instead got '$argType'.",
-        );
-      }
-    }
-  }
-
-  /// Validates formatted CLI arguments.
-  ///
-  /// Throws [CliArgumentException], if argument is not valid.
-  void _validateFormatted() {
-    final args = this;
-
-    final svgDir = args[CliArgument.svgDir] as Directory?;
-    final fontFile = args[CliArgument.fontFile] as File?;
-
-    if (svgDir == null) {
-      throw CliArgumentException(
-        message: 'The input directory is not specified.',
-      );
-    }
-
-    if (fontFile == null) {
-      throw CliArgumentException(
-        message: 'The output font file is not specified.',
-      );
-    }
-
-    if (svgDir.statSync().type != FileSystemEntityType.directory) {
-      throw CliArgumentException(
-        message: "The input directory is not a directory or it doesn't exist.",
-      );
-    }
-  }
-
-  /// Validates and formats CLI arguments.
-  ///
-  /// Throws [CliArgumentException], if argument is not valid.
-  Map<CliArgument, Object?> validateAndFormat() {
-    _validateRaw();
-    return Formatter.formatArguments(args: this).._validateFormatted();
-  }
-}

@@ -5,7 +5,7 @@ import 'package:icon_font/src/common/codable/binary.dart';
 import 'package:icon_font/src/otf/cff/operand.dart';
 import 'package:icon_font/src/otf/cff/operator.dart';
 import 'package:icon_font/src/utils/exceptions.dart';
-import 'package:icon_font/src/utils/otf_utils.dart';
+import 'package:icon_font/src/utils/extensions.dart';
 
 const _kOperatorEscapeByte = 0x0C;
 

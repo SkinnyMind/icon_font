@@ -8,6 +8,7 @@ import 'package:icon_font/src/otf/table/glyph/header.dart';
 import 'package:icon_font/src/otf/table/glyph/simple.dart';
 import 'package:icon_font/src/otf/table/loca.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
+import 'package:icon_font/src/utils/extensions.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
 class GlyphDataTable extends FontTable {

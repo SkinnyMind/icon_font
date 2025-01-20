@@ -1,16 +1,15 @@
+import 'dart:io';
 import 'dart:math' as math;
+import 'dart:typed_data';
+import 'package:icon_font/src/cli/arguments.dart';
+import 'package:icon_font/src/cli/formatter.dart';
 import 'package:icon_font/src/svg/element.dart';
 import 'package:icon_font/src/svg/shapes.dart';
 import 'package:icon_font/src/svg/transform.dart';
 import 'package:icon_font/src/svg/unknown_element.dart';
+import 'package:icon_font/src/utils/otf_utils.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:xml/xml.dart';
-
-extension MockableDateTime on DateTime {
-  static DateTime? mockedDate;
-
-  static DateTime now() => mockedDate ?? DateTime.now();
-}
 
 extension PointExt<T extends num> on math.Point<T> {
   math.Point<int> toIntPoint() => math.Point<int>(x.toInt(), y.toInt());
@@ -77,4 +76,90 @@ extension XmlElementExt on XmlElement {
     final transformList = Transform.parse(getAttribute('transform'));
     return generateTransformMatrix(transformList: transformList);
   }
+}
+
+extension CliArgumentMapExtension on Map<CliArgument, Object?> {
+  /// Validates and formats CLI arguments.
+  ///
+  /// Throws [CliArgumentException], if argument is not valid.
+  Map<CliArgument, Object?> validateAndFormat() {
+    // Validate raw CLI arguments
+    for (final arg in CliArgument.values) {
+      final argType = this[arg].runtimeType;
+
+      if (argType != Null && arg.allowedType != argType) {
+        final argName =
+            arg.optionName.isNotEmpty ? arg.optionName : arg.configName;
+        throw CliArgumentException(
+          message: "'$argName' argument's type "
+              "must be : ${arg.allowedType}, instead got '$argType'.",
+        );
+      }
+    }
+
+    // Validate formatted CLI arguments.
+    final formattedArguments = Formatter.formatArguments(args: this);
+    final svgDir = formattedArguments[CliArgument.svgDir] as Directory?;
+    final fontFile = formattedArguments[CliArgument.fontFile] as File?;
+
+    if (svgDir == null) {
+      throw CliArgumentException(
+        message: 'The input directory is not specified.',
+      );
+    }
+
+    if (fontFile == null) {
+      throw CliArgumentException(
+        message: 'The output font file is not specified.',
+      );
+    }
+
+    if (svgDir.statSync().type != FileSystemEntityType.directory) {
+      throw CliArgumentException(
+        message: "The input directory is not a directory or it doesn't exist.",
+      );
+    }
+
+    return formattedArguments;
+  }
+}
+
+extension XmlNodeUtils on XmlNode {
+  double getDoubleAttribute(String name, [double defaultValue = 0]) =>
+      double.tryParse(getAttribute(name) ?? '$defaultValue') ?? defaultValue;
+
+  int getIntAttribute(String name, [int defaultValue = 0]) =>
+      int.tryParse(getAttribute(name) ?? '$defaultValue') ?? defaultValue;
+}
+
+extension NumPretty on num {
+  String toStringPretty([int? fractionDigits]) =>
+      (fractionDigits != null ? toStringAsFixed(fractionDigits) : toString())
+          .replaceFirst(RegExp(r'\.?0*$'), '');
+}
+
+extension OTFByteDateExt on ByteData {
+  void setTag(int offset, String tag) {
+    var currentOffset = offset;
+    OtfUtils.convertStringToTag(tag)
+        .forEach((b) => setUint8(currentOffset++, b));
+  }
+
+  ByteData sublistView(int offset, [int? length]) {
+    return ByteData.sublistView(
+      this,
+      offset,
+      length == null ? null : offset + length,
+    );
+  }
+}
+
+extension OTFStringExt on String {
+  /// Returns ASCII-printable string
+  String getAsciiPrintable() =>
+      replaceAll(RegExp(r'([^\x00-\x7E]|[\(\[\]\(\)\{\}<>\/%])'), '');
+
+  /// Returns ASCII-printable and PostScript-compatible string
+  String getPostScriptString() =>
+      getAsciiPrintable().replaceAll(RegExp(r'[^\x21-\x7E]'), '');
 }

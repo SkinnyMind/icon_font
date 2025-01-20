@@ -6,6 +6,7 @@ import 'package:icon_font/src/common/generic_glyph.dart';
 import 'package:icon_font/src/otf/defaults.dart';
 import 'package:icon_font/src/otf/table/all.dart';
 import 'package:icon_font/src/utils/exceptions.dart';
+import 'package:icon_font/src/utils/extensions.dart';
 import 'package:icon_font/src/utils/konst.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 

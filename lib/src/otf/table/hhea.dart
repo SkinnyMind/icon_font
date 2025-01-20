@@ -4,7 +4,6 @@ import 'package:icon_font/src/common/generic_glyph.dart';
 import 'package:icon_font/src/otf/table/abstract.dart';
 import 'package:icon_font/src/otf/table/hmtx.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
-import 'package:icon_font/src/utils/otf_utils.dart';
 
 const _kHheaTableSize = 36;
 
@@ -35,13 +34,13 @@ class HorizontalHeaderTable extends FontTable {
       entry: entry,
       majorVersion: byteData.getUint16(entry.offset),
       minorVersion: byteData.getUint16(entry.offset + 2),
-      ascender: byteData.getFWord(entry.offset + 4),
-      descender: byteData.getFWord(entry.offset + 6),
-      lineGap: byteData.getFWord(entry.offset + 8),
-      advanceWidthMax: byteData.getUFWord(entry.offset + 10),
-      minLeftSideBearing: byteData.getFWord(entry.offset + 12),
-      minRightSideBearing: byteData.getFWord(entry.offset + 14),
-      xMaxExtent: byteData.getFWord(entry.offset + 16),
+      ascender: byteData.getInt16(entry.offset + 4),
+      descender: byteData.getInt16(entry.offset + 6),
+      lineGap: byteData.getInt16(entry.offset + 8),
+      advanceWidthMax: byteData.getUint16(entry.offset + 10),
+      minLeftSideBearing: byteData.getInt16(entry.offset + 12),
+      minRightSideBearing: byteData.getInt16(entry.offset + 14),
+      xMaxExtent: byteData.getInt16(entry.offset + 16),
       caretSlopeRise: byteData.getInt16(entry.offset + 18),
       caretSlopeRun: byteData.getInt16(entry.offset + 20),
       caretOffset: byteData.getInt16(entry.offset + 22),
@@ -101,13 +100,13 @@ class HorizontalHeaderTable extends FontTable {
     byteData
       ..setUint16(0, majorVersion)
       ..setUint16(2, minorVersion)
-      ..setFWord(4, ascender)
-      ..setFWord(6, descender)
-      ..setFWord(8, lineGap)
-      ..setUFWord(10, advanceWidthMax)
-      ..setFWord(12, minLeftSideBearing)
-      ..setFWord(14, minRightSideBearing)
-      ..setFWord(16, xMaxExtent)
+      ..setInt16(4, ascender)
+      ..setInt16(6, descender)
+      ..setInt16(8, lineGap)
+      ..setUint16(10, advanceWidthMax)
+      ..setInt16(12, minLeftSideBearing)
+      ..setInt16(14, minRightSideBearing)
+      ..setInt16(16, xMaxExtent)
       ..setInt16(18, caretSlopeRise)
       ..setInt16(20, caretSlopeRun)
       ..setInt16(22, caretOffset)

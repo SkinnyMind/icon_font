@@ -109,17 +109,3 @@ class Svg extends SvgElement {
   @override
   String toString() => '$name (${elementList.length} elements)';
 }
-
-extension XmlNodeUtils on XmlNode {
-  double getDoubleAttribute(String name, [double defaultValue = 0]) =>
-      double.tryParse(getAttribute(name) ?? '$defaultValue') ?? defaultValue;
-
-  int getIntAttribute(String name, [int defaultValue = 0]) =>
-      int.tryParse(getAttribute(name) ?? '$defaultValue') ?? defaultValue;
-}
-
-extension NumPretty on num {
-  String toStringPretty([int? fractionDigits]) =>
-      (fractionDigits != null ? toStringAsFixed(fractionDigits) : toString())
-          .replaceFirst(RegExp(r'\.?0*$'), '');
-}

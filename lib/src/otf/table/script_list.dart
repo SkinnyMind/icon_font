@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:icon_font/src/common/codable/binary.dart';
 import 'package:icon_font/src/otf/table/language_system.dart';
-import 'package:icon_font/src/utils/otf_utils.dart';
+import 'package:icon_font/src/utils/extensions.dart';
 
 const kScriptRecordSize = 6;
 
@@ -36,7 +36,9 @@ class ScriptRecord implements BinaryCodable {
     required int offset,
   }) {
     return ScriptRecord(
-      scriptTag: byteData.getTag(offset),
+      scriptTag: String.fromCharCodes(
+        Uint8List.view(byteData.buffer, offset, 4),
+      ),
       scriptOffset: byteData.getUint16(offset + 4),
     );
   }

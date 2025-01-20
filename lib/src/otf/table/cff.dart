@@ -17,8 +17,8 @@ import 'package:icon_font/src/otf/table/head.dart';
 import 'package:icon_font/src/otf/table/hmtx.dart';
 import 'package:icon_font/src/otf/table/name.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
+import 'package:icon_font/src/utils/extensions.dart';
 import 'package:icon_font/src/utils/konst.dart';
-import 'package:icon_font/src/utils/otf_utils.dart';
 
 part '../cff/charset.dart';
 part '../cff/standard_string.dart';

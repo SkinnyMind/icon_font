@@ -354,7 +354,6 @@ void main() {
     late OpenTypeFont recreatedFont;
 
     setUpAll(() {
-      MockableDateTime.mockedDate = DateTime.utc(2020, 2, 2, 2, 2);
       originalByteData =
           ByteData.sublistView(File(_kTestFontAssetPath).readAsBytesSync());
       font = OTFReader.fromByteData(originalByteData).read();
@@ -380,10 +379,6 @@ void main() {
 
       recreatedByteData = ByteData(recreatedFont.size);
       recreatedFont.encodeToBinary(recreatedByteData);
-    });
-
-    tearDownAll(() {
-      MockableDateTime.mockedDate = null;
     });
 
     test(
