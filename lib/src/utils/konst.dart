@@ -6,3 +6,6 @@ const int kUnicodeSpaceCharCode = 0x20;
 
 const int kUnicodePrivateUseAreaStart = 0xE000;
 const int kUnicodePrivateUseAreaEnd = 0xF8FF;
+
+const kDefaultFontFamily = 'icon_font Icons';
+const kDefaultOpenTypeUnitsPerEm = 1000;

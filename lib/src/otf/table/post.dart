@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:icon_font/src/common/codable/binary.dart';
 import 'package:icon_font/src/common/generic_glyph.dart';
 import 'package:icon_font/src/otf/debugger.dart';
-import 'package:icon_font/src/otf/defaults.dart';
 import 'package:icon_font/src/otf/table/abstract.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
 import 'package:icon_font/src/utils/extensions.dart';
@@ -173,7 +172,8 @@ class PostScriptVersion20 extends PostScriptData {
 
   factory PostScriptVersion20.create({required List<String> glyphNameList}) {
     final glyphNameIndex = [
-      ...kDefaultGlyphIndex,
+      0, // .notdef
+      3, // space
       for (var i = 0; i < glyphNameList.length; i++)
         _kMacStandardGlyphNames.length + i,
     ];
