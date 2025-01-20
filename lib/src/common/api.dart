@@ -79,10 +79,6 @@ class IconFont {
   ///
   /// * [fontFileName] is font file's name. Used in generated docs for class.
   ///
-  /// * [indent] is a number of spaces in leading indentation for class'
-  /// members.
-  /// Defaults to 2.
-  ///
   /// Returns content of a class file.
   static String generateFlutterClass({
     required List<GenericGlyph> glyphList,
@@ -90,78 +86,65 @@ class IconFont {
     String? familyName,
     String? fontFileName,
     String? package,
-    int? indent,
-    bool? iconList = false,
+    bool? iconList,
   }) {
-    return _FlutterClassGenerator(
-      glyphList: glyphList,
-      className: className,
-      indent: indent,
-      fontFileName: fontFileName,
-      familyName: familyName,
-      package: package,
-      iconList: iconList,
-    ).generate();
-  }
-}
+    className ??= 'UiIcons';
+    familyName ??= kDefaultFontFamily;
+    fontFileName ??= 'icon_font_icons.otf';
+    final packageName = package?.isEmpty ?? true ? null : package;
+    final iconVarNames = _generateVariableNames(glyphList: glyphList);
+    iconList ??= false;
 
-/// Result of svg-to-otf conversion.
+    final replacedClassName = RegExp(r'^[a-zA-Z$].*')
+            .firstMatch(className.replaceAll(RegExp(r'[^a-zA-Z0-9_$]'), ''))
+            ?.group(0) ??
+        '';
+
+    final classContent = [
+      'const $replacedClassName._();',
+      '',
+      "static const iconFontFamily = '$familyName';",
+      if (package != null) "static const iconFontPackage = '$packageName';",
+      for (var i = 0; i < glyphList.length; i++)
+        ..._generateIconConst(
+          glyphList: glyphList,
+          iconVarNames: iconVarNames,
+          hasPackage: package != null,
+          index: i,
+        ),
+      if (iconList) '',
+      '/// List of all icons in this font.',
+      'static const List<IconData> values = <IconData>[',
+      for (final iconName in iconVarNames) ...['$iconName,'],
+      '];',
+    ].join('\n');
+
+    return '''// Generated code: do not hand-edit.
+
+import 'package:flutter/widgets.dart';
+
+/// Identifiers for the icons.
 ///
-/// Contains list of generated glyphs and created font.
-class SvgToOtfResult {
-  SvgToOtfResult._({required this.glyphList, required this.font});
-
-  final List<GenericGlyph> glyphList;
-  final OpenTypeFont font;
+/// Use with the [Icon] class to show specific icons.
+///
+/// Icons are identified by their name as listed below.
+///
+/// To use this class, make sure you declare the font in your
+/// project's `pubspec.yaml` file in the `fonts` section. This ensures that
+/// the "$familyName" font is included in your application. This font is used to
+/// display the icons. For example:
+///
+/// ```yaml
+/// flutter:
+///   fonts:
+///     - family: $familyName
+///       fonts:
+///         - asset: packages/package_name/fonts/$fontFileName
+/// ```
+class $className {
+$classContent
 }
-
-/// A helper for generating Flutter-compatible class with IconData objects for
-/// each icon.
-class _FlutterClassGenerator {
-  /// * [glyphList] is a list of non-default glyphs.
-  ///
-  /// * [className] is generated class' name (preferably, in PascalCase).
-  ///
-  /// * [familyName] is font's family name to use in IconData.
-  ///
-  /// * [package] is the name of a font package. Used to provide a font through
-  /// package dependency.
-  ///
-  /// * [fontFileName] is font file's name. Used in generated docs for class.
-  ///
-  /// * [indent] is a number of spaces in leading indentation for class'
-  /// members. Defaults to 2.
-  _FlutterClassGenerator({
-    required this.glyphList,
-    String? className,
-    String? familyName,
-    String? fontFileName,
-    String? package,
-    int? indent,
-    bool? iconList = false,
-  })  : _indent = ' ' * (indent ?? 2),
-        _className = _getVarName(className ?? 'UiIcons'),
-        _familyName = familyName ?? kDefaultFontFamily,
-        _fontFileName = fontFileName ?? 'icon_font_icons.otf',
-        _iconVarNames = _generateVariableNames(glyphList: glyphList),
-        _package = package?.isEmpty ?? true ? null : package,
-        _iconList = iconList ?? false;
-
-  final List<GenericGlyph> glyphList;
-  final String _fontFileName;
-  final String _className;
-  final String _familyName;
-  final String _indent;
-  final String? _package;
-  final List<String> _iconVarNames;
-  final bool _iconList;
-
-  /// Removes any characters that are not valid for variable name.
-  ///
-  /// Returns a new string.
-  static String _getVarName(String string) {
-    final replaced = string.replaceAll(RegExp(r'[^a-zA-Z0-9_$]'), '');
-    return RegExp(r'^[a-zA-Z$].*').firstMatch(replaced)?.group(0) ?? '';
+''';
   }
 
   static List<String> _generateVariableNames({
@@ -170,8 +153,15 @@ class _FlutterClassGenerator {
     final iconNameSet = <String>{};
 
     return glyphList.map((g) {
-      final baseName =
-          _getVarName(p.basenameWithoutExtension(g.metadata.name!)).camelCase;
+      final baseName = (RegExp(r'^[a-zA-Z$].*')
+                  .firstMatch(
+                    p
+                        .basenameWithoutExtension(g.metadata.name!)
+                        .replaceAll(RegExp(r'[^a-zA-Z0-9_$]'), ''),
+                  )
+                  ?.group(0) ??
+              '')
+          .camelCase;
       final usingDefaultName = baseName.isEmpty;
 
       var variableName = usingDefaultName ? 'unnamed' : baseName;
@@ -205,24 +195,22 @@ class _FlutterClassGenerator {
     }).toList();
   }
 
-  bool get _hasPackage => _package != null;
-
-  String get _fontFamilyConst =>
-      "static const iconFontFamily = '$_familyName';";
-
-  String get _fontPackageConst => "static const iconFontPackage = '$_package';";
-
-  List<String> _generateIconConst({required int index}) {
+  static List<String> _generateIconConst({
+    required List<GenericGlyph> glyphList,
+    required List<String> iconVarNames,
+    required bool hasPackage,
+    required int index,
+  }) {
     final glyphMeta = glyphList[index].metadata;
 
     final charCode = glyphMeta.charCode!;
 
-    final varName = _iconVarNames[index];
+    final varName = iconVarNames[index];
     final hexCode = charCode.toRadixString(16);
 
     final posParamList = [
       'fontFamily: iconFontFamily',
-      if (_hasPackage) 'fontPackage: iconFontPackage',
+      if (hasPackage) 'fontPackage: iconFontPackage',
     ];
 
     final posParamString = posParamList.join(', ');
@@ -235,57 +223,14 @@ class _FlutterClassGenerator {
       'static const IconData $varName = IconData(0x$hexCode, $posParamString);',
     ];
   }
-
-  String _generateIconList() {
-    return [
-      '',
-      '/// List of all icons in this font.',
-      'static const List<IconData> values = <IconData>[',
-      for (final iconName in _iconVarNames) ...['$iconName,'],
-      '];',
-    ].join('\n');
-  }
-
-  /// Generates content for a class' file.
-  String generate() {
-    final classContent = [
-      'const $_className._();',
-      '',
-      _fontFamilyConst,
-      if (_hasPackage) _fontPackageConst,
-      for (var i = 0; i < glyphList.length; i++)
-        ..._generateIconConst(index: i),
-      if (_iconList) _generateIconList(),
-    ];
-
-    final classContentString =
-        classContent.map((e) => e.isEmpty ? '' : '$_indent$e').join('\n');
-
-    return '''// Generated code: do not hand-edit.
-
-import 'package:flutter/widgets.dart';
-
-/// Identifiers for the icons.
-///
-/// Use with the [Icon] class to show specific icons.
-///
-/// Icons are identified by their name as listed below.
-///
-/// To use this class, make sure you declare the font in your
-/// project's `pubspec.yaml` file in the `fonts` section. This ensures that
-/// the "$_familyName" font is included in your application. This font is used to
-/// display the icons. For example:
-///
-/// ```yaml
-/// flutter:
-///   fonts:
-///     - family: $_familyName
-///       fonts:
-///         - asset: packages/package_name/fonts/$_fontFileName
-/// ```
-class $_className {
-$classContentString
 }
-''';
-  }
+
+/// Result of svg-to-otf conversion.
+///
+/// Contains list of generated glyphs and created font.
+class SvgToOtfResult {
+  SvgToOtfResult._({required this.glyphList, required this.font});
+
+  final List<GenericGlyph> glyphList;
+  final OpenTypeFont font;
 }
