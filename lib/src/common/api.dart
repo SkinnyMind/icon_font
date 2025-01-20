@@ -1,7 +1,7 @@
 import 'package:icon_font/src/common/generic_glyph.dart';
-import 'package:icon_font/src/otf/defaults.dart';
 import 'package:icon_font/src/otf/otf.dart';
 import 'package:icon_font/src/svg/svg.dart';
+import 'package:icon_font/src/utils/konst.dart';
 import 'package:icon_font/src/utils/logger.dart';
 import 'package:path/path.dart' as p;
 import 'package:recase/recase.dart';

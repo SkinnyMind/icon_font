@@ -1,9 +1,10 @@
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:icon_font/src/common/calculatable_offsets.dart';
 import 'package:icon_font/src/common/codable/binary.dart';
 import 'package:icon_font/src/common/generic_glyph.dart';
-import 'package:icon_font/src/otf/defaults.dart';
+import 'package:icon_font/src/common/outline.dart';
 import 'package:icon_font/src/otf/table/all.dart';
 import 'package:icon_font/src/utils/exceptions.dart';
 import 'package:icon_font/src/utils/extensions.dart';
@@ -26,6 +27,11 @@ const _kTableTagsToEncode = {
   kCFF2Tag,
   kGSUBTag,
 };
+
+const _kDefaultAchVendID = '    ';
+const _kDefaultTrueTypeUnitsPerEm = 1024; // A power of two is recommended
+const _kDefaultBaselineExtension = 150;
+const _kDefaultFontRevision = Revision(1, 0);
 
 /// An OpenType font.
 /// Contains either TrueType (glyf table) or OpenType (CFF2 table) outlines
@@ -68,8 +74,8 @@ class OpenTypeFont implements BinaryCodable {
       fontName = null;
     }
 
-    revision ??= kDefaultFontRevision;
-    achVendID ??= kDefaultAchVendID;
+    revision ??= _kDefaultFontRevision;
+    achVendID ??= _kDefaultAchVendID;
     fontName ??= kDefaultFontFamily;
     useOpenType ??= true;
     normalize ??= true;
@@ -79,9 +85,9 @@ class OpenTypeFont implements BinaryCodable {
 
     // A power of two is recommended only for TrueType outlines
     final unitsPerEm =
-        useOpenType ? kDefaultOpenTypeUnitsPerEm : kDefaultTrueTypeUnitsPerEm;
+        useOpenType ? kDefaultOpenTypeUnitsPerEm : _kDefaultTrueTypeUnitsPerEm;
 
-    final baselineExtension = normalize ? kDefaultBaselineExtension : 0;
+    final baselineExtension = normalize ? _kDefaultBaselineExtension : 0;
     final ascender = unitsPerEm - baselineExtension;
     final descender = -baselineExtension;
 
@@ -92,7 +98,7 @@ class OpenTypeFont implements BinaryCodable {
       fontHeight: normalize ? null : unitsPerEm,
     );
 
-    final defaultGlyphList = generateDefaultGlyphList(ascender: ascender);
+    final defaultGlyphList = _generateDefaultGlyphList(ascender: ascender);
     final fullGlyphList = [
       ...defaultGlyphList,
       ...resizedGlyphList,
@@ -350,5 +356,66 @@ class OpenTypeFont implements BinaryCodable {
       glyphList[i].metadata.charCode = kUnicodePrivateUseAreaStart + i;
     }
     return glyphList;
+  }
+
+  /// Generates list of default glyphs (.notdef 'rectangle' and empty space)
+  static List<GenericGlyph> _generateDefaultGlyphList({required int ascender}) {
+    final notdef = _generateNotdefGlyph(ascender: ascender);
+    final space = GenericGlyph.empty();
+
+    // .notdef doesn't have charcode
+    space.metadata.charCode = kUnicodeSpaceCharCode;
+
+    return [notdef, space];
+  }
+
+  static GenericGlyph _generateNotdefGlyph({required int ascender}) {
+    const kRelativeWidth = .7;
+    const kRelativeThickness = .1;
+
+    final xOuterOffset = (kRelativeWidth * ascender / 2).round();
+    final thickness = (kRelativeThickness * xOuterOffset).round();
+
+    final outerRect = Rectangle.fromPoints(
+      const Point(0, 0),
+      Point(xOuterOffset, ascender),
+    );
+
+    final innerRect = Rectangle.fromPoints(
+      Point(thickness, thickness),
+      Point(xOuterOffset - thickness, ascender - thickness),
+    );
+
+    final outlines = [
+      // Outer rectangle clockwise
+      Outline(
+        pointList: [
+          outerRect.bottomLeft,
+          outerRect.bottomRight,
+          outerRect.topRight,
+          outerRect.topLeft,
+        ],
+        isOnCurveList: List.filled(4, true),
+        hasCompactCurves: false,
+        hasQuadCurves: true,
+        fillRule: FillRule.nonzero,
+      ),
+
+      // Inner rectangle counter-clockwise
+      Outline(
+        pointList: [
+          innerRect.bottomLeft,
+          innerRect.topLeft,
+          innerRect.topRight,
+          innerRect.bottomRight,
+        ],
+        isOnCurveList: List.filled(4, true),
+        hasCompactCurves: false,
+        hasQuadCurves: true,
+        fillRule: FillRule.nonzero,
+      ),
+    ];
+
+    return GenericGlyph(outlines: outlines, bounds: outerRect);
   }
 }
