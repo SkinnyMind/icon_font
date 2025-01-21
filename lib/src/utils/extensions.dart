@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:math' as math;
 import 'dart:typed_data';
 import 'package:icon_font/src/cli/arguments.dart';
-import 'package:icon_font/src/cli/formatter.dart';
 import 'package:icon_font/src/svg/element.dart';
 import 'package:icon_font/src/svg/shapes.dart';
 import 'package:icon_font/src/svg/transform.dart';
@@ -10,6 +9,8 @@ import 'package:icon_font/src/svg/unknown_element.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:xml/xml.dart';
+
+typedef CliArgumentFormatter = Object Function(String arg);
 
 extension PointExt<T extends num> on math.Point<T> {
   math.Point<int> toIntPoint() => math.Point<int>(x.toInt(), y.toInt());
@@ -98,7 +99,7 @@ extension CliArgumentMapExtension on Map<CliArgument, Object?> {
     }
 
     // Validate formatted CLI arguments.
-    final formattedArguments = Formatter.formatArguments(args: this);
+    final formattedArguments = _formatArguments(args: this);
     final svgDir = formattedArguments[CliArgument.svgDir] as Directory?;
     final fontFile = formattedArguments[CliArgument.fontFile] as File?;
 
@@ -121,6 +122,27 @@ extension CliArgumentMapExtension on Map<CliArgument, Object?> {
     }
 
     return formattedArguments;
+  }
+
+  Map<CliArgument, Object?> _formatArguments({
+    required Map<CliArgument, Object?> args,
+  }) {
+    const argumentFormatters = <CliArgument, CliArgumentFormatter>{
+      CliArgument.svgDir: Directory.new,
+      CliArgument.fontFile: File.new,
+      CliArgument.classFile: File.new,
+      CliArgument.configFile: File.new,
+    };
+
+    return args.map<CliArgument, Object?>((k, v) {
+      final formatter = argumentFormatters[k];
+
+      if (formatter == null || v == null) {
+        return MapEntry<CliArgument, Object?>(k, v);
+      }
+
+      return MapEntry<CliArgument, Object?>(k, formatter(v.toString()));
+    });
   }
 }
 
