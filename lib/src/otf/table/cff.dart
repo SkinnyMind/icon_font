@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:icon_font/src/common/binary_codable.dart';
 import 'package:icon_font/src/common/calculatable_offsets.dart';
-import 'package:icon_font/src/common/codable/binary.dart';
 import 'package:icon_font/src/common/generic_glyph.dart';
 import 'package:icon_font/src/otf/cff/char_string.dart';
 import 'package:icon_font/src/otf/cff/char_string_operator.dart' as cs_op;

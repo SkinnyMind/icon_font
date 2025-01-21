@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:icon_font/src/common/codable/binary.dart';
+import 'package:icon_font/src/common/binary_codable.dart';
 import 'package:icon_font/src/common/generic_glyph.dart';
 import 'package:icon_font/src/otf/table/abstract.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';

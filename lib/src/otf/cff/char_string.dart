@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:icon_font/src/common/codable/binary.dart';
+import 'package:icon_font/src/common/binary_codable.dart';
 import 'package:icon_font/src/otf/cff/char_string_operator.dart';
 import 'package:icon_font/src/otf/cff/operand.dart';
 import 'package:icon_font/src/otf/cff/operator.dart';
@@ -227,7 +227,7 @@ class CharStringInterpreter {
   }) {
     final list = <int>[];
 
-    void encodeAndPush({required BinaryEncodable encodable}) {
+    void encodeAndPush({required BinaryCodable encodable}) {
       final byteData = ByteData(encodable.size);
       encodable.encodeToBinary(byteData);
       list.addAll(byteData.buffer.asUint8List());
