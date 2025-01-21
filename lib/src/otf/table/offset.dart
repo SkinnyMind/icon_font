@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
 
-import 'package:icon_font/src/common/codable/binary.dart';
+import 'package:icon_font/src/common/binary_codable.dart';
 
 const kOffsetTableLength = 12;
 

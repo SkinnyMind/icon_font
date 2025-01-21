@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:icon_font/src/common/codable/binary.dart';
+import 'package:icon_font/src/common/binary_codable.dart';
 import 'package:icon_font/src/otf/cff/char_string_operator.dart';
 import 'package:icon_font/src/otf/cff/dict_operator.dart';
 import 'package:meta/meta.dart';

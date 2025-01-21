@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:icon_font/src/common/binary_codable.dart';
 import 'package:icon_font/src/common/calculatable_offsets.dart';
-import 'package:icon_font/src/common/codable/binary.dart';
 import 'package:icon_font/src/common/generic_glyph.dart';
 import 'package:icon_font/src/common/outline.dart';
 import 'package:icon_font/src/otf/table/all.dart';

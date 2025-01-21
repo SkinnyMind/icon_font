@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
 
-import 'package:icon_font/src/common/codable/binary.dart';
+import 'package:icon_font/src/common/binary_codable.dart';
 import 'package:icon_font/src/otf/table/glyph/flag.dart';
 import 'package:icon_font/src/otf/table/glyph/header.dart';
 import 'package:icon_font/src/utils/extensions.dart';

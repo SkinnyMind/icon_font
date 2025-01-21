@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
-import 'package:icon_font/src/common/codable/binary.dart';
+import 'package:icon_font/src/common/binary_codable.dart';
 import 'package:icon_font/src/otf/cff/operand.dart';
 import 'package:icon_font/src/otf/cff/operator.dart';
 import 'package:icon_font/src/utils/exceptions.dart';
