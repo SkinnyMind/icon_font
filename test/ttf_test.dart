@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:icon_font/src/common/generic_glyph.dart';
-import 'package:icon_font/src/otf/io.dart';
 import 'package:icon_font/src/otf/otf.dart';
 import 'package:icon_font/src/otf/reader.dart';
 import 'package:icon_font/src/otf/table/all.dart';
@@ -21,7 +20,9 @@ void main() {
 
   group('Reader', () {
     setUpAll(() {
-      font = readFromFile(path: _kTestFontAssetPath);
+      font = OTFReader.fromByteData(
+        ByteData.sublistView(File(_kTestFontAssetPath).readAsBytesSync()),
+      ).read();
     });
 
     test('Offset table', () {
@@ -467,7 +468,9 @@ void main() {
 
   group('Generic Glyph', () {
     setUpAll(() {
-      font = readFromFile(path: _kTestFontAssetPath);
+      font = OTFReader.fromByteData(
+        ByteData.sublistView(File(_kTestFontAssetPath).readAsBytesSync()),
+      ).read();
     });
 
     test('Conversion from TrueType and back', () {
