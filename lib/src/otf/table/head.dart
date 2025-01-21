@@ -6,17 +6,6 @@ import 'package:icon_font/src/otf/table/all.dart';
 import 'package:icon_font/src/utils/konst.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
-const kChecksumMagicNumber = 0xB1B0AFBA;
-
-const _kMagicNumber = 0x5F0F3CF5;
-const _kMacStyleRegular = 0;
-const _kIndexToLocFormatShort = 0;
-const _kIndexToLocFormatLong = 1;
-
-const _kLowestRecPPEMdefault = 8;
-
-const _kHeaderTableSize = 54;
-
 class HeaderTable extends FontTable {
   HeaderTable({
     required TableRecordEntry? entry,
@@ -37,7 +26,7 @@ class HeaderTable extends FontTable {
         minorVersion = 0,
         fontDirectionHint = 2,
         glyphDataFormat = 0,
-        magicNumber = _kMagicNumber,
+        magicNumber = 0x5F0F3CF5,
         super.fromTableRecordEntry(entry);
 
   HeaderTable._({
@@ -134,11 +123,9 @@ class HeaderTable extends FontTable {
       yMin: yMin,
       xMax: xMax,
       yMax: yMax,
-      macStyle: _kMacStyleRegular,
-      lowestRecPPEM: _kLowestRecPPEMdefault,
-      indexToLocFormat: glyf == null || glyf.size < 0x20000
-          ? _kIndexToLocFormatShort
-          : _kIndexToLocFormatLong,
+      macStyle: 0,
+      lowestRecPPEM: 8,
+      indexToLocFormat: glyf == null || glyf.size < 0x20000 ? 0 : 1,
     );
   }
 
@@ -164,7 +151,7 @@ class HeaderTable extends FontTable {
   static final _longDateTimeStart = DateTime.parse('1904-01-01T00:00:00.000Z');
 
   @override
-  int get size => _kHeaderTableSize;
+  int get size => 54;
 
   @override
   void encodeToBinary(ByteData byteData) {

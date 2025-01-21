@@ -9,3 +9,9 @@ const int kUnicodePrivateUseAreaEnd = 0xF8FF;
 
 const kDefaultFontFamily = 'icon_font Icons';
 const kDefaultOpenTypeUnitsPerEm = 1000;
+
+const kLangSysRecordSize = 6;
+
+const kOffsetTableLength = 12;
+
+const kTableRecordEntryLength = 16;

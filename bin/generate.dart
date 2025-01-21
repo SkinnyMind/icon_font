@@ -11,24 +11,21 @@ import 'package:path/path.dart' as p;
 import 'package:pub_semver/pub_semver.dart';
 import 'package:yaml/yaml.dart';
 
-final _argParser = ArgParser();
-final formatter = DartFormatter(
-  pageWidth: 80,
-  languageVersion: Version(3, 6, 0),
-);
-
 void main(List<String> args) {
-  Options.define(argParser: _argParser);
+  final argParser = ArgParser();
+  Options.define(argParser: argParser);
 
   late final CliArguments parsedArgs;
 
   try {
-    parsedArgs =
-        Arguments.parseArgsAndConfig(argParser: _argParser, args: args);
+    parsedArgs = Arguments.parseArgsAndConfig(
+      argParser: argParser,
+      args: args,
+    );
   } on CliArgumentException catch (e) {
-    _usageError(e.message);
+    _usageError(error: e.message, usage: argParser.usage);
   } on CliHelpException {
-    _printHelp();
+    _printHelp(usage: argParser.usage);
   } on YamlException catch (e) {
     Log.logger.e(e.toString());
     exit(66);
@@ -113,6 +110,10 @@ void _run(CliArguments parsedArgs) {
     );
 
     Log.logger.i('Formatting generated Flutter class.');
+    final formatter = DartFormatter(
+      pageWidth: 80,
+      languageVersion: Version(3, 6, 0),
+    );
     classString = formatter.format(classString);
 
     parsedArgs.classFile!.writeAsStringSync(classString);
@@ -121,37 +122,31 @@ void _run(CliArguments parsedArgs) {
   Log.logger.i('Generated in ${stopwatch.elapsedMilliseconds}ms');
 }
 
-void _printHelp() {
-  _printUsage();
+void _printHelp({required String usage}) {
+  _printUsage(usage: usage);
   exit(exitCode);
 }
 
-void _usageError(String error) {
-  _printUsage(error);
+void _usageError({required String error, required String usage}) {
+  _printUsage(usage: usage, error: error);
   exit(64);
 }
 
-void _printUsage([String? error]) {
-  final message = error ?? _kAbout;
+void _printUsage({required String usage, String? error}) {
+  final message = error ??
+      'Converts .svg icons to an OpenType font and generates '
+          'Flutter-compatible class.';
 
   stdout.write('''
 $message
 
-$_kUsage
-${_argParser.usage}
-''');
-  exit(64);
-}
-
-const _kAbout =
-    'Converts .svg icons to an OpenType font and generates Flutter-compatible '
-    'class.';
-
-const _kUsage = '''
 Usage:   icon_font <input-svg-dir> <output-font-file> [options]
 
 Example: icon_font assets/svg/ fonts/my_icons_font.otf --output-class-file=lib/my_icons.dart
 
 Converts every .svg file from <input-svg-dir> directory to an OpenType font and writes it to <output-font-file> file.
 If "--output-class-file" option is specified, Flutter-compatible class that contains identifiers for the icons is generated.
-''';
+
+$usage
+''');
+}

@@ -15,27 +15,6 @@ const _kFormat12 = 12;
 
 const _kEncodingRecordSize = 8;
 const _kSequentialMapGroupSize = 12;
-const _kByteEncodingTableSize = 256 + 6;
-
-/// Ordered list of encoding record templates, sorted by platform and encoding
-/// ID
-List<EncodingRecord> _getDefaultEncodingRecordList() => [
-      /// Unicode (2.0 or later semantics BMP only), format 4
-      EncodingRecord.create(platformID: kPlatformUnicode, encodingID: 3),
-
-      /// Unicode (Unicode 2.0 or later semantics non-BMP characters allowed),
-      /// format 12
-      EncodingRecord.create(platformID: kPlatformUnicode, encodingID: 4),
-
-      /// Macintosh, format 0
-      EncodingRecord.create(platformID: kPlatformMacintosh, encodingID: 0),
-
-      /// Windows (Unicode BMP-only UCS-2), format 4
-      EncodingRecord.create(platformID: kPlatformWindows, encodingID: 1),
-
-      /// Windows (Unicode UCS-4), format 12
-      EncodingRecord.create(platformID: kPlatformWindows, encodingID: 10),
-    ];
 
 /// Ordered list of encoding record format for each template
 const _kDefaultEncodingRecordFormatList = [
@@ -262,7 +241,7 @@ class CmapByteEncodingTable extends CmapData {
   factory CmapByteEncodingTable.create() {
     return CmapByteEncodingTable(
       format: _kFormat0,
-      length: _kByteEncodingTableSize,
+      length: 256 + 6,
       language: 0,
       glyphIdArray: List.filled(256, 0), // Not using standard mac glyphs
     );
@@ -273,7 +252,7 @@ class CmapByteEncodingTable extends CmapData {
   final List<int> glyphIdArray;
 
   @override
-  int get size => _kByteEncodingTableSize;
+  int get size => 256 + 6;
 
   @override
   void encodeToBinary(ByteData byteData) {
@@ -611,7 +590,19 @@ class CharacterToGlyphTable extends FontTable {
     final header = CharacterToGlyphTableHeader(
       version: 0,
       numTables: subtables.length,
-      encodingRecords: _getDefaultEncodingRecordList(),
+      encodingRecords: [
+        // Unicode (2.0 or later semantics BMP only), format 4
+        EncodingRecord.create(platformID: kPlatformUnicode, encodingID: 3),
+        // Unicode (Unicode 2.0 or later semantics non-BMP characters allowed),
+        // format 12
+        EncodingRecord.create(platformID: kPlatformUnicode, encodingID: 4),
+        // Macintosh, format 0
+        EncodingRecord.create(platformID: kPlatformMacintosh, encodingID: 0),
+        // Windows (Unicode BMP-only UCS-2), format 4
+        EncodingRecord.create(platformID: kPlatformWindows, encodingID: 1),
+        // Windows (Unicode UCS-4), format 12
+        EncodingRecord.create(platformID: kPlatformWindows, encodingID: 10),
+      ],
     );
 
     return CharacterToGlyphTable(

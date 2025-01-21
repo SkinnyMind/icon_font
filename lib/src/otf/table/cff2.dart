@@ -20,7 +20,7 @@ class CFF2TableHeader implements BinaryCodable {
   }
 
   factory CFF2TableHeader.create() => CFF2TableHeader(
-        majorVersion: _kMajorVersion2,
+        majorVersion: 0x0002,
         minorVersion: 0,
         headerSize: _kCFF2HeaderSize,
         topDictLength: null,

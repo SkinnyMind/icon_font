@@ -2,8 +2,6 @@ import 'dart:typed_data';
 
 import 'package:icon_font/src/common/binary_codable.dart';
 
-const _kGlyphHeaderSize = 10;
-
 class GlyphHeader implements BinaryCodable {
   GlyphHeader({
     required this.numberOfContours,
@@ -35,7 +33,7 @@ class GlyphHeader implements BinaryCodable {
   bool get isComposite => numberOfContours.isNegative;
 
   @override
-  int get size => _kGlyphHeaderSize;
+  int get size => 10;
 
   @override
   void encodeToBinary(ByteData byteData) {
