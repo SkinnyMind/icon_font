@@ -5,7 +5,7 @@ import 'package:dart_style/dart_style.dart';
 import 'package:icon_font/src/cli/arguments.dart';
 import 'package:icon_font/src/cli/options.dart';
 import 'package:icon_font/src/common/api.dart';
-import 'package:icon_font/src/otf/io.dart';
+import 'package:icon_font/src/otf/writer.dart';
 import 'package:icon_font/src/utils/logger.dart';
 import 'package:path/path.dart' as p;
 import 'package:pub_semver/pub_semver.dart';
@@ -84,7 +84,16 @@ void _run(CliArguments parsedArgs) {
     fontName: parsedArgs.fontName,
   );
 
-  writeToFile(path: parsedArgs.fontFile.path, font: otfResult.font);
+  /// Write OpenType font to a file.
+  final file = File(parsedArgs.fontFile.path);
+  file.createSync(recursive: true);
+  final byteData = OTFWriter().write(font: otfResult.font);
+  final extension = p.extension(file.path).toLowerCase();
+  if (extension != '.otf' && otfResult.font.isOpenType) {
+    Log.logger.w('A font that contains only CFF outline data should have an '
+        '.OTF extension.');
+  }
+  file.writeAsBytesSync(byteData.buffer.asUint8List());
 
   if (parsedArgs.classFile == null) {
     Log.logger.t('No output path for Flutter class was specified - '
