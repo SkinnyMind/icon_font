@@ -3,30 +3,9 @@ import 'dart:typed_data';
 import 'package:icon_font/src/common/binary_codable.dart';
 import 'package:icon_font/src/otf/table/language_system.dart';
 import 'package:icon_font/src/utils/extensions.dart';
+import 'package:icon_font/src/utils/konst.dart';
 
 const kScriptRecordSize = 6;
-
-/// Alphabetically ordered (by tag) list of script records
-final _defaultScriptRecordList = [
-  /// Default
-  ScriptRecord(scriptTag: 'DFLT', scriptOffset: null),
-
-  /// Latin
-  ScriptRecord(scriptTag: 'latn', scriptOffset: null),
-];
-
-const _kDefaultScriptTable = ScriptTable(
-  defaultLangSysOffset: 4,
-  langSysCount: 0,
-  langSysRecords: [],
-  langSysTables: [],
-  defaultLangSys: LanguageSystemTable(
-    lookupOrder: 0,
-    requiredFeatureIndex: 0xFFFF, // no required features
-    featureIndexCount: 1,
-    featureIndices: [0],
-  ),
-);
 
 class ScriptRecord implements BinaryCodable {
   ScriptRecord({required this.scriptTag, required this.scriptOffset});
@@ -194,12 +173,31 @@ class ScriptListTable implements BinaryCodable {
   }
 
   factory ScriptListTable.create() {
-    final scriptCount = _defaultScriptRecordList.length;
+    final scriptRecords = [
+      ScriptRecord(scriptTag: 'DFLT', scriptOffset: null),
+      ScriptRecord(scriptTag: 'latn', scriptOffset: null),
+    ];
+
+    const scriptTable = ScriptTable(
+      defaultLangSysOffset: 4,
+      langSysCount: 0,
+      langSysRecords: [],
+      langSysTables: [],
+      defaultLangSys: LanguageSystemTable(
+        lookupOrder: 0,
+        requiredFeatureIndex: 0xFFFF, // no required features
+        featureIndexCount: 1,
+        featureIndices: [0],
+      ),
+    );
 
     return ScriptListTable(
-      scriptCount: scriptCount,
-      scriptRecords: _defaultScriptRecordList,
-      scriptTables: List.generate(scriptCount, (index) => _kDefaultScriptTable),
+      scriptCount: scriptRecords.length,
+      scriptRecords: scriptRecords,
+      scriptTables: List.generate(
+        scriptRecords.length,
+        (index) => scriptTable,
+      ),
     );
   }
 

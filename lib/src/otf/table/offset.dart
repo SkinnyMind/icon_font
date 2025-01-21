@@ -2,11 +2,7 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:icon_font/src/common/binary_codable.dart';
-
-const kOffsetTableLength = 12;
-
-const _kOffsetTableTrueTypeVersion = 0x00010000;
-const _kOffsetTableOpenTypeVersion = 0x4F54544F;
+import 'package:icon_font/src/utils/konst.dart';
 
 class OffsetTable implements BinaryCodable {
   OffsetTable({
@@ -38,9 +34,7 @@ class OffsetTable implements BinaryCodable {
     final rangeShift = numTables * 16 - searchRange;
 
     return OffsetTable(
-      sfntVersion: isOpenType
-          ? _kOffsetTableOpenTypeVersion
-          : _kOffsetTableTrueTypeVersion,
+      sfntVersion: isOpenType ? 0x4F54544F : 0x00010000,
       numTables: numTables,
       searchRange: searchRange,
       entrySelector: entrySelector,
@@ -54,7 +48,7 @@ class OffsetTable implements BinaryCodable {
   final int entrySelector;
   final int rangeShift;
 
-  bool get isOpenType => sfntVersion == _kOffsetTableOpenTypeVersion;
+  bool get isOpenType => sfntVersion == 0x4F54544F;
 
   @override
   int get size => kOffsetTableLength;

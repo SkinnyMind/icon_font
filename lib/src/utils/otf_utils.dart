@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:icon_font/src/otf/table/head.dart';
 import 'package:meta/meta.dart';
 
 const String kHeadTag = 'head';
@@ -67,7 +66,8 @@ class OtfUtils {
   }
 
   static int calculateFontChecksum({required ByteData byteData}) {
-    return (kChecksumMagicNumber -
+    final checkSumMagicNumber = 0xB1B0AFBA;
+    return (checkSumMagicNumber -
             calculateTableChecksum(encodedTable: byteData))
         .toUnsigned(32);
   }

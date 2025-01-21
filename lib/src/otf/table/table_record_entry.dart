@@ -2,8 +2,7 @@ import 'dart:typed_data';
 
 import 'package:icon_font/src/common/binary_codable.dart';
 import 'package:icon_font/src/utils/extensions.dart';
-
-const kTableRecordEntryLength = 16;
+import 'package:icon_font/src/utils/konst.dart';
 
 class TableRecordEntry implements BinaryCodable {
   TableRecordEntry({

@@ -14,18 +14,16 @@ import 'package:icon_font/src/utils/konst.dart';
 import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
-const _kVersion0 = 0x0000;
-const _kVersion1 = 0x0001;
-const _kVersion4 = 0x0004;
-const _kVersion5 = 0x0005;
+enum OS2TableVersion {
+  v0(value: 0x0000, size: 78),
+  v1(value: 0x0001, size: 8),
+  v4(value: 0x0004, size: 10),
+  v5(value: 0x0005, size: 4);
 
-/// Byte size for fields added with specific version
-const _kVersionDataSize = {
-  _kVersion0: 78,
-  _kVersion1: 8,
-  _kVersion4: 10,
-  _kVersion5: 4,
-};
+  const OS2TableVersion({required this.value, required this.size});
+  final int value;
+  final int size;
+}
 
 const _kDefaultSubscriptRelativeXsize = .65;
 const _kDefaultSubscriptRelativeYsize = .7;
@@ -93,11 +91,11 @@ class OS2Table extends FontTable {
   }) {
     final version = byteData.getInt16(entry.offset);
 
-    final isV1 = version >= _kVersion1;
-    final isV4 = version >= _kVersion4;
-    final isV5 = version >= _kVersion5;
+    final isV1 = version >= OS2TableVersion.v1.value;
+    final isV4 = version >= OS2TableVersion.v4.value;
+    final isV5 = version >= OS2TableVersion.v5.value;
 
-    if (version > _kVersion5) {
+    if (version > OS2TableVersion.v5.value) {
       Log.unsupportedTableVersion(kOS2Tag, version);
     }
 
@@ -159,7 +157,7 @@ class OS2Table extends FontTable {
     required CharacterToGlyphTable cmap,
     required GlyphSubstitutionTable gsub,
     required String achVendID,
-    int version = _kVersion5,
+    required int version,
   }) {
     final asciiAchVendID = achVendID.getAsciiPrintable();
 
@@ -172,9 +170,9 @@ class OS2Table extends FontTable {
     final emSize = head.unitsPerEm;
     final height = hhea.ascender - hhea.descender;
 
-    final isV1 = version >= _kVersion1;
-    final isV4 = version >= _kVersion4;
-    final isV5 = version >= _kVersion5;
+    final isV1 = version >= OS2TableVersion.v1.value;
+    final isV4 = version >= OS2TableVersion.v4.value;
+    final isV5 = version >= OS2TableVersion.v5.value;
 
     final scriptXsize = (emSize * _kDefaultSubscriptRelativeXsize).round();
     final scriptYsize = (height * _kDefaultSubscriptRelativeYsize).round();
@@ -293,12 +291,11 @@ class OS2Table extends FontTable {
   int get size {
     var size = 0;
 
-    for (final e in _kVersionDataSize.entries) {
-      if (e.key > version) {
+    for (final e in OS2TableVersion.values) {
+      if (e.value > version) {
         break;
       }
-
-      size += e.value;
+      size += e.size;
     }
 
     return size;
@@ -334,11 +331,11 @@ class OS2Table extends FontTable {
 
   @override
   void encodeToBinary(ByteData byteData) {
-    final isV1 = version >= _kVersion1;
-    final isV4 = version >= _kVersion4;
-    final isV5 = version >= _kVersion5;
+    final isV1 = version >= OS2TableVersion.v1.value;
+    final isV4 = version >= OS2TableVersion.v4.value;
+    final isV5 = version >= OS2TableVersion.v5.value;
 
-    if (version > _kVersion5) {
+    if (version > OS2TableVersion.v5.value) {
       Log.unsupportedTableVersion(kOS2Tag, version);
     }
 

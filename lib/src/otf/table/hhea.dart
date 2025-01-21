@@ -5,8 +5,6 @@ import 'package:icon_font/src/otf/table/abstract.dart';
 import 'package:icon_font/src/otf/table/hmtx.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
 
-const _kHheaTableSize = 36;
-
 class HorizontalHeaderTable extends FontTable {
   HorizontalHeaderTable({
     required TableRecordEntry? entry,
@@ -93,7 +91,7 @@ class HorizontalHeaderTable extends FontTable {
   final int numberOfHMetrics;
 
   @override
-  int get size => _kHheaTableSize;
+  int get size => 36;
 
   @override
   void encodeToBinary(ByteData byteData) {

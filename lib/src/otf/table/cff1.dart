@@ -1,7 +1,5 @@
 part of 'cff.dart';
 
-const _kCFF1HeaderSize = 4;
-
 // NOTE: local subrs, encodings are omitted
 
 class CFF1TableHeader implements BinaryCodable {
@@ -25,7 +23,7 @@ class CFF1TableHeader implements BinaryCodable {
     return CFF1TableHeader(
       majorVersion: 1,
       minorVersion: 0,
-      headerSize: _kCFF1HeaderSize,
+      headerSize: 4,
       offSize: null,
     );
   }
@@ -45,7 +43,7 @@ class CFF1TableHeader implements BinaryCodable {
   }
 
   @override
-  int get size => _kCFF1HeaderSize;
+  int get size => 4;
 }
 
 class CFF1Table extends CFFTable implements CalculatableOffsets {
@@ -181,8 +179,7 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
     required NamingTable name,
   }) {
     final header = CFF1TableHeader.create();
-
-    var sidIndex = _cffStandardStringCount;
+    var sidIndex = 391;
     final sidList = <int>[];
     final stringIndexDataList = <Uint8List>[];
     final ascii = RegExp(r'^[\x00-\x7F]+$');
@@ -199,10 +196,8 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
 
     // excluding .notdef
     for (final g in glyphList.sublist(1)) {
-      final standardSid = _kCharcodeToSidMap[g.metadata.charCode];
-
-      standardSid != null
-          ? sidList.add(standardSid)
+      g.metadata.charCode == kUnicodeSpaceCharCode
+          ? sidList.add(1)
           : putStringInIndex(g.metadata.name!);
     }
 

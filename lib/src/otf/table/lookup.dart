@@ -223,27 +223,35 @@ class LookupListTable implements BinaryCodable {
   }
 
   factory LookupListTable.create() {
+    const coverageTable = CoverageTableFormat1(
+      coverageFormat: 1,
+      glyphCount: 0,
+      glyphArray: [],
+    );
+    const subtables = [
+      LigatureSubstitutionSubtable(
+        substFormat: 1,
+        coverageOffset: 6,
+        ligatureSetCount: 0,
+        ligatureSetOffsets: [],
+        coverageTable: coverageTable,
+      ),
+    ];
+    const lookupTables = [
+      LookupTable(
+        lookupType: 4,
+        lookupFlag: 0,
+        subTableCount: 1,
+        subtableOffsets: [8],
+        markFilteringSet: null,
+        subtables: subtables,
+      ),
+    ];
+
     return LookupListTable(
       lookupCount: 1,
       lookups: [4],
-      lookupTables: const [
-        LookupTable(
-          lookupType: 4,
-          lookupFlag: 0,
-          subTableCount: 1,
-          subtableOffsets: [8],
-          markFilteringSet: null,
-          subtables: [
-            LigatureSubstitutionSubtable(
-              substFormat: 1,
-              coverageOffset: 6,
-              ligatureSetCount: 0,
-              ligatureSetOffsets: [],
-              coverageTable: kDefaultCoverageTable,
-            ),
-          ],
-        ),
-      ],
+      lookupTables: lookupTables,
     );
   }
 

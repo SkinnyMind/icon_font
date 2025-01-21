@@ -12,10 +12,6 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:yaml/yaml.dart';
 
 final _argParser = ArgParser();
-final formatter = DartFormatter(
-  pageWidth: 80,
-  languageVersion: Version(3, 6, 0),
-);
 
 void main(List<String> args) {
   Options.define(argParser: _argParser);
@@ -113,6 +109,10 @@ void _run(CliArguments parsedArgs) {
     );
 
     Log.logger.i('Formatting generated Flutter class.');
+    final formatter = DartFormatter(
+      pageWidth: 80,
+      languageVersion: Version(3, 6, 0),
+    );
     classString = formatter.format(classString);
 
     parsedArgs.classFile!.writeAsStringSync(classString);
@@ -132,26 +132,20 @@ void _usageError(String error) {
 }
 
 void _printUsage([String? error]) {
-  final message = error ?? _kAbout;
+  final message = error ??
+      'Converts .svg icons to an OpenType font and generates '
+          'Flutter-compatible class.';
 
   stdout.write('''
 $message
 
-$_kUsage
-${_argParser.usage}
-''');
-  exit(64);
-}
-
-const _kAbout =
-    'Converts .svg icons to an OpenType font and generates Flutter-compatible '
-    'class.';
-
-const _kUsage = '''
 Usage:   icon_font <input-svg-dir> <output-font-file> [options]
 
 Example: icon_font assets/svg/ fonts/my_icons_font.otf --output-class-file=lib/my_icons.dart
 
 Converts every .svg file from <input-svg-dir> directory to an OpenType font and writes it to <output-font-file> file.
 If "--output-class-file" option is specified, Flutter-compatible class that contains identifiers for the icons is generated.
-''';
+
+${_argParser.usage}
+''');
+}

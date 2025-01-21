@@ -21,12 +21,8 @@ import 'package:icon_font/src/utils/konst.dart';
 import 'package:icon_font/src/utils/logger.dart';
 
 part '../cff/charset.dart';
-part '../cff/standard_string.dart';
 part 'cff1.dart';
 part 'cff2.dart';
-
-const _kMajorVersion1 = 0x0001;
-const _kMajorVersion2 = 0x0002;
 
 abstract class CFFTable extends FontTable {
   CFFTable.fromTableRecordEntry(super.entry) : super.fromTableRecordEntry();
@@ -38,9 +34,9 @@ abstract class CFFTable extends FontTable {
     final major = byteData.getUint8(entry.offset);
 
     switch (major) {
-      case _kMajorVersion1:
+      case 0x0001:
         return CFF1Table.fromByteData(byteData: byteData, entry: entry);
-      case _kMajorVersion2:
+      case 0x0002:
         return CFF2Table.fromByteData(byteData: byteData, entry: entry);
     }
 

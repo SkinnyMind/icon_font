@@ -1,9 +1,5 @@
 part of '../table/cff.dart';
 
-const _kFormat0 = 0;
-const _kFormat1 = 1;
-const _kFormat2 = 2;
-
 const _kRange1Size = 3;
 
 abstract class CharsetEntry implements BinaryCodable {
@@ -18,13 +14,13 @@ abstract class CharsetEntry implements BinaryCodable {
     final format = byteData.getUint8(0);
 
     switch (format) {
-      case _kFormat1:
+      case 1:
         return CharsetEntryFormat1.fromByteData(
           byteData: byteData.sublistView(1),
           glyphCount: glyphCount,
         );
-      case _kFormat0:
-      case _kFormat2:
+      case 0:
+      case 2:
       default:
         Log.unsupportedTableFormat('charsets', format);
     }
@@ -55,7 +51,7 @@ class CharsetEntryFormat1 extends CharsetEntry {
       offset += range.size;
     }
 
-    return CharsetEntryFormat1(format: _kFormat1, rangeList: rangeList);
+    return CharsetEntryFormat1(format: 1, rangeList: rangeList);
   }
 
   factory CharsetEntryFormat1.create({required List<int> sIdList}) {
@@ -87,7 +83,7 @@ class CharsetEntryFormat1 extends CharsetEntry {
       saveRange();
     }
 
-    return CharsetEntryFormat1(format: _kFormat1, rangeList: rangeList);
+    return CharsetEntryFormat1(format: 1, rangeList: rangeList);
   }
 
   final List<Range1> rangeList;

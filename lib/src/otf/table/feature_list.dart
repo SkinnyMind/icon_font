@@ -3,15 +3,7 @@ import 'dart:typed_data';
 import 'package:icon_font/src/common/binary_codable.dart';
 import 'package:icon_font/src/utils/extensions.dart';
 
-const kFeatureRecordSize = 6;
-
-const _kDefaultFeatureTableList = [
-  FeatureTable(featureParams: 0, lookupIndexCount: 1, lookupListIndices: [0]),
-];
-
-List<FeatureRecord> _createDefaultFeatureRecordList() => [
-      FeatureRecord(featureTag: 'liga', featureOffset: null),
-    ];
+const _kFeatureRecordSize = 6;
 
 class FeatureRecord implements BinaryCodable {
   FeatureRecord({required this.featureTag, required this.featureOffset});
@@ -33,7 +25,7 @@ class FeatureRecord implements BinaryCodable {
   int? featureOffset;
 
   @override
-  int get size => kFeatureRecordSize;
+  int get size => _kFeatureRecordSize;
 
   @override
   void encodeToBinary(ByteData byteData) {
@@ -105,7 +97,7 @@ class FeatureListTable implements BinaryCodable {
       featureCount,
       (i) => FeatureRecord.fromByteData(
         byteData: byteData,
-        offset: offset + 2 + kFeatureRecordSize * i,
+        offset: offset + 2 + _kFeatureRecordSize * i,
       ),
     );
     final featureTables = List.generate(
@@ -121,12 +113,20 @@ class FeatureListTable implements BinaryCodable {
   }
 
   factory FeatureListTable.create() {
-    final featureRecordList = _createDefaultFeatureRecordList();
+    final featureRecordList = [
+      FeatureRecord(featureTag: 'liga', featureOffset: null),
+    ];
 
     return FeatureListTable(
       featureCount: featureRecordList.length,
       featureRecords: featureRecordList,
-      featureTables: _kDefaultFeatureTableList,
+      featureTables: const [
+        FeatureTable(
+          featureParams: 0,
+          lookupIndexCount: 1,
+          lookupListIndices: [0],
+        ),
+      ],
     );
   }
 
@@ -148,13 +148,13 @@ class FeatureListTable implements BinaryCodable {
     byteData.setUint16(0, featureCount);
 
     var recordOffset = 2;
-    var tableRelativeOffset = 2 + kFeatureRecordSize * featureCount;
+    var tableRelativeOffset = 2 + _kFeatureRecordSize * featureCount;
 
     for (var i = 0; i < featureCount; i++) {
       final record = featureRecords[i]
         ..featureOffset = tableRelativeOffset
         ..encodeToBinary(
-          byteData.sublistView(recordOffset, kFeatureRecordSize),
+          byteData.sublistView(recordOffset, _kFeatureRecordSize),
         );
 
       final table = featureTables[i];

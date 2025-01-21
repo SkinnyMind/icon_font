@@ -6,19 +6,20 @@ import 'package:icon_font/src/otf/table/table_record_entry.dart';
 import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
-const _kVersion0 = 0x00005000;
-const _kVersion1 = 0x00010000;
+enum ProfileTableVersion {
+  v0(value: 0x00005000, size: 6),
+  v1(value: 0x00010000, size: 32);
 
-const _kTableSizeForVersion = {
-  _kVersion0: 6,
-  _kVersion1: 32,
-};
+  const ProfileTableVersion({required this.value, required this.size});
+  final int value;
+  final int size;
+}
 
 class MaximumProfileTable extends FontTable {
   MaximumProfileTable.v0({
     required TableRecordEntry? entry,
     required this.numGlyphs,
-  })  : version = _kVersion0,
+  })  : version = ProfileTableVersion.v0.value,
         maxPoints = null,
         maxContours = null,
         maxCompositePoints = null,
@@ -50,7 +51,7 @@ class MaximumProfileTable extends FontTable {
     required this.maxSizeOfInstructions,
     required this.maxComponentElements,
     required this.maxComponentDepth,
-  })  : version = _kVersion1,
+  })  : version = ProfileTableVersion.v1.value,
         super.fromTableRecordEntry(entry);
 
   factory MaximumProfileTable.create({
@@ -89,13 +90,13 @@ class MaximumProfileTable extends FontTable {
   }) {
     final version = data.getInt32(entry.offset);
 
-    if (version == _kVersion0) {
+    if (version == ProfileTableVersion.v0.value) {
       return MaximumProfileTable.v0(
         entry: entry,
         numGlyphs: data.getUint16(entry.offset + 4),
       );
     }
-    if (version == _kVersion1) {
+    if (version == ProfileTableVersion.v1.value) {
       return MaximumProfileTable.v1(
         entry: entry,
         numGlyphs: data.getUint16(entry.offset + 4),
@@ -144,7 +145,7 @@ class MaximumProfileTable extends FontTable {
       ..setInt32(0, version)
       ..setUint16(4, numGlyphs);
 
-    if (version == _kVersion1) {
+    if (version == ProfileTableVersion.v1.value) {
       byteData
         ..setUint16(6, maxPoints!)
         ..setUint16(8, maxContours!)
@@ -159,11 +160,12 @@ class MaximumProfileTable extends FontTable {
         ..setUint16(26, maxSizeOfInstructions!)
         ..setUint16(28, maxComponentElements!)
         ..setUint16(30, maxComponentDepth!);
-    } else if (version != _kVersion0) {
+    } else if (version != ProfileTableVersion.v0.value) {
       Log.unsupportedTableVersion(kMaxpTag, version);
     }
   }
 
   @override
-  int get size => _kTableSizeForVersion[version]!;
+  int get size =>
+      ProfileTableVersion.values.firstWhere((e) => e.value == version).size;
 }

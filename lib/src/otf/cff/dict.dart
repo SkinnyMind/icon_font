@@ -7,8 +7,6 @@ import 'package:icon_font/src/otf/cff/operator.dart';
 import 'package:icon_font/src/utils/exceptions.dart';
 import 'package:icon_font/src/utils/extensions.dart';
 
-const _kOperatorEscapeByte = 0x0C;
-
 class CFFDictEntry extends BinaryCodable {
   CFFDictEntry({required this.operandList, required this.operator});
 
@@ -27,7 +25,7 @@ class CFFDictEntry extends BinaryCodable {
         /// Reading an operator (b0 is not in operand range)
         int? b1;
 
-        if (b0 == _kOperatorEscapeByte) {
+        if (b0 == 0x0C) {
           /// An operator is 2-byte long
           b1 = byteData.getUint8(offset++);
         }

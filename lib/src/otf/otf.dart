@@ -11,28 +11,6 @@ import 'package:icon_font/src/utils/extensions.dart';
 import 'package:icon_font/src/utils/konst.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
-/// Ordered list of table tags for encoding (Optimized Table Ordering)
-const _kTableTagsToEncode = {
-  kHeadTag,
-  kHheaTag,
-  kMaxpTag,
-  kOS2Tag,
-  kHmtxTag,
-  kNameTag, // NOTE: 'name' should be after 'cmap' for TTF
-  kCmapTag,
-  kLocaTag,
-  kGlyfTag,
-  kPostTag,
-  kCFFTag,
-  kCFF2Tag,
-  kGSUBTag,
-};
-
-const _kDefaultAchVendID = '    ';
-const _kDefaultTrueTypeUnitsPerEm = 1024; // A power of two is recommended
-const _kDefaultBaselineExtension = 150;
-const _kDefaultFontRevision = Revision(1, 0);
-
 /// An OpenType font.
 /// Contains either TrueType (glyf table) or OpenType (CFF2 table) outlines
 class OpenTypeFont implements BinaryCodable {
@@ -74,8 +52,8 @@ class OpenTypeFont implements BinaryCodable {
       fontName = null;
     }
 
-    revision ??= _kDefaultFontRevision;
-    achVendID ??= _kDefaultAchVendID;
+    revision ??= const Revision(1, 0);
+    achVendID ??= '    ';
     fontName ??= kDefaultFontFamily;
     useOpenType ??= true;
     normalize ??= true;
@@ -84,10 +62,9 @@ class OpenTypeFont implements BinaryCodable {
     glyphList = _generateCharCodes(glyphList: glyphList);
 
     // A power of two is recommended only for TrueType outlines
-    final unitsPerEm =
-        useOpenType ? kDefaultOpenTypeUnitsPerEm : _kDefaultTrueTypeUnitsPerEm;
+    final unitsPerEm = useOpenType ? kDefaultOpenTypeUnitsPerEm : 1024;
 
-    final baselineExtension = normalize ? _kDefaultBaselineExtension : 0;
+    final baselineExtension = normalize ? 150 : 0;
     final ascender = unitsPerEm - baselineExtension;
     final descender = -baselineExtension;
 
@@ -174,6 +151,7 @@ class OpenTypeFont implements BinaryCodable {
       cmap: cmap,
       gsub: gsub,
       achVendID: achVendID,
+      version: OS2TableVersion.v5.value,
     );
 
     final cff = useOpenType
@@ -255,7 +233,23 @@ class OpenTypeFont implements BinaryCodable {
 
     final entryList = <TableRecordEntry>[];
 
-    for (final tag in _kTableTagsToEncode) {
+    /// Ordered list of table tags for encoding (Optimized Table Ordering)
+    const tableTagsToEncode = {
+      kHeadTag,
+      kHheaTag,
+      kMaxpTag,
+      kOS2Tag,
+      kHmtxTag,
+      kNameTag, // NOTE: 'name' should be after 'cmap' for TTF
+      kCmapTag,
+      kLocaTag,
+      kGlyfTag,
+      kPostTag,
+      kCFFTag,
+      kCFF2Tag,
+      kGSUBTag,
+    };
+    for (final tag in tableTagsToEncode) {
       final table = tableMap[tag];
 
       if (table == null) {
