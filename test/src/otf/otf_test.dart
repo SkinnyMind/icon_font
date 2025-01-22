@@ -6,18 +6,18 @@ import 'package:icon_font/src/svg/svg.dart';
 import 'package:icon_font/src/utils/konst.dart';
 import 'package:test/test.dart';
 
-import 'constant.dart';
-
-const _kTestCompSvgPathList = [
-  '$kTestAssetsDir/svg/comp_first.svg',
-  '$kTestAssetsDir/svg/comp_second.svg',
-  '$kTestAssetsDir/svg/comp_third.svg',
-];
-
 void main() {
-  group('Normalization', () {
+  const testAssetsDir = './test/assets';
+
+  const testCompSvgPathList = [
+    '$testAssetsDir/svg/comp_first.svg',
+    '$testAssetsDir/svg/comp_second.svg',
+    '$testAssetsDir/svg/comp_third.svg',
+  ];
+
+  group('OTF Normalization', () {
     List<GenericGlyph> createGlyphList() {
-      final svgFileList = _kTestCompSvgPathList.map(File.new);
+      final svgFileList = testCompSvgPathList.map(File.new);
       final svgList = svgFileList.map(
         (e) => Svg.parse(name: e.path, xmlString: e.readAsStringSync()),
       );
