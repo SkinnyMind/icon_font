@@ -8,30 +8,34 @@ import 'package:test/test.dart';
 void main() {
   final argParser = ArgParser();
 
-  group('Arguments', () {
+  group('CLI Arguments', () {
     Options.define(argParser: argParser);
 
-    void expectCliArgumentException(List<String> args) {
+    test('throws when no positional args provided', () {
       expect(
-        () => Arguments.parseArgsAndConfig(argParser: argParser, args: args),
-        throwsA(const TypeMatcher<CliArgumentException>()),
+        () => Arguments.parseArgsAndConfig(
+          argParser: argParser,
+          args: [
+            '--output-class-file=test/a/df.dart',
+            '--class-name=MyIcons',
+            '--font-name=My Icons',
+          ],
+        ),
+        throwsA(isA<CliArgumentException>()),
       );
-    }
-
-    test('No positional args', () {
-      expectCliArgumentException([
-        '--output-class-file=test/a/df.dart',
-        '--class-name=MyIcons',
-        '--font-name=My Icons',
-      ]);
     });
 
-    test('Positional args validation', () {
-      // dir doesn't exist
-      expectCliArgumentException(['./asdasd/', 'asdasdasd']);
+    test('throws when positional args are not valid', () {
+      expect(
+        () => Arguments.parseArgsAndConfig(
+          argParser: argParser,
+          args: ['./asdasd/', 'asdasdasd'],
+        ),
+        throwsA(isA<CliArgumentException>()),
+      );
     });
 
-    test('All arguments with non-defaults', () {
+    test('parses all arguments with non-defaults', () {
       const args = [
         './',
         'test/fonts/my_font.otf',
@@ -64,7 +68,7 @@ void main() {
       expect(parsedArgs.iconList, isTrue);
     });
 
-    test('All arguments with defaults', () {
+    test('parses all arguments with defaults', () {
       const args = [
         './',
         'test/fonts/my_font.otf',

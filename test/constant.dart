@@ -1,1 +1,0 @@
-const kTestAssetsDir = './test/assets';
