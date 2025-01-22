@@ -14,22 +14,19 @@ Compatible with dart2js and dart2native.
 
 ### Install via dev dependency
 
-```shell
-$ flutter pub add --dev icon_font
+Add following section to `pubspec.yaml`:
 
-# And it's ready to go:
-$ flutter pub run icon_font:generate <input-svg-dir> <output-font-file> [options]
+```yaml
+dev_dependencies:
+  icon_font:
+    git:
+      url: https://github.com/SkinnyMind/icon_font.git
 ```
 
-### or [Globally activate][] the package:
-
-[globally activate]: https://dart.dev/tools/pub/cmd/pub-global
+Use following shell command to generate icon font:
 
 ```shell
-$ pub global activate icon_font
-
-# And it's ready to go:
-$ icon_font <input-svg-dir> <output-font-file> [options]
+$ dart run icon_font:generate <input-svg-dir> <output-font-file> [options]
 ```
 
 Required positional arguments:
@@ -75,7 +72,7 @@ Other options:
 _Usage example:_
 
 ```shell
-$ icon_font assets/svg/ fonts/my_icons_font.otf --output-class-file=lib/my_icons.dart -r
+$ dart run icon_font:generate assets/svg/ fonts/my_icons_font.otf --output-class-file=lib/my_icons.dart -r
 ```
 
 Updated Flutter project's pubspec.yaml:
@@ -115,10 +112,7 @@ It's possible to specify any other config file by using `--config-file` option.
 
 ## Using API
 
-[svgToOtf][] and [generateFlutterClass][] functions can be used for generating font and Flutter class.
-
-[svgToOtf]: https://pub.dev/documentation/icon_font/latest/icon_font/svgToOtf.html
-[generateFlutterClass]: https://pub.dev/documentation/icon_font/latest/icon_font/generateFlutterClass.html
+`IconFont.svgToOtf(...)` and `IconFont.generateFlutterClass(...)` functions can be used for generating font and Flutter class.
 
 ## Notes
 
