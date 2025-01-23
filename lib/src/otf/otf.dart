@@ -6,9 +6,9 @@ import 'package:icon_font/src/common/calculatable_offsets.dart';
 import 'package:icon_font/src/common/generic_glyph.dart';
 import 'package:icon_font/src/common/outline.dart';
 import 'package:icon_font/src/otf/table/all.dart';
+import 'package:icon_font/src/utils/constants.dart';
 import 'package:icon_font/src/utils/exceptions.dart';
 import 'package:icon_font/src/utils/extensions.dart';
-import 'package:icon_font/src/utils/konst.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
 /// An OpenType font.
@@ -54,7 +54,7 @@ class OpenTypeFont implements BinaryCodable {
 
     revision ??= const Revision(1, 0);
     achVendID ??= '    ';
-    fontName ??= kDefaultFontFamily;
+    fontName ??= defaultFontFamily;
     useOpenType ??= true;
     normalize ??= true;
     usePostV2 ??= false;
@@ -62,7 +62,7 @@ class OpenTypeFont implements BinaryCodable {
     glyphList = _generateCharCodes(glyphList: glyphList);
 
     // A power of two is recommended only for TrueType outlines
-    final unitsPerEm = useOpenType ? kDefaultOpenTypeUnitsPerEm : 1024;
+    final unitsPerEm = useOpenType ? defaultOpenTypeUnitsPerEm : 1024;
 
     final baselineExtension = normalize ? 150 : 0;
     final ascender = unitsPerEm - baselineExtension;
@@ -229,7 +229,7 @@ class OpenTypeFont implements BinaryCodable {
 
   @override
   void encodeToBinary(ByteData byteData) {
-    var currentTableOffset = kOffsetTableLength + entryListSize;
+    var currentTableOffset = offsetTableLength + entryListSize;
 
     final entryList = <TableRecordEntry>[];
 
@@ -284,20 +284,20 @@ class OpenTypeFont implements BinaryCodable {
     entryList.sort((e1, e2) => e1.tag.compareTo(e2.tag));
 
     for (var i = 0; i < entryList.length; i++) {
-      final entryOffset = kOffsetTableLength + i * kTableRecordEntryLength;
+      final entryOffset = offsetTableLength + i * tableRecordEntryLength;
       final entryByteData =
-          byteData.sublistView(entryOffset, kTableRecordEntryLength);
+          byteData.sublistView(entryOffset, tableRecordEntryLength);
       entryList[i].encodeToBinary(entryByteData);
     }
 
-    offsetTable.encodeToBinary(byteData.sublistView(0, kOffsetTableLength));
+    offsetTable.encodeToBinary(byteData.sublistView(0, offsetTableLength));
 
     // Setting checksum for whole font in the head table
     final fontChecksum = OtfUtils.calculateFontChecksum(byteData: byteData);
     byteData.setUint32(head.entry!.offset + 8, fontChecksum);
   }
 
-  int get entryListSize => kTableRecordEntryLength * tableMap.length;
+  int get entryListSize => tableRecordEntryLength * tableMap.length;
 
   int get tableListSize => tableMap.values.fold<int>(
         0,
@@ -305,7 +305,7 @@ class OpenTypeFont implements BinaryCodable {
       );
 
   @override
-  int get size => kOffsetTableLength + entryListSize + tableListSize;
+  int get size => offsetTableLength + entryListSize + tableListSize;
 
   // TODO: I don't like this. Refactor it later. Use "strategy" or something.
   static List<GenericGlyph> _resizeAndCenter({
@@ -347,7 +347,7 @@ class OpenTypeFont implements BinaryCodable {
     required List<GenericGlyph> glyphList,
   }) {
     for (var i = 0; i < glyphList.length; i++) {
-      glyphList[i].metadata.charCode = kUnicodePrivateUseAreaStart + i;
+      glyphList[i].metadata.charCode = unicodePrivateUseAreaStart + i;
     }
     return glyphList;
   }
@@ -358,7 +358,7 @@ class OpenTypeFont implements BinaryCodable {
     final space = GenericGlyph.empty();
 
     // .notdef doesn't have charcode
-    space.metadata.charCode = kUnicodeSpaceCharCode;
+    space.metadata.charCode = unicodeSpaceCharCode;
 
     return [notdef, space];
   }

@@ -3,14 +3,14 @@ import 'dart:typed_data';
 import 'package:icon_font/src/common/binary_codable.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
-const _kOnCurvePointValue = 0x01;
-const _kXshortVectorValue = 0x02;
-const _kYshortVectorValue = 0x04;
-const _kRepeatFlagValue = 0x08;
-const _kXisSameValue = 0x10;
-const _kYisSameValue = 0x20;
-const _kOverlapSimpleValue = 0x40;
-const _kReservedValue = 0x80;
+const _onCurvePointValue = 0x01;
+const _xShortVectorValue = 0x02;
+const _yShortVectorValue = 0x04;
+const _repeatFlagValue = 0x08;
+const _xIsSameValue = 0x10;
+const _yIsSameValue = 0x20;
+const _overlapSimpleValue = 0x40;
+const _reservedValue = 0x80;
 
 class SimpleGlyphFlag implements BinaryCodable {
   SimpleGlyphFlag({
@@ -28,32 +28,32 @@ class SimpleGlyphFlag implements BinaryCodable {
     return SimpleGlyphFlag(
       onCurvePoint: OtfUtils.checkBitMask(
         value: flag,
-        mask: _kOnCurvePointValue,
+        mask: _onCurvePointValue,
       ),
       xShortVector: OtfUtils.checkBitMask(
         value: flag,
-        mask: _kXshortVectorValue,
+        mask: _xShortVectorValue,
       ),
       yShortVector: OtfUtils.checkBitMask(
         value: flag,
-        mask: _kYshortVectorValue,
+        mask: _yShortVectorValue,
       ),
       repeat: repeatTimes,
       xIsSameOrPositive: OtfUtils.checkBitMask(
         value: flag,
-        mask: _kXisSameValue,
+        mask: _xIsSameValue,
       ),
       yIsSameOrPositive: OtfUtils.checkBitMask(
         value: flag,
-        mask: _kYisSameValue,
+        mask: _yIsSameValue,
       ),
       overlapSimple: OtfUtils.checkBitMask(
         value: flag,
-        mask: _kOverlapSimpleValue,
+        mask: _overlapSimpleValue,
       ),
       reserved: OtfUtils.checkBitMask(
         value: flag,
-        mask: _kReservedValue,
+        mask: _reservedValue,
       ),
     );
   }
@@ -64,7 +64,7 @@ class SimpleGlyphFlag implements BinaryCodable {
   }) {
     final flag = byteData.getUint8(offset);
     final repeatFlag =
-        OtfUtils.checkBitMask(value: flag, mask: _kRepeatFlagValue);
+        OtfUtils.checkBitMask(value: flag, mask: _repeatFlagValue);
     final repeatTimes = repeatFlag ? byteData.getUint8(offset + 1) : null;
 
     return SimpleGlyphFlag.fromIntValue(flag: flag, repeatTimes: repeatTimes);
@@ -102,14 +102,14 @@ class SimpleGlyphFlag implements BinaryCodable {
   final bool reserved;
 
   Map<int, bool> get _valueForMaskMap => {
-        _kOnCurvePointValue: onCurvePoint,
-        _kXshortVectorValue: xShortVector,
-        _kYshortVectorValue: yShortVector,
-        _kXisSameValue: xIsSameOrPositive,
-        _kYisSameValue: yIsSameOrPositive,
-        _kOverlapSimpleValue: overlapSimple,
-        _kReservedValue: reserved,
-        _kRepeatFlagValue: isRepeating,
+        _onCurvePointValue: onCurvePoint,
+        _xShortVectorValue: xShortVector,
+        _yShortVectorValue: yShortVector,
+        _xIsSameValue: xIsSameOrPositive,
+        _yIsSameValue: yIsSameOrPositive,
+        _overlapSimpleValue: overlapSimple,
+        _reservedValue: reserved,
+        _repeatFlagValue: isRepeating,
       };
 
   bool get isRepeating => repeat != null;

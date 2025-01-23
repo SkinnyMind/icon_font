@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:icon_font/src/common/generic_glyph.dart';
 import 'package:icon_font/src/otf/otf.dart';
 import 'package:icon_font/src/svg/svg.dart';
-import 'package:icon_font/src/utils/konst.dart';
+import 'package:icon_font/src/utils/constants.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -30,7 +30,7 @@ void main() {
         normalize: false,
       );
       final widthList = font.hmtx.hMetrics.map((e) => e.advanceWidth);
-      const unitsPerEm = kDefaultOpenTypeUnitsPerEm;
+      const unitsPerEm = defaultOpenTypeUnitsPerEm;
 
       expect(widthList, [350, 333, unitsPerEm, unitsPerEm, unitsPerEm]);
       expect(font.hhea.ascender, 1000);

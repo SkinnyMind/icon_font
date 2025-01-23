@@ -9,20 +9,20 @@ import 'package:icon_font/src/utils/extensions.dart';
 import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
-const _kFormat0 = 0;
-const _kFormat4 = 4;
-const _kFormat12 = 12;
+const _format0 = 0;
+const _format4 = 4;
+const _format12 = 12;
 
-const _kEncodingRecordSize = 8;
-const _kSequentialMapGroupSize = 12;
+const _encodingRecordSize = 8;
+const _sequentialMapGroupSize = 12;
 
 /// Ordered list of encoding record format for each template
-const _kDefaultEncodingRecordFormatList = [
-  _kFormat4,
-  _kFormat12,
-  _kFormat0,
-  _kFormat4,
-  _kFormat12,
+const _defaultEncodingRecordFormatList = [
+  _format4,
+  _format12,
+  _format0,
+  _format4,
+  _format12,
 ];
 
 class Segment {
@@ -67,7 +67,7 @@ class EncodingRecord implements BinaryCodable {
   int? offset;
 
   @override
-  int get size => _kEncodingRecordSize;
+  int get size => _encodingRecordSize;
 
   @override
   void encodeToBinary(ByteData byteData) {
@@ -101,7 +101,7 @@ class SequentialMapGroup implements BinaryCodable {
   final int startGlyphID;
 
   @override
-  int get size => _kSequentialMapGroupSize;
+  int get size => _sequentialMapGroupSize;
 
   @override
   void encodeToBinary(ByteData byteData) {
@@ -129,7 +129,7 @@ class CharacterToGlyphTableHeader implements BinaryCodable {
       numTables,
       (i) => EncodingRecord.fromByteData(
         byteData: byteData,
-        offset: entry.offset + 4 + _kEncodingRecordSize * i,
+        offset: entry.offset + 4 + _encodingRecordSize * i,
       ),
     );
 
@@ -145,7 +145,7 @@ class CharacterToGlyphTableHeader implements BinaryCodable {
   final List<EncodingRecord> encodingRecords;
 
   @override
-  int get size => 4 + _kEncodingRecordSize * encodingRecords.length;
+  int get size => 4 + _encodingRecordSize * encodingRecords.length;
 
   @override
   void encodeToBinary(ByteData byteData) {
@@ -156,7 +156,7 @@ class CharacterToGlyphTableHeader implements BinaryCodable {
     for (var i = 0; i < encodingRecords.length; i++) {
       final r = encodingRecords[i];
       r.encodeToBinary(
-        byteData.sublistView(4 + _kEncodingRecordSize * i, r.size),
+        byteData.sublistView(4 + _encodingRecordSize * i, r.size),
       );
     }
   }
@@ -172,17 +172,17 @@ abstract class CmapData implements BinaryCodable {
     final format = byteData.getUint16(offset);
 
     switch (format) {
-      case _kFormat0:
+      case _format0:
         return CmapByteEncodingTable.fromByteData(
           byteData: byteData,
           offset: offset,
         );
-      case _kFormat4:
+      case _format4:
         return CmapSegmentMappingToDeltaValuesTable.fromByteData(
           byteData: byteData,
           startOffset: offset,
         );
-      case _kFormat12:
+      case _format12:
         return CmapSegmentedCoverageTable.fromByteData(
           byteData: byteData,
           offset: offset,
@@ -198,13 +198,13 @@ abstract class CmapData implements BinaryCodable {
     required int format,
   }) {
     switch (format) {
-      case _kFormat0:
+      case _format0:
         return CmapByteEncodingTable.create();
-      case _kFormat4:
+      case _format4:
         return CmapSegmentMappingToDeltaValuesTable.create(
           segmentList: segmentList,
         );
-      case _kFormat12:
+      case _format12:
         return CmapSegmentedCoverageTable.create(segmentList: segmentList);
       default:
         Log.unsupportedTableFormat(kCmapTag, format);
@@ -240,7 +240,7 @@ class CmapByteEncodingTable extends CmapData {
 
   factory CmapByteEncodingTable.create() {
     return CmapByteEncodingTable(
-      format: _kFormat0,
+      format: _format0,
       length: 256 + 6,
       language: 0,
       glyphIdArray: List.filled(256, 0), // Not using standard mac glyphs
@@ -358,7 +358,7 @@ class CmapSegmentMappingToDeltaValuesTable extends CmapData {
     final length = 16 + 4 * 2 * segCount;
 
     return CmapSegmentMappingToDeltaValuesTable(
-      format: _kFormat4,
+      format: _format4,
       length: length,
       language: 0, // Roman language
       segCount: segCount,
@@ -459,7 +459,7 @@ class CmapSegmentedCoverageTable extends CmapData {
         numGroups,
         (i) => SequentialMapGroup.fromByteData(
           byteData: byteData,
-          offset: offset + 16 + _kSequentialMapGroupSize * i,
+          offset: offset + 16 + _sequentialMapGroupSize * i,
         ),
       ),
     );
@@ -479,7 +479,7 @@ class CmapSegmentedCoverageTable extends CmapData {
         .toList();
 
     final numGroups = groups.length;
-    final groupsSize = numGroups * _kSequentialMapGroupSize;
+    final groupsSize = numGroups * _sequentialMapGroupSize;
 
     /// Two 2-byte variables
     /// Three 4-byte variables
@@ -487,7 +487,7 @@ class CmapSegmentedCoverageTable extends CmapData {
     final length = 16 + groupsSize;
 
     return CmapSegmentedCoverageTable(
-      format: _kFormat12,
+      format: _format12,
       reserved: 0,
       length: length,
       language: 0, // Roman language
@@ -572,18 +572,18 @@ class CharacterToGlyphTable extends FontTable {
       ), // Format 4 table must end with 0xFFFF char code
     ];
 
-    final subtableByFormat = _kDefaultEncodingRecordFormatList
+    final subtableByFormat = _defaultEncodingRecordFormatList
         .toSet()
         .fold<Map<int, CmapData?>>({}, (p, format) {
       p[format] = CmapData.create(
-        segmentList: format == _kFormat4 ? segmentListFormat4 : segmentList,
+        segmentList: format == _format4 ? segmentListFormat4 : segmentList,
         format: format,
       );
       return p;
     });
 
     final subtables = [
-      for (final format in _kDefaultEncodingRecordFormatList)
+      for (final format in _defaultEncodingRecordFormatList)
         if (subtableByFormat[format] != null) subtableByFormat[format]!,
     ];
 

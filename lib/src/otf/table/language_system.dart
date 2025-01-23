@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:icon_font/src/common/binary_codable.dart';
+import 'package:icon_font/src/utils/constants.dart';
 import 'package:icon_font/src/utils/extensions.dart';
-import 'package:icon_font/src/utils/konst.dart';
 
 class LanguageSystemRecord implements BinaryCodable {
   LanguageSystemRecord({required this.langSysTag, required this.langSysOffset});
@@ -24,7 +24,7 @@ class LanguageSystemRecord implements BinaryCodable {
   int langSysOffset;
 
   @override
-  int get size => kLangSysRecordSize;
+  int get size => langSysRecordSize;
 
   @override
   void encodeToBinary(ByteData byteData) {

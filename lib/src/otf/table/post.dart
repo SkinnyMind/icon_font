@@ -8,10 +8,10 @@ import 'package:icon_font/src/utils/extensions.dart';
 import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
-const _kVersion20 = 0x00020000;
-const _kVersion30 = 0x00030000;
+const _version20 = 0x00020000;
+const _version30 = 0x00030000;
 
-const _kHeaderSize = 32;
+const _headerSize = 32;
 
 class PostScriptTableHeader implements BinaryCodable {
   PostScriptTableHeader({
@@ -70,7 +70,7 @@ class PostScriptTableHeader implements BinaryCodable {
   final int maxMemType1;
 
   @override
-  int get size => _kHeaderSize;
+  int get size => _headerSize;
 
   @override
   void encodeToBinary(ByteData byteData) {
@@ -98,12 +98,12 @@ abstract class PostScriptData implements BinaryCodable {
     final version = header.version.int32value;
 
     switch (version) {
-      case _kVersion20:
+      case _version20:
         return PostScriptVersion20.fromByteData(
           byteData: byteData,
           offset: offset,
         );
-      case _kVersion30:
+      case _version30:
         return PostScriptVersion30();
       default:
         Log.unsupportedTableVersion(kPostTag, version);
@@ -121,7 +121,7 @@ class PostScriptVersion30 extends PostScriptData {
   int get size => 0;
 
   @override
-  Revision get version => const Revision.fromInt32(_kVersion30);
+  Revision get version => const Revision.fromInt32(_version30);
 
   @override
   void encodeToBinary(_) {}
@@ -175,7 +175,7 @@ class PostScriptVersion20 extends PostScriptData {
       0, // .notdef
       3, // space
       for (var i = 0; i < glyphNameList.length; i++)
-        _kMacStandardGlyphNames.length + i,
+        _macStandardGlyphNames.length + i,
     ];
 
     final numberOfGlyphs = glyphNameIndex.length;
@@ -210,7 +210,7 @@ class PostScriptVersion20 extends PostScriptData {
   }
 
   @override
-  Revision get version => const Revision.fromInt32(_kVersion20);
+  Revision get version => const Revision.fromInt32(_version20);
 
   @override
   void encodeToBinary(ByteData byteData) {
@@ -260,7 +260,7 @@ class PostScriptTable extends FontTable {
       header: header,
       data: PostScriptData.fromByteData(
         byteData: byteData,
-        offset: entry.offset + _kHeaderSize,
+        offset: entry.offset + _headerSize,
         header: header,
       ),
     );
@@ -301,9 +301,9 @@ class PostScriptTable extends FontTable {
 }
 
 bool _isGlyphNameStandard(int glyphIndex) =>
-    glyphIndex < _kMacStandardGlyphNames.length;
+    glyphIndex < _macStandardGlyphNames.length;
 
-const _kMacStandardGlyphNames = [
+const _macStandardGlyphNames = [
   '.notdef',
   '.null',
   'nonmarkingreturn',

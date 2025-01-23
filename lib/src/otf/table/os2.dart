@@ -8,9 +8,9 @@ import 'package:icon_font/src/otf/table/head.dart';
 import 'package:icon_font/src/otf/table/hhea.dart';
 import 'package:icon_font/src/otf/table/hmtx.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
+import 'package:icon_font/src/utils/constants.dart';
 import 'package:icon_font/src/utils/exceptions.dart';
 import 'package:icon_font/src/utils/extensions.dart';
-import 'package:icon_font/src/utils/konst.dart';
 import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
@@ -25,12 +25,12 @@ enum OS2TableVersion {
   final int size;
 }
 
-const _kDefaultSubscriptRelativeXsize = .65;
-const _kDefaultSubscriptRelativeYsize = .7;
-const _kDefaultSubscriptRelativeYoffset = .14;
-const _kDefaultSuperscriptRelativeYoffset = .48;
-const _kDefaultStrikeoutRelativeSize = .1;
-const _kDefaultStrikeoutRelativeOffset = .26;
+const _defaultSubscriptRelativeXsize = .65;
+const _defaultSubscriptRelativeYsize = .7;
+const _defaultSubscriptRelativeYoffset = .14;
+const _defaultSuperscriptRelativeYoffset = .48;
+const _defaultStrikeoutRelativeSize = .1;
+const _defaultStrikeoutRelativeOffset = .26;
 
 /// Default values for PANOSE classification:
 ///
@@ -39,7 +39,7 @@ const _kDefaultStrikeoutRelativeOffset = .26;
 /// * Font weight: Book
 /// * Proportion: Modern
 /// * Anything else: Any
-const _kDefaultPANOSE = [2, 0, 5, 3, 0, 0, 0, 0, 0, 0];
+const _defaultPANOSE = [2, 0, 5, 3, 0, 0, 0, 0, 0, 0];
 
 class OS2Table extends FontTable {
   OS2Table._({
@@ -174,14 +174,14 @@ class OS2Table extends FontTable {
     final isV4 = version >= OS2TableVersion.v4.value;
     final isV5 = version >= OS2TableVersion.v5.value;
 
-    final scriptXsize = (emSize * _kDefaultSubscriptRelativeXsize).round();
-    final scriptYsize = (height * _kDefaultSubscriptRelativeYsize).round();
+    final scriptXsize = (emSize * _defaultSubscriptRelativeXsize).round();
+    final scriptYsize = (height * _defaultSubscriptRelativeYsize).round();
     final subscriptYoffset =
-        (height * _kDefaultSubscriptRelativeYoffset).round();
+        (height * _defaultSubscriptRelativeYoffset).round();
     final superscriptYoffset =
-        (height * _kDefaultSuperscriptRelativeYoffset).round();
-    final strikeoutSize = (height * _kDefaultStrikeoutRelativeSize).round();
-    final strikeoutOffset = (height * _kDefaultStrikeoutRelativeOffset).round();
+        (height * _defaultSuperscriptRelativeYoffset).round();
+    final strikeoutSize = (height * _defaultStrikeoutRelativeSize).round();
+    final strikeoutOffset = (height * _defaultStrikeoutRelativeOffset).round();
 
     final cmapFormat4subtable =
         cmap.data.whereType<CmapSegmentMappingToDeltaValuesTable>().first;
@@ -204,7 +204,7 @@ class OS2Table extends FontTable {
       yStrikeoutSize: strikeoutSize,
       yStrikeoutPosition: strikeoutOffset,
       sFamilyClass: 0, // No Classification
-      panose: _kDefaultPANOSE,
+      panose: _defaultPANOSE,
       // NOTE: Only 2 unicode ranges are used now.
       //
       // Should be made calculated, in case of using other ranges.
@@ -229,7 +229,7 @@ class OS2Table extends FontTable {
       sxHeight: !isV4 ? null : 0,
       sCapHeight: !isV4 ? null : 0,
       usDefaultChar: !isV4 ? null : 0,
-      usBreakChar: !isV4 ? null : kUnicodeSpaceCharCode,
+      usBreakChar: !isV4 ? null : unicodeSpaceCharCode,
       usMaxContext: !isV4 ? null : _getMaxContext(gsub: gsub),
       // For fonts that were not designed for multiple optical-size variants,
       // usLowerOpticalPointSize should be set to 0 (zero),

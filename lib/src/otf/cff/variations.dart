@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:icon_font/src/common/binary_codable.dart';
 import 'package:icon_font/src/utils/extensions.dart';
 
-const _kRegionAxisCoordinatesSize = 6;
+const _regionAxisCoordinatesSize = 6;
 
 class RegionAxisCoordinates extends BinaryCodable {
   RegionAxisCoordinates({
@@ -34,7 +34,7 @@ class RegionAxisCoordinates extends BinaryCodable {
   }
 
   @override
-  int get size => _kRegionAxisCoordinatesSize;
+  int get size => _regionAxisCoordinatesSize;
 }
 
 class ItemVariationData extends BinaryCodable {
@@ -94,8 +94,8 @@ class VariationRegionList extends BinaryCodable {
         for (var a = 0; a < axisCount; a++)
           RegionAxisCoordinates.fromByteData(
             byteData: byteData.sublistView(
-              4 + (a + r * axisCount) * _kRegionAxisCoordinatesSize,
-              _kRegionAxisCoordinatesSize,
+              4 + (a + r * axisCount) * _regionAxisCoordinatesSize,
+              _regionAxisCoordinatesSize,
             ),
           ),
     ];
@@ -122,8 +122,8 @@ class VariationRegionList extends BinaryCodable {
         final index = r * axisCount + a;
         final coords = regions[index];
         final coordsByteData = byteData.sublistView(
-          4 + index * _kRegionAxisCoordinatesSize,
-          _kRegionAxisCoordinatesSize,
+          4 + index * _regionAxisCoordinatesSize,
+          _regionAxisCoordinatesSize,
         );
         coords.encodeToBinary(coordsByteData);
       }
@@ -131,7 +131,7 @@ class VariationRegionList extends BinaryCodable {
   }
 
   @override
-  int get size => 4 + regionCount * axisCount * _kRegionAxisCoordinatesSize;
+  int get size => 4 + regionCount * axisCount * _regionAxisCoordinatesSize;
 }
 
 class ItemVariationStore extends BinaryCodable {
