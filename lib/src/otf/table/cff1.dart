@@ -69,7 +69,7 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
     var fixedOffset = entry.offset;
 
     final header = CFF1TableHeader.fromByteData(
-      byteData.sublistView(fixedOffset, _kCFF2HeaderSize),
+      byteData.sublistView(fixedOffset, _cff2HeaderSize),
     );
     fixedOffset += header.size;
 
@@ -196,7 +196,7 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
 
     // excluding .notdef
     for (final g in glyphList.sublist(1)) {
-      g.metadata.charCode == kUnicodeSpaceCharCode
+      g.metadata.charCode == unicodeSpaceCharCode
           ? sidList.add(1)
           : putStringInIndex(g.metadata.name!);
     }

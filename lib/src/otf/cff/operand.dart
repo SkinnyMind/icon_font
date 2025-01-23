@@ -3,9 +3,9 @@ import 'dart:typed_data';
 import 'package:icon_font/src/common/binary_codable.dart';
 import 'package:icon_font/src/utils/exceptions.dart';
 
-const _kRealNumberTerminator = 0xF;
+const _realNumberTerminator = 0xF;
 
-const _kStringForRealNumberByte = [
+const _stringForRealNumberByte = [
   '0',
   '1',
   '2',
@@ -77,18 +77,18 @@ class CFFOperand extends BinaryCodable {
         final b = byteData.getUint8(offset++);
 
         final n1 = b >> 4;
-        if (n1 == _kRealNumberTerminator) {
+        if (n1 == _realNumberTerminator) {
           break;
         }
 
-        sb.write(_kStringForRealNumberByte[n1]);
+        sb.write(_stringForRealNumberByte[n1]);
 
         final n2 = b & 0xF;
-        if (n2 == _kRealNumberTerminator) {
+        if (n2 == _realNumberTerminator) {
           break;
         }
 
-        sb.write(_kStringForRealNumberByte[n2]);
+        sb.write(_stringForRealNumberByte[n2]);
       }
 
       return double.parse(sb.toString());
@@ -172,7 +172,7 @@ class CFFOperand extends BinaryCodable {
           i++;
         }
 
-        final nibble = _kStringForRealNumberByte.indexOf(char);
+        final nibble = _stringForRealNumberByte.indexOf(char);
 
         if (firstHalf) {
           prevNibble = nibble;
@@ -186,7 +186,7 @@ class CFFOperand extends BinaryCodable {
       if (firstHalf) {
         byteData.setUint8(offset++, 0xFF);
       } else {
-        byteData.setUint8(offset++, (prevNibble << 4) | _kRealNumberTerminator);
+        byteData.setUint8(offset++, (prevNibble << 4) | _realNumberTerminator);
       }
     }
 

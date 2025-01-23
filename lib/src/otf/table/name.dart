@@ -7,9 +7,9 @@ import 'package:icon_font/src/utils/extensions.dart';
 import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
-const _kNameRecordSize = 12;
+const _nameRecordSize = 12;
 
-const _kFormat0 = 0x0;
+const _format0 = 0x0;
 
 enum NameID {
   fontFamily,
@@ -23,7 +23,7 @@ enum NameID {
 }
 
 /// List of name record templates, sorted by platform and encoding ID
-const _kNameRecordTemplateList = [
+const _nameRecordTemplateList = [
   /// Macintosh English with Roman encoding
   NameRecord.template(
     platformID: kPlatformMacintosh,
@@ -125,7 +125,7 @@ class NameRecord implements BinaryCodable {
   }
 
   @override
-  int get size => _kNameRecordSize;
+  int get size => _nameRecordSize;
 
   @override
   void encodeToBinary(ByteData byteData) {
@@ -151,9 +151,9 @@ class NamingTableFormat0Header implements BinaryCodable {
     required List<NameRecord> nameRecordList,
   }) {
     return NamingTableFormat0Header(
-      format: _kFormat0,
+      format: _format0,
       count: nameRecordList.length,
-      stringOffset: 6 + nameRecordList.length * _kNameRecordSize,
+      stringOffset: 6 + nameRecordList.length * _nameRecordSize,
       nameRecordList: nameRecordList,
     );
   }
@@ -164,7 +164,7 @@ class NamingTableFormat0Header implements BinaryCodable {
   }) {
     final format = byteData.getUint16(entry.offset);
 
-    if (format != _kFormat0) {
+    if (format != _format0) {
       Log.unsupportedTableFormat(entry.tag, format);
       return null;
     }
@@ -175,7 +175,7 @@ class NamingTableFormat0Header implements BinaryCodable {
       count,
       (i) => NameRecord.fromByteData(
         byteData: byteData,
-        offset: entry.offset + 6 + i * _kNameRecordSize,
+        offset: entry.offset + 6 + i * _nameRecordSize,
       ),
     );
 
@@ -193,7 +193,7 @@ class NamingTableFormat0Header implements BinaryCodable {
   final List<NameRecord> nameRecordList;
 
   @override
-  int get size => 6 + nameRecordList.length * _kNameRecordSize;
+  int get size => 6 + nameRecordList.length * _nameRecordSize;
 
   @override
   void encodeToBinary(ByteData byteData) {
@@ -222,7 +222,7 @@ abstract class NamingTable extends FontTable {
     final format = byteData.getUint16(entry.offset);
 
     switch (format) {
-      case _kFormat0:
+      case _format0:
         return NamingTableFormat0.fromByteData(
           byteData: byteData,
           entry: entry,
@@ -237,10 +237,10 @@ abstract class NamingTable extends FontTable {
     required String fontName,
     required String? description,
     required Revision revision,
-    int format = _kFormat0,
+    int format = _format0,
   }) {
     switch (format) {
-      case _kFormat0:
+      case _format0:
         return NamingTableFormat0.create(
           fontName: fontName,
           description: description,
@@ -280,7 +280,7 @@ class NamingTableFormat0 extends NamingTable {
     };
 
     final stringList = [
-      for (var i = 0; i < _kNameRecordTemplateList.length; i++)
+      for (var i = 0; i < _nameRecordTemplateList.length; i++)
         ...stringForNameMap.values,
     ];
 
@@ -288,7 +288,7 @@ class NamingTableFormat0 extends NamingTable {
 
     var stringOffset = 0;
 
-    for (final recordTemplate in _kNameRecordTemplateList) {
+    for (final recordTemplate in _nameRecordTemplateList) {
       for (final entry in stringForNameMap.entries) {
         final encoder = _getEncoder(record: recordTemplate);
         final units = encoder(entry.value);

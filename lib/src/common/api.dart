@@ -1,7 +1,7 @@
 import 'package:icon_font/src/common/generic_glyph.dart';
 import 'package:icon_font/src/otf/otf.dart';
 import 'package:icon_font/src/svg/svg.dart';
-import 'package:icon_font/src/utils/konst.dart';
+import 'package:icon_font/src/utils/constants.dart';
 import 'package:icon_font/src/utils/logger.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart' as p;
@@ -91,7 +91,7 @@ class IconFont {
     bool? iconList,
   }) {
     className ??= 'UiIcons';
-    familyName ??= kDefaultFontFamily;
+    familyName ??= defaultFontFamily;
     fontFileName ??= 'icon_font_icons.otf';
     final packageName = package?.isEmpty ?? true ? null : package;
     final iconVarNames = _generateVariableNames(glyphList: glyphList);

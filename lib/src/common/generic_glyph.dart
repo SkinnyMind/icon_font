@@ -9,8 +9,8 @@ import 'package:icon_font/src/otf/table/glyph/simple.dart';
 import 'package:icon_font/src/svg/outline_converter.dart';
 import 'package:icon_font/src/svg/path.dart';
 import 'package:icon_font/src/svg/svg.dart';
+import 'package:icon_font/src/utils/constants.dart';
 import 'package:icon_font/src/utils/extensions.dart';
-import 'package:icon_font/src/utils/konst.dart';
 import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 import 'package:logger/logger.dart';
@@ -242,10 +242,10 @@ class GenericGlyph {
     final relYcoordinates =
         OtfUtils.absToRelCoordinates(absCoordinates: absYcoordinates);
 
-    final xMin = absXcoordinates.fold<int>(kInt32Max, math.min);
-    final yMin = absYcoordinates.fold<int>(kInt32Max, math.min);
-    final xMax = absXcoordinates.fold<int>(kInt32Min, math.max);
-    final yMax = absYcoordinates.fold<int>(kInt32Min, math.max);
+    final xMin = absXcoordinates.fold<int>(int32Max, math.min);
+    final yMin = absYcoordinates.fold<int>(int32Max, math.min);
+    final xMax = absXcoordinates.fold<int>(int32Min, math.max);
+    final yMax = absYcoordinates.fold<int>(int32Min, math.max);
 
     final flags = [
       for (var i = 0; i < pointList.length; i++)
@@ -376,10 +376,10 @@ class GenericGlyph {
       return GenericGlyphMetrics.empty();
     }
 
-    var xMin = kInt32Max;
-    var yMin = kInt32Max;
-    var xMax = kInt32Min;
-    var yMax = kInt32Min;
+    var xMin = int32Max;
+    var yMin = int32Max;
+    var xMax = int32Min;
+    var yMax = int32Min;
 
     for (final p in points) {
       if (p.x.isFinite && p.y.isFinite) {

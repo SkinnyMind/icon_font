@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:icon_font/src/common/binary_codable.dart';
 import 'package:icon_font/src/otf/table/language_system.dart';
+import 'package:icon_font/src/utils/constants.dart';
 import 'package:icon_font/src/utils/extensions.dart';
-import 'package:icon_font/src/utils/konst.dart';
 
 const kScriptRecordSize = 6;
 
@@ -66,7 +66,7 @@ class ScriptTable implements BinaryCodable {
       langSysCount,
       (i) => LanguageSystemRecord.fromByteData(
         byteData: byteData,
-        offset: offset + 4 + kLangSysRecordSize * i,
+        offset: offset + 4 + langSysRecordSize * i,
       ),
     );
     final langSysTables = langSysRecords
@@ -107,13 +107,13 @@ class ScriptTable implements BinaryCodable {
     byteData.setUint16(2, langSysCount);
 
     var recordOffset = 4;
-    var tableRelativeOffset = 4 + kLangSysRecordSize * langSysRecords.length;
+    var tableRelativeOffset = 4 + langSysRecordSize * langSysRecords.length;
 
     for (var i = 0; i < langSysRecords.length; i++) {
       final record = langSysRecords[i]
         ..langSysOffset = tableRelativeOffset
         ..encodeToBinary(
-          byteData.sublistView(recordOffset, kLangSysRecordSize),
+          byteData.sublistView(recordOffset, langSysRecordSize),
         );
 
       final table = langSysTables[i];

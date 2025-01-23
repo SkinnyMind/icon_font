@@ -214,9 +214,6 @@ class LineElement extends SvgElement implements PathConvertible {
     return LineElement(p1: p1, p2: p2, parent: parent, element: element);
   }
 
-  /// Line width
-  static const _kW = 1;
-
   final math.Point p1;
   final math.Point p2;
 
@@ -230,8 +227,8 @@ class LineElement extends SvgElement implements PathConvertible {
 
   @override
   PathElement getPath() {
-    final d =
-        'M$x1 $y1 ${x1 + _kW} ${y1 + _kW} ${x2 + _kW} ${y2 + _kW} $x2 $y2 z';
+    // line width is 1
+    final d = 'M$x1 $y1 ${x1 + 1} ${y1 + 1} ${x2 + 1} ${y2 + 1} $x2 $y2 z';
 
     return PathElement(
       fillRule: null,

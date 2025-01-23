@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:icon_font/src/common/binary_codable.dart';
 import 'package:icon_font/src/utils/extensions.dart';
 
-const _kFeatureRecordSize = 6;
+const _featureRecordSize = 6;
 
 class FeatureRecord implements BinaryCodable {
   FeatureRecord({required this.featureTag, required this.featureOffset});
@@ -25,7 +25,7 @@ class FeatureRecord implements BinaryCodable {
   int? featureOffset;
 
   @override
-  int get size => _kFeatureRecordSize;
+  int get size => _featureRecordSize;
 
   @override
   void encodeToBinary(ByteData byteData) {
@@ -97,7 +97,7 @@ class FeatureListTable implements BinaryCodable {
       featureCount,
       (i) => FeatureRecord.fromByteData(
         byteData: byteData,
-        offset: offset + 2 + _kFeatureRecordSize * i,
+        offset: offset + 2 + _featureRecordSize * i,
       ),
     );
     final featureTables = List.generate(
@@ -148,13 +148,13 @@ class FeatureListTable implements BinaryCodable {
     byteData.setUint16(0, featureCount);
 
     var recordOffset = 2;
-    var tableRelativeOffset = 2 + _kFeatureRecordSize * featureCount;
+    var tableRelativeOffset = 2 + _featureRecordSize * featureCount;
 
     for (var i = 0; i < featureCount; i++) {
       final record = featureRecords[i]
         ..featureOffset = tableRelativeOffset
         ..encodeToBinary(
-          byteData.sublistView(recordOffset, _kFeatureRecordSize),
+          byteData.sublistView(recordOffset, _featureRecordSize),
         );
 
       final table = featureTables[i];

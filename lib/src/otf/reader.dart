@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:icon_font/src/otf/otf.dart';
 import 'package:icon_font/src/otf/table/all.dart';
+import 'package:icon_font/src/utils/constants.dart';
 import 'package:icon_font/src/utils/exceptions.dart';
-import 'package:icon_font/src/utils/konst.dart';
 import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
@@ -48,14 +48,14 @@ class OTFReader {
   int _readTableRecordEntries({
     required Map<String, TableRecordEntry> outputMap,
   }) {
-    var offset = kOffsetTableLength;
+    var offset = offsetTableLength;
 
     for (var i = 0; i < _offsetTable.numTables; i++) {
       final entry = TableRecordEntry.fromByteData(_byteData, offset);
       outputMap[entry.tag] = entry;
       _tagsParseOrder.add(entry.tag);
 
-      offset += kTableRecordEntryLength;
+      offset += tableRecordEntryLength;
     }
 
     return offset;

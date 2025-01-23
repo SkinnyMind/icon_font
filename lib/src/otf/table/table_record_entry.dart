@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:icon_font/src/common/binary_codable.dart';
+import 'package:icon_font/src/utils/constants.dart';
 import 'package:icon_font/src/utils/extensions.dart';
-import 'package:icon_font/src/utils/konst.dart';
 
 class TableRecordEntry implements BinaryCodable {
   TableRecordEntry({
@@ -26,7 +26,7 @@ class TableRecordEntry implements BinaryCodable {
   final int length;
 
   @override
-  int get size => kTableRecordEntryLength;
+  int get size => tableRecordEntryLength;
 
   @override
   void encodeToBinary(ByteData byteData) {

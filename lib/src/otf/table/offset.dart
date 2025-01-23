@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:icon_font/src/common/binary_codable.dart';
-import 'package:icon_font/src/utils/konst.dart';
+import 'package:icon_font/src/utils/constants.dart';
 
 class OffsetTable implements BinaryCodable {
   OffsetTable({
@@ -51,7 +51,7 @@ class OffsetTable implements BinaryCodable {
   bool get isOpenType => sfntVersion == 0x4F54544F;
 
   @override
-  int get size => kOffsetTableLength;
+  int get size => offsetTableLength;
 
   @override
   void encodeToBinary(ByteData byteData) {

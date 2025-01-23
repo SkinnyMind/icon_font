@@ -6,10 +6,10 @@ import 'package:icon_font/src/common/generic_glyph.dart';
 import 'package:icon_font/src/otf/table/abstract.dart';
 import 'package:icon_font/src/otf/table/hhea.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
+import 'package:icon_font/src/utils/constants.dart';
 import 'package:icon_font/src/utils/extensions.dart';
-import 'package:icon_font/src/utils/konst.dart';
 
-const _kLongHorMetricSize = 4;
+const _longHorMetricSize = 4;
 
 class LongHorMetric implements BinaryCodable {
   LongHorMetric({required this.advanceWidth, required this.lsb});
@@ -40,7 +40,7 @@ class LongHorMetric implements BinaryCodable {
       advanceWidth - (lsb + xMax - xMin);
 
   @override
-  int get size => _kLongHorMetricSize;
+  int get size => _longHorMetricSize;
 
   @override
   void encodeToBinary(ByteData byteData) {
@@ -67,10 +67,10 @@ class HorizontalMetricsTable extends FontTable {
       hhea.numberOfHMetrics,
       (i) => LongHorMetric.fromByteData(
         byteData: byteData,
-        offset: entry.offset + _kLongHorMetricSize * i,
+        offset: entry.offset + _longHorMetricSize * i,
       ),
     );
-    final offset = entry.offset + _kLongHorMetricSize * hhea.numberOfHMetrics;
+    final offset = entry.offset + _longHorMetricSize * hhea.numberOfHMetrics;
     final leftSideBearings = List.generate(
       numGlyphs - hhea.numberOfHMetrics,
       (i) => byteData.getInt16(offset + 2 * i),
@@ -107,18 +107,18 @@ class HorizontalMetricsTable extends FontTable {
 
   @override
   int get size =>
-      hMetrics.length * _kLongHorMetricSize + leftSideBearings.length * 2;
+      hMetrics.length * _longHorMetricSize + leftSideBearings.length * 2;
 
   int get advanceWidthMax =>
       hMetrics.fold<int>(0, (p, v) => math.max(p, v.advanceWidth));
 
   int get minLeftSideBearing =>
-      hMetrics.fold<int>(kInt32Max, (p, v) => math.min(p, v.lsb));
+      hMetrics.fold<int>(int32Max, (p, v) => math.min(p, v.lsb));
 
   int getMinRightSideBearing({
     required List<GenericGlyphMetrics> glyphMetricsList,
   }) {
-    var minRsb = kInt32Max;
+    var minRsb = int32Max;
 
     for (var i = 0; i < glyphMetricsList.length; i++) {
       final m = glyphMetricsList[i];
@@ -131,7 +131,7 @@ class HorizontalMetricsTable extends FontTable {
   }
 
   int getMaxExtent({required List<GenericGlyphMetrics> glyphMetricsList}) {
-    var maxExtent = kInt32Min;
+    var maxExtent = int32Min;
 
     for (var i = 0; i < glyphMetricsList.length; i++) {
       final m = glyphMetricsList[i];

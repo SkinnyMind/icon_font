@@ -1,6 +1,6 @@
 part of 'cff.dart';
 
-const _kCFF2HeaderSize = 5;
+const _cff2HeaderSize = 5;
 
 class CFF2TableHeader implements BinaryCodable {
   CFF2TableHeader({
@@ -22,7 +22,7 @@ class CFF2TableHeader implements BinaryCodable {
   factory CFF2TableHeader.create() => CFF2TableHeader(
         majorVersion: 0x0002,
         minorVersion: 0,
-        headerSize: _kCFF2HeaderSize,
+        headerSize: _cff2HeaderSize,
         topDictLength: null,
       );
 
@@ -41,7 +41,7 @@ class CFF2TableHeader implements BinaryCodable {
   }
 
   @override
-  int get size => _kCFF2HeaderSize;
+  int get size => _cff2HeaderSize;
 }
 
 class CFF2Table extends CFFTable implements CalculatableOffsets {
@@ -65,9 +65,9 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
     var fixedOffset = entry.offset;
 
     final header = CFF2TableHeader.fromByteData(
-      byteData: byteData.sublistView(fixedOffset, _kCFF2HeaderSize),
+      byteData: byteData.sublistView(fixedOffset, _cff2HeaderSize),
     );
-    fixedOffset += _kCFF2HeaderSize;
+    fixedOffset += _cff2HeaderSize;
 
     final topDict = CFFDict.fromByteData(
       byteData.sublistView(fixedOffset, header.topDictLength!),

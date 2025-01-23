@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:icon_font/src/common/generic_glyph.dart';
 import 'package:icon_font/src/otf/table/all.dart';
-import 'package:icon_font/src/utils/konst.dart';
+import 'package:icon_font/src/utils/constants.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
 class HeaderTable extends FontTable {
@@ -93,19 +93,19 @@ class HeaderTable extends FontTable {
   }) {
     final now = DateTime.now();
     final xMin = glyphMetricsList.fold<int>(
-      kInt32Max,
+      int32Max,
       (prev, m) => math.min(prev, m.xMin),
     );
     final yMin = glyphMetricsList.fold<int>(
-      kInt32Max,
+      int32Max,
       (prev, m) => math.min(prev, m.yMin),
     );
     final xMax = glyphMetricsList.fold<int>(
-      kInt32Min,
+      int32Min,
       (prev, m) => math.max(prev, m.xMax),
     );
     final yMax = glyphMetricsList.fold<int>(
-      kInt32Min,
+      int32Min,
       (prev, m) => math.max(prev, m.yMax),
     );
 
