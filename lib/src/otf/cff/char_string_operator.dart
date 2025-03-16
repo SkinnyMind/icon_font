@@ -28,14 +28,26 @@ const callgsubr = CFFOperator(context: CFFOperatorContext.charString, b0: 29);
 const vhcurveto = CFFOperator(context: CFFOperatorContext.charString, b0: 30);
 const hvcurveto = CFFOperator(context: CFFOperatorContext.charString, b0: 31);
 
-const hflex =
-    CFFOperator(context: CFFOperatorContext.charString, b0: 12, b1: 34);
-const flex =
-    CFFOperator(context: CFFOperatorContext.charString, b0: 12, b1: 35);
-const hflex1 =
-    CFFOperator(context: CFFOperatorContext.charString, b0: 12, b1: 36);
-const flex1 =
-    CFFOperator(context: CFFOperatorContext.charString, b0: 12, b1: 37);
+const hflex = CFFOperator(
+  context: CFFOperatorContext.charString,
+  b0: 12,
+  b1: 34,
+);
+const flex = CFFOperator(
+  context: CFFOperatorContext.charString,
+  b0: 12,
+  b1: 35,
+);
+const hflex1 = CFFOperator(
+  context: CFFOperatorContext.charString,
+  b0: 12,
+  b1: 36,
+);
+const flex1 = CFFOperator(
+  context: CFFOperatorContext.charString,
+  b0: 12,
+  b1: 37,
+);
 
 /// CFF1 endchar
 const endchar = CFFOperator(context: CFFOperatorContext.charString, b0: 14);

@@ -69,14 +69,15 @@ class ScriptTable implements BinaryCodable {
         offset: offset + 4 + langSysRecordSize * i,
       ),
     );
-    final langSysTables = langSysRecords
-        .map(
-          (r) => LanguageSystemTable.fromByteData(
-            byteData: byteData,
-            offset: offset + r.langSysOffset,
-          ),
-        )
-        .toList();
+    final langSysTables =
+        langSysRecords
+            .map(
+              (r) => LanguageSystemTable.fromByteData(
+                byteData: byteData,
+                offset: offset + r.langSysOffset,
+              ),
+            )
+            .toList();
 
     return ScriptTable(
       defaultLangSysOffset: defaultLangSysOffset,
@@ -110,11 +111,12 @@ class ScriptTable implements BinaryCodable {
     var tableRelativeOffset = 4 + langSysRecordSize * langSysRecords.length;
 
     for (var i = 0; i < langSysRecords.length; i++) {
-      final record = langSysRecords[i]
-        ..langSysOffset = tableRelativeOffset
-        ..encodeToBinary(
-          byteData.sublistView(recordOffset, langSysRecordSize),
-        );
+      final record =
+          langSysRecords[i]
+            ..langSysOffset = tableRelativeOffset
+            ..encodeToBinary(
+              byteData.sublistView(recordOffset, langSysRecordSize),
+            );
 
       final table = langSysTables[i];
       table.encodeToBinary(
@@ -129,10 +131,7 @@ class ScriptTable implements BinaryCodable {
     byteData.setUint16(0, defaultRelativeLangSysOffset);
 
     defaultLangSys?.encodeToBinary(
-      byteData.sublistView(
-        defaultRelativeLangSysOffset,
-        defaultLangSys!.size,
-      ),
+      byteData.sublistView(defaultRelativeLangSysOffset, defaultLangSys!.size),
     );
   }
 }
@@ -194,10 +193,7 @@ class ScriptListTable implements BinaryCodable {
     return ScriptListTable(
       scriptCount: scriptRecords.length,
       scriptRecords: scriptRecords,
-      scriptTables: List.generate(
-        scriptRecords.length,
-        (index) => scriptTable,
-      ),
+      scriptTables: List.generate(scriptRecords.length, (index) => scriptTable),
     );
   }
 
@@ -222,9 +218,12 @@ class ScriptListTable implements BinaryCodable {
     var tableRelativeOffset = 2 + kScriptRecordSize * scriptCount;
 
     for (var i = 0; i < scriptCount; i++) {
-      final record = scriptRecords[i]
-        ..scriptOffset = tableRelativeOffset
-        ..encodeToBinary(byteData.sublistView(recordOffset, kScriptRecordSize));
+      final record =
+          scriptRecords[i]
+            ..scriptOffset = tableRelativeOffset
+            ..encodeToBinary(
+              byteData.sublistView(recordOffset, kScriptRecordSize),
+            );
 
       final table = scriptTables[i];
       table.encodeToBinary(

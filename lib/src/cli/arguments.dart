@@ -29,13 +29,16 @@ class Arguments {
       throw CliHelpException();
     }
 
-    final options =
-        CliArgument.values.where((arg) => arg.optionName.isNotEmpty);
+    final options = CliArgument.values.where(
+      (arg) => arg.optionName.isNotEmpty,
+    );
     final positionalArgs = CliArgument.values.where(
       (arg) => arg.optionName.isEmpty,
     );
-    final posArgsLength =
-        math.min(positionalArgs.length, argResults.rest.length);
+    final posArgsLength = math.min(
+      positionalArgs.length,
+      argResults.rest.length,
+    );
 
     final rawArgMap = <CliArgument, Object?>{
       for (final argument in options)
@@ -59,8 +62,9 @@ class Arguments {
     }
 
     late final CliArgument key;
-    final configNames =
-        CliArgument.values.where((arg) => arg.configName.isNotEmpty);
+    final configNames = CliArgument.values.where(
+      (arg) => arg.configName.isNotEmpty,
+    );
     try {
       key = configNames.firstWhere((e) => e.configName == rawKey);
     } on StateError catch (_) {

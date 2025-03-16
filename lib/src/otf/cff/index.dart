@@ -15,9 +15,9 @@ class CFFIndex extends BinaryCodable {
   });
 
   CFFIndex.empty({required this.isCFF1})
-      : count = 0,
-        offSize = 1,
-        offsetList = [];
+    : count = 0,
+      offSize = 1,
+      offsetList = [];
 
   factory CFFIndex.fromByteData({
     required ByteData byteData,
@@ -139,8 +139,10 @@ class CFFIndexWithData<T> implements BinaryCodable, CalculatableOffsets {
           index.offsetList[i] - 1; // -1 because first offset value is always 1
       final elementLength = index.offsetList[i + 1] - index.offsetList[i];
 
-      final fontDictByteData =
-          byteData.sublistView(indexSize + relativeOffset, elementLength);
+      final fontDictByteData = byteData.sublistView(
+        indexSize + relativeOffset,
+        elementLength,
+      );
 
       dataList.add(decoder(fontDictByteData) as T);
     }
@@ -151,8 +153,7 @@ class CFFIndexWithData<T> implements BinaryCodable, CalculatableOffsets {
   factory CFFIndexWithData.create({
     required List<T> data,
     required bool isCFF1,
-  }) =>
-      CFFIndexWithData(index: null, data: data, isCFF1: isCFF1);
+  }) => CFFIndexWithData(index: null, data: data, isCFF1: isCFF1);
 
   CFFIndex? index;
   final List<T> data;
@@ -160,9 +161,10 @@ class CFFIndexWithData<T> implements BinaryCodable, CalculatableOffsets {
 
   static Object Function(ByteData) _getDecoderForType(Type type) {
     return switch (type) {
-      const (Uint8List) => (bd) => Uint8List.fromList(
-            bd.buffer.asUint8List(bd.offsetInBytes, bd.lengthInBytes),
-          ),
+      const (Uint8List) =>
+        (bd) => Uint8List.fromList(
+          bd.buffer.asUint8List(bd.offsetInBytes, bd.lengthInBytes),
+        ),
       const (CFFDict) => CFFDict.fromByteData,
       _ => throw UnsupportedError('No decoder for type $type'),
     };
@@ -171,10 +173,10 @@ class CFFIndexWithData<T> implements BinaryCodable, CalculatableOffsets {
   void Function(ByteData, T) _getEncoder() {
     return switch (T) {
       const (Uint8List) => (bd, list) {
-          for (var i = 0; i < (list as Uint8List).length; i++) {
-            bd.setUint8(0 + i, list[i]);
-          }
-        },
+        for (var i = 0; i < (list as Uint8List).length; i++) {
+          bd.setUint8(0 + i, list[i]);
+        }
+      },
       const (CFFDict) => (bd, dict) => (dict as CFFDict).encodeToBinary(bd),
       _ => throw UnsupportedError('No encoder for type $T'),
     };

@@ -116,12 +116,12 @@ class OtfUtils {
 @immutable
 class Revision {
   const Revision(int? major, int? minor)
-      : major = major ?? 0,
-        minor = minor ?? 0;
+    : major = major ?? 0,
+      minor = minor ?? 0;
 
   const Revision.fromInt32(int revision)
-      : major = (revision >> 16) & 0xFFFF,
-        minor = revision & 0xFFFF;
+    : major = (revision >> 16) & 0xFFFF,
+      minor = revision & 0xFFFF;
 
   final int major;
   final int minor;

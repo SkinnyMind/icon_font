@@ -63,10 +63,7 @@ class Svg extends SvgElement {
       throw SvgParserException(message: 'viewBox must contain 1..4 parameters');
     }
 
-    final fvb = [
-      ...List.filled(4 - vb.length, 0),
-      ...vb,
-    ];
+    final fvb = [...List.filled(4 - vb.length, 0), ...vb];
 
     final viewBox = math.Rectangle(fvb[0], fvb[1], fvb[2], fvb[3]);
 
@@ -103,8 +100,9 @@ class Svg extends SvgElement {
 
   final Codec<String, String> _stringToBase64 = utf8.fuse(base64);
 
-  String toBase64() => _stringToBase64
-      .encode(xmlElement!.toXmlString(pretty: true, indent: '', newLine: ''));
+  String toBase64() => _stringToBase64.encode(
+    xmlElement!.toXmlString(pretty: true, indent: '', newLine: ''),
+  );
 
   @override
   String toString() => '$name (${elementList.length} elements)';

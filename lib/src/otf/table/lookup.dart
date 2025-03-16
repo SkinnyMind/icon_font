@@ -122,23 +122,25 @@ class LookupTable implements BinaryCodable {
     final useMarkFilteringSet = _useMarkFilteringSet(lookupFlag: lookupFlag);
     final markFilteringSetOffset = offset + 6 + 2 * subTableCount;
 
-    final subtables = List.generate(
-      subTableCount,
-      (i) => SubstitutionSubtable.fromByteData(
-        byteData: byteData,
-        offset: offset + subtableOffsets[i],
-        lookupType: lookupType,
-      ),
-    ).whereType<SubstitutionSubtable>().toList();
+    final subtables =
+        List.generate(
+          subTableCount,
+          (i) => SubstitutionSubtable.fromByteData(
+            byteData: byteData,
+            offset: offset + subtableOffsets[i],
+            lookupType: lookupType,
+          ),
+        ).whereType<SubstitutionSubtable>().toList();
 
     return LookupTable(
       lookupType: lookupType,
       lookupFlag: lookupFlag,
       subTableCount: subTableCount,
       subtableOffsets: subtableOffsets,
-      markFilteringSet: useMarkFilteringSet
-          ? byteData.getUint16(markFilteringSetOffset)
-          : null,
+      markFilteringSet:
+          useMarkFilteringSet
+              ? byteData.getUint16(markFilteringSetOffset)
+              : null,
       subtables: subtables,
     );
   }

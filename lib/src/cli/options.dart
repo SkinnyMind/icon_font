@@ -11,7 +11,8 @@ class Options {
       ..addOption(
         CliArgument.classFile.optionName,
         abbr: 'o',
-        help: 'Output path for Flutter-compatible class that contains '
+        help:
+            'Output path for Flutter-compatible class that contains '
             'identifiers for the icons.',
         valueHelp: 'path',
       )
@@ -24,7 +25,8 @@ class Options {
       ..addOption(
         CliArgument.fontPackage.optionName,
         abbr: 'f',
-        help: 'Name of a package that provides a font. Used to provide a font '
+        help:
+            'Name of a package that provides a font. Used to provide a font '
             'through package dependency.',
         valueHelp: 'name',
       )
@@ -42,7 +44,8 @@ class Options {
       )
       ..addFlag(
         CliArgument.normalize.optionName,
-        help: 'Enables glyph normalization for the font. Disable this if every '
+        help:
+            'Enables glyph normalization for the font. Disable this if every '
             'icon has the same size and positioning.',
         defaultsTo: true,
       )
@@ -55,7 +58,8 @@ class Options {
       ..addOption(
         CliArgument.configFile.optionName,
         abbr: 'z',
-        help: 'Path to icon_font yaml configuration file. pubspec.yaml '
+        help:
+            'Path to icon_font yaml configuration file. pubspec.yaml '
             'and icon_font.yaml files are used by default.',
         valueHelp: 'path',
       )

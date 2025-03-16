@@ -50,12 +50,8 @@ class GenericGlyphMetrics {
     required this.yMax,
   });
 
-  factory GenericGlyphMetrics.empty() => GenericGlyphMetrics(
-        xMin: 0,
-        xMax: 0,
-        yMin: 0,
-        yMax: 0,
-      );
+  factory GenericGlyphMetrics.empty() =>
+      GenericGlyphMetrics(xMin: 0, xMax: 0, yMin: 0, yMax: 0);
 
   factory GenericGlyphMetrics.square({required int unitsPerEm}) =>
       GenericGlyphMetrics(xMin: 0, xMax: unitsPerEm, yMin: 0, yMax: unitsPerEm);
@@ -81,9 +77,9 @@ class GenericGlyph {
   }) : metadata = metadata ?? GenericGlyphMetadata();
 
   GenericGlyph.empty()
-      : outlines = [],
-        bounds = const math.Rectangle(0, 0, 0, 0),
-        metadata = GenericGlyphMetadata();
+    : outlines = [],
+      bounds = const math.Rectangle(0, 0, 0, 0),
+      metadata = GenericGlyphMetadata();
 
   factory GenericGlyph.fromSimpleTrueTypeGlyph(SimpleGlyph glyph) {
     final isOnCurveList = glyph.flags.map((e) => e.onCurvePoint).toList();
@@ -92,10 +88,14 @@ class GenericGlyph {
     final outlines = [
       for (var i = 1; i < endPoints.length; i++)
         Outline(
-          pointList:
-              glyph.pointList.sublist(endPoints[i - 1] + 1, endPoints[i] + 1),
-          isOnCurveList:
-              isOnCurveList.sublist(endPoints[i - 1] + 1, endPoints[i] + 1),
+          pointList: glyph.pointList.sublist(
+            endPoints[i - 1] + 1,
+            endPoints[i] + 1,
+          ),
+          isOnCurveList: isOnCurveList.sublist(
+            endPoints[i - 1] + 1,
+            endPoints[i] + 1,
+          ),
           hasCompactCurves: true,
           hasQuadCurves: true,
           fillRule: FillRule.nonzero,
@@ -237,10 +237,12 @@ class GenericGlyph {
     final absXcoordinates = pointList.map((p) => p.x.toInt()).toList();
     final absYcoordinates = pointList.map((p) => p.y.toInt()).toList();
 
-    final relXcoordinates =
-        OtfUtils.absToRelCoordinates(absCoordinates: absXcoordinates);
-    final relYcoordinates =
-        OtfUtils.absToRelCoordinates(absCoordinates: absYcoordinates);
+    final relXcoordinates = OtfUtils.absToRelCoordinates(
+      absCoordinates: absXcoordinates,
+    );
+    final relYcoordinates = OtfUtils.absToRelCoordinates(
+      absCoordinates: absYcoordinates,
+    );
 
     final xMin = absXcoordinates.fold<int>(int32Max, math.min);
     final yMin = absYcoordinates.fold<int>(int32Max, math.min);
@@ -304,16 +306,20 @@ class GenericGlyph {
       return this;
     }
 
-    final newOutlines = outlines.map((o) {
-      final newOutline = o.copy();
-      final newPointList = newOutline.pointList
-          .map((e) => math.Point<num>(e.x * sideRatioX, e.y * sideRatioY))
-          .toList();
-      newOutline.pointList
-        ..clear()
-        ..addAll(newPointList);
-      return newOutline;
-    }).toList();
+    final newOutlines =
+        outlines.map((o) {
+          final newOutline = o.copy();
+          final newPointList =
+              newOutline.pointList
+                  .map(
+                    (e) => math.Point<num>(e.x * sideRatioX, e.y * sideRatioY),
+                  )
+                  .toList();
+          newOutline.pointList
+            ..clear()
+            ..addAll(newPointList);
+          return newOutline;
+        }).toList();
 
     final newBounds = math.Rectangle.fromPoints(
       math.Point<num>(
@@ -344,16 +350,18 @@ class GenericGlyph {
     final offsetY =
         (ascender + descender) / 2 - metrics.height / 2 - metrics.yMin + offset;
 
-    final newOutlines = outlines.map((o) {
-      final newOutline = o.copy();
-      final newPointList = newOutline.pointList
-          .map((e) => math.Point<num>(e.x + offsetX, e.y + offsetY))
-          .toList();
-      newOutline.pointList
-        ..clear()
-        ..addAll(newPointList);
-      return newOutline;
-    }).toList();
+    final newOutlines =
+        outlines.map((o) {
+          final newOutline = o.copy();
+          final newPointList =
+              newOutline.pointList
+                  .map((e) => math.Point<num>(e.x + offsetX, e.y + offsetY))
+                  .toList();
+          newOutline.pointList
+            ..clear()
+            ..addAll(newPointList);
+          return newOutline;
+        }).toList();
 
     final newBounds = math.Rectangle(
       bounds.left + offsetX,

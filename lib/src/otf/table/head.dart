@@ -22,12 +22,12 @@ class HeaderTable extends FontTable {
     required this.macStyle,
     required this.lowestRecPPEM,
     required this.indexToLocFormat,
-  })  : majorVersion = 1,
-        minorVersion = 0,
-        fontDirectionHint = 2,
-        glyphDataFormat = 0,
-        magicNumber = 0x5F0F3CF5,
-        super.fromTableRecordEntry(entry);
+  }) : majorVersion = 1,
+       minorVersion = 0,
+       fontDirectionHint = 2,
+       glyphDataFormat = 0,
+       magicNumber = 0x5F0F3CF5,
+       super.fromTableRecordEntry(entry);
 
   HeaderTable._({
     required TableRecordEntry entry,

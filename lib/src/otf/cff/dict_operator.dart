@@ -73,10 +73,16 @@ const blueShift = CFFOperator(context: CFFOperatorContext.dict, b0: 12, b1: 10);
 const blueFuzz = CFFOperator(context: CFFOperatorContext.dict, b0: 12, b1: 11);
 const stemSnapH = CFFOperator(context: CFFOperatorContext.dict, b0: 12, b1: 12);
 const stemSnapV = CFFOperator(context: CFFOperatorContext.dict, b0: 12, b1: 13);
-const languageGroup =
-    CFFOperator(context: CFFOperatorContext.dict, b0: 12, b1: 17);
-const expansionFactor =
-    CFFOperator(context: CFFOperatorContext.dict, b0: 12, b1: 18);
+const languageGroup = CFFOperator(
+  context: CFFOperatorContext.dict,
+  b0: 12,
+  b1: 17,
+);
+const expansionFactor = CFFOperator(
+  context: CFFOperatorContext.dict,
+  b0: 12,
+  b1: 18,
+);
 
 final Map<CFFOperator, String> dictOperatorNames = UnmodifiableMapView({
   fontMatrix: 'FontMatrix',

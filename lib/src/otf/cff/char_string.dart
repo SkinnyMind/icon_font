@@ -42,13 +42,11 @@ class CharStringOperand extends CFFOperand {
 }
 
 class CharStringCommand implements BinaryCodable {
-  CharStringCommand({
-    required this.operator,
-    required this.operandList,
-  }) : assert(
-          operator.context == CFFOperatorContext.charString,
-          "Operator's context must be CharString",
-        );
+  CharStringCommand({required this.operator, required this.operandList})
+    : assert(
+        operator.context == CFFOperatorContext.charString,
+        "Operator's context must be CharString",
+      );
 
   factory CharStringCommand.hmoveto({required int dx}) {
     return CharStringCommand(
@@ -180,10 +178,8 @@ class CharStringCommand implements BinaryCodable {
         .toList();
   }
 
-  CharStringCommand copy() => CharStringCommand(
-        operator: operator,
-        operandList: operandList,
-      );
+  CharStringCommand copy() =>
+      CharStringCommand(operator: operator, operandList: operandList);
 
   @override
   String toString() {
@@ -250,9 +246,10 @@ class CharStringInterpreter {
 }
 
 class CharStringInterpreterLimits {
-  factory CharStringInterpreterLimits({required bool isCFF1}) => isCFF1
-      ? const CharStringInterpreterLimits._cff1()
-      : const CharStringInterpreterLimits._cff2();
+  factory CharStringInterpreterLimits({required bool isCFF1}) =>
+      isCFF1
+          ? const CharStringInterpreterLimits._cff1()
+          : const CharStringInterpreterLimits._cff2();
 
   const CharStringInterpreterLimits._cff1() : argumentStackLimit = 48;
 

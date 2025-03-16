@@ -156,9 +156,7 @@ void main() {
     });
 
     test('No arguments and config', () {
-      const args = [
-        '--config-file=test/assets/test_config.yaml',
-      ];
+      const args = ['--config-file=test/assets/test_config.yaml'];
 
       final parsedArgs = Arguments.parseArgsAndConfig(
         argParser: argParser,
