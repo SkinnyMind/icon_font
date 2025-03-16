@@ -55,13 +55,13 @@ extension XmlElementExt on XmlElement {
         .where((e) => e is! UnknownElement)
         // Expanding groups
         .expand((e) {
-      if (e is! GroupElement) {
-        return [e];
-      }
+          if (e is! GroupElement) {
+            return [e];
+          }
 
-      e.applyTransformOnChildren();
-      return e.elementList;
-    });
+          e.applyTransformOnChildren();
+          return e.elementList;
+        });
 
     if (!ignoreShapes) {
       // Converting shapes into paths
@@ -92,7 +92,8 @@ extension CliArgumentMapExtension on Map<CliArgument, Object?> {
         final argName =
             arg.optionName.isNotEmpty ? arg.optionName : arg.configName;
         throw CliArgumentException(
-          message: "'$argName' argument's type "
+          message:
+              "'$argName' argument's type "
               "must be : ${arg.allowedType}, instead got '$argType'.",
         );
       }
@@ -163,8 +164,9 @@ extension NumPretty on num {
 extension OTFByteDateExt on ByteData {
   void setTag(int offset, String tag) {
     var currentOffset = offset;
-    OtfUtils.convertStringToTag(tag)
-        .forEach((b) => setUint8(currentOffset++, b));
+    OtfUtils.convertStringToTag(
+      tag,
+    ).forEach((b) => setUint8(currentOffset++, b));
   }
 
   ByteData sublistView(int offset, [int? length]) {

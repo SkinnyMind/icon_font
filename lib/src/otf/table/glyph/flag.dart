@@ -51,10 +51,7 @@ class SimpleGlyphFlag implements BinaryCodable {
         value: flag,
         mask: _overlapSimpleValue,
       ),
-      reserved: OtfUtils.checkBitMask(
-        value: flag,
-        mask: _reservedValue,
-      ),
+      reserved: OtfUtils.checkBitMask(value: flag, mask: _reservedValue),
     );
   }
 
@@ -63,8 +60,10 @@ class SimpleGlyphFlag implements BinaryCodable {
     required int offset,
   }) {
     final flag = byteData.getUint8(offset);
-    final repeatFlag =
-        OtfUtils.checkBitMask(value: flag, mask: _repeatFlagValue);
+    final repeatFlag = OtfUtils.checkBitMask(
+      value: flag,
+      mask: _repeatFlagValue,
+    );
     final repeatTimes = repeatFlag ? byteData.getUint8(offset + 1) : null;
 
     return SimpleGlyphFlag.fromIntValue(flag: flag, repeatTimes: repeatTimes);
@@ -102,15 +101,15 @@ class SimpleGlyphFlag implements BinaryCodable {
   final bool reserved;
 
   Map<int, bool> get _valueForMaskMap => {
-        _onCurvePointValue: onCurvePoint,
-        _xShortVectorValue: xShortVector,
-        _yShortVectorValue: yShortVector,
-        _xIsSameValue: xIsSameOrPositive,
-        _yIsSameValue: yIsSameOrPositive,
-        _overlapSimpleValue: overlapSimple,
-        _reservedValue: reserved,
-        _repeatFlagValue: isRepeating,
-      };
+    _onCurvePointValue: onCurvePoint,
+    _xShortVectorValue: xShortVector,
+    _yShortVectorValue: yShortVector,
+    _xIsSameValue: xIsSameOrPositive,
+    _yIsSameValue: yIsSameOrPositive,
+    _overlapSimpleValue: overlapSimple,
+    _reservedValue: reserved,
+    _repeatFlagValue: isRepeating,
+  };
 
   bool get isRepeating => repeat != null;
 

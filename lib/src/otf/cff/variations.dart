@@ -52,8 +52,10 @@ class ItemVariationData extends BinaryCodable {
       itemCount: byteData.getUint16(0),
       shortDeltaCount: byteData.getUint16(2),
       regionIndexCount: regionIndexCount,
-      regionIndexes:
-          List.generate(regionIndexCount, (i) => byteData.getUint16(6 + 2 * i)),
+      regionIndexes: List.generate(
+        regionIndexCount,
+        (i) => byteData.getUint16(6 + 2 * i),
+      ),
     );
   }
 
@@ -155,12 +157,14 @@ class ItemVariationStore extends BinaryCodable {
     final variationRegionList = VariationRegionList.fromByteData(
       byteData: byteData.sublistView(variationRegionListOffset),
     );
-    final itemVariationDataList = itemVariationDataOffsets
-        .map(
-          (o) =>
-              ItemVariationData.fromByteData(byteData: byteData.sublistView(o)),
-        )
-        .toList();
+    final itemVariationDataList =
+        itemVariationDataOffsets
+            .map(
+              (o) => ItemVariationData.fromByteData(
+                byteData: byteData.sublistView(o),
+              ),
+            )
+            .toList();
 
     return ItemVariationStore(
       format: byteData.getUint16(0),
@@ -206,10 +210,7 @@ class ItemVariationStore extends BinaryCodable {
       ..setUint16(6, itemVariationDataCount);
 
     variationRegionList.encodeToBinary(
-      byteData.sublistView(
-        variationRegionListOffset,
-        variationRegionListSize,
-      ),
+      byteData.sublistView(variationRegionListOffset, variationRegionListSize),
     );
   }
 

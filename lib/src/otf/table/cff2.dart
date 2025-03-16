@@ -20,11 +20,11 @@ class CFF2TableHeader implements BinaryCodable {
   }
 
   factory CFF2TableHeader.create() => CFF2TableHeader(
-        majorVersion: 0x0002,
-        minorVersion: 0,
-        headerSize: _cff2HeaderSize,
-        topDictLength: null,
-      );
+    majorVersion: 0x0002,
+    minorVersion: 0,
+    headerSize: _cff2HeaderSize,
+    topDictLength: null,
+  );
 
   final int majorVersion;
   final int minorVersion;
@@ -85,8 +85,9 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
         topDict.getEntryForOperator(operator: op.charStrings)!;
     final charStringsIndexOffset =
         charStringsIndexEntry.operandList.first.value! as int;
-    final charStringsIndexByteData =
-        byteData.sublistView(entry.offset + charStringsIndexOffset);
+    final charStringsIndexByteData = byteData.sublistView(
+      entry.offset + charStringsIndexOffset,
+    );
 
     final charStringsData = CFFIndexWithData<Uint8List>.fromByteData(
       byteData: charStringsIndexByteData,
@@ -109,8 +110,9 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
     final fdArrayEntry = topDict.getEntryForOperator(operator: op.fdArray)!;
     final fdArrayOffset = fdArrayEntry.operandList.first.value! as int;
 
-    final fontIndexByteData =
-        byteData.sublistView(entry.offset + fdArrayOffset);
+    final fontIndexByteData = byteData.sublistView(
+      entry.offset + fdArrayOffset,
+    );
 
     /// List of Font DICT
     final fontDictList = CFFIndexWithData<CFFDict>.fromByteData(
@@ -141,8 +143,9 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
         /// Offset from the start of the Private DICT
         final localSubrOffset = localSubrEntry.operandList.first.value! as int;
 
-        final localSubrByteData =
-            byteData.sublistView(dictOffset + localSubrOffset);
+        final localSubrByteData = byteData.sublistView(
+          dictOffset + localSubrOffset,
+        );
         final localSubrsData = CFFIndexWithData<Uint8List>.fromByteData(
           byteData: localSubrByteData,
           isCFF1: false,
@@ -303,8 +306,9 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
     offset += topDictSize;
 
     final globalSubrsSize = globalSubrsData.size;
-    globalSubrsData
-        .encodeToBinary(byteData.sublistView(offset, globalSubrsSize));
+    globalSubrsData.encodeToBinary(
+      byteData.sublistView(offset, globalSubrsSize),
+    );
     offset += globalSubrsSize;
 
     if (vstoreData != null) {
@@ -314,8 +318,9 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
     }
 
     final charStringsSize = charStringsData.size;
-    charStringsData
-        .encodeToBinary(byteData.sublistView(offset, charStringsSize));
+    charStringsData.encodeToBinary(
+      byteData.sublistView(offset, charStringsSize),
+    );
     offset += charStringsSize;
 
     final fontDictListSize = fontDictList.size;

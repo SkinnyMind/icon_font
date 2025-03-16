@@ -25,11 +25,8 @@ const _stringForRealNumberByte = [
 ];
 
 class CFFOperand extends BinaryCodable {
-  CFFOperand({
-    required this.value,
-    int? size,
-    this.forceLargeInt = false,
-  }) : _size = size;
+  CFFOperand({required this.value, int? size, this.forceLargeInt = false})
+    : _size = size;
 
   CFFOperand.fromValue(this.value, {this.forceLargeInt = false});
 
@@ -235,8 +232,10 @@ class CFFOperand extends BinaryCodable {
     return _size = () {
       if (value is double) {
         var valueString = _doubleToNormalizedString();
-        valueString =
-            valueString.replaceFirst('E-', 'E'); // 'E-' used as a single char
+        valueString = valueString.replaceFirst(
+          'E-',
+          'E',
+        ); // 'E-' used as a single char
 
         return 1 + ((valueString.length + 1) / 2).ceil();
       } else if (value >= -107 && value <= 107) {

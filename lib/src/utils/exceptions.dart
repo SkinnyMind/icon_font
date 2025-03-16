@@ -10,7 +10,7 @@ class TableDataFormatException implements Exception {
 class ChecksumException implements Exception {
   ChecksumException.font() : entityName = 'font';
   ChecksumException.table({required String tableName})
-      : entityName = '$tableName table';
+    : entityName = '$tableName table';
 
   final String entityName;
 

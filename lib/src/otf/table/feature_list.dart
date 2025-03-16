@@ -151,16 +151,18 @@ class FeatureListTable implements BinaryCodable {
     var tableRelativeOffset = 2 + _featureRecordSize * featureCount;
 
     for (var i = 0; i < featureCount; i++) {
-      final record = featureRecords[i]
-        ..featureOffset = tableRelativeOffset
-        ..encodeToBinary(
-          byteData.sublistView(recordOffset, _featureRecordSize),
-        );
+      final record =
+          featureRecords[i]
+            ..featureOffset = tableRelativeOffset
+            ..encodeToBinary(
+              byteData.sublistView(recordOffset, _featureRecordSize),
+            );
 
       final table = featureTables[i];
       final tableSize = table.size;
-      table
-          .encodeToBinary(byteData.sublistView(tableRelativeOffset, tableSize));
+      table.encodeToBinary(
+        byteData.sublistView(tableRelativeOffset, tableSize),
+      );
 
       recordOffset += record.size;
       tableRelativeOffset += table.size;

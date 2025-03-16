@@ -106,8 +106,9 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
         topDict.getEntryForOperator(operator: op.charStrings)!;
     final charStringsIndexOffset =
         charStringsIndexEntry.operandList.first.value! as int;
-    final charStringsIndexByteData =
-        byteData.sublistView(entry.offset + charStringsIndexOffset);
+    final charStringsIndexByteData = byteData.sublistView(
+      entry.offset + charStringsIndexOffset,
+    );
 
     final charStringsData = CFFIndexWithData<Uint8List>.fromByteData(
       byteData: charStringsIndexByteData,
@@ -115,18 +116,22 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
     );
 
     /// Charsets
-    final charsetsOffset = topDict
-        .getEntryForOperator(operator: op.charset)!
-        .operandList
-        .first
-        .value! as int;
-    final charsetsByteData =
-        byteData.sublistView(entry.offset + charsetsOffset);
+    final charsetsOffset =
+        topDict
+                .getEntryForOperator(operator: op.charset)!
+                .operandList
+                .first
+                .value!
+            as int;
+    final charsetsByteData = byteData.sublistView(
+      entry.offset + charsetsOffset,
+    );
 
-    final charsetEntry = CharsetEntry.fromByteData(
-      byteData: charsetsByteData,
-      glyphCount: charStringsData.index!.count,
-    )!;
+    final charsetEntry =
+        CharsetEntry.fromByteData(
+          byteData: charsetsByteData,
+          glyphCount: charStringsData.index!.count,
+        )!;
 
     final privateEntry = topDict.getEntryForOperator(operator: op.private)!;
     final dictOffset =
@@ -147,8 +152,9 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
       /// Offset from the start of the Private DICT
       final localSubrOffset = localSubrEntry.operandList.first.value! as int;
 
-      final localSubrByteData =
-          byteData.sublistView(dictOffset + localSubrOffset);
+      final localSubrByteData = byteData.sublistView(
+        dictOffset + localSubrOffset,
+      );
       final localSubrsData = CFFIndexWithData<Uint8List>.fromByteData(
         byteData: localSubrByteData,
         isCFF1: true,
@@ -215,9 +221,7 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
       for (final e in topDictStringEntryMap.entries)
         if (e.value != null)
           CFFDictEntry(
-            operandList: [
-              CFFOperand.fromValue(putStringInIndex(e.value!)),
-            ],
+            operandList: [CFFOperand.fromValue(putStringInIndex(e.value!))],
             operator: e.key,
           ),
       CFFDictEntry(
@@ -288,9 +292,7 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
     final localSubrsDataList = <CFFIndexWithData<Uint8List>>[];
 
     final nameIndex = CFFIndexWithData<Uint8List>.create(
-      data: [
-        Uint8List.fromList(fontName.getPostScriptString().codeUnits),
-      ],
+      data: [Uint8List.fromList(fontName.getPostScriptString().codeUnits)],
       isCFF1: true,
     );
     final stringIndex = CFFIndexWithData<Uint8List>.create(
@@ -378,17 +380,9 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
         topDict.getEntryForOperator(operator: op.charStrings)!;
     final privateEntry = topDict.getEntryForOperator(operator: op.private)!;
 
-    final offsetList = [
-      charsetOffset,
-      charStringsOffset,
-      privateDictOffset,
-    ];
+    final offsetList = [charsetOffset, charStringsOffset, privateDictOffset];
 
-    final entryList = [
-      charsetEntry,
-      charStringsEntry,
-      privateEntry,
-    ];
+    final entryList = [charsetEntry, charStringsEntry, privateEntry];
 
     _calculateEntryOffsets(
       entryList: entryList,
@@ -438,8 +432,9 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
     offset += stringIndexSize;
 
     final globalSubrsSize = globalSubrsData.size;
-    globalSubrsData
-        .encodeToBinary(byteData.sublistView(offset, globalSubrsSize));
+    globalSubrsData.encodeToBinary(
+      byteData.sublistView(offset, globalSubrsSize),
+    );
     offset += globalSubrsSize;
 
     final charsetsSize = charsets.size;
@@ -447,8 +442,9 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
     offset += charsetsSize;
 
     final charStringsSize = charStringsData.size;
-    charStringsData
-        .encodeToBinary(byteData.sublistView(offset, charStringsSize));
+    charStringsData.encodeToBinary(
+      byteData.sublistView(offset, charStringsSize),
+    );
     offset += charStringsSize;
 
     // NOTE: Using only first private dict

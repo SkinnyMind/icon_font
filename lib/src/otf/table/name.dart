@@ -44,9 +44,10 @@ const _nameRecordTemplateList = [
 /// NOTE: There are more cases than this, but it will do for now.
 List<int> Function(String) _getEncoder({required NameRecord record}) {
   return switch (record.platformID) {
-    kPlatformWindows => (string) => [
-          for (final code in string.codeUnits) ...[code >> 8, code & 0xFF],
-        ],
+    kPlatformWindows =>
+      (string) => [
+        for (final code in string.codeUnits) ...[code >> 8, code & 0xFF],
+      ],
     _ => (string) => string.codeUnits,
   };
 }
@@ -56,10 +57,11 @@ List<int> Function(String) _getEncoder({required NameRecord record}) {
 /// NOTE: There are more cases than this, but it will do for now.
 String Function(List<int>) _getDecoder({required NameRecord record}) {
   return switch (record.platformID) {
-    kPlatformWindows => (byteList) => String.fromCharCodes([
-          for (var i = 0; i < byteList.length; i += 2)
-            byteList[i] << 8 | byteList[i + 1],
-        ]),
+    kPlatformWindows =>
+      (byteList) => String.fromCharCodes([
+        for (var i = 0; i < byteList.length; i += 2)
+          byteList[i] << 8 | byteList[i + 1],
+      ]),
     _ => String.fromCharCodes,
   };
 }
@@ -78,9 +80,9 @@ class NameRecord implements BinaryCodable {
     required this.platformID,
     required this.encodingID,
     required this.languageID,
-  })  : nameID = -1,
-        length = -1,
-        offset = -1;
+  }) : nameID = -1,
+       length = -1,
+       offset = -1;
 
   factory NameRecord.fromByteData({
     required ByteData byteData,
@@ -213,7 +215,7 @@ class NamingTableFormat0Header implements BinaryCodable {
 
 abstract class NamingTable extends FontTable {
   NamingTable.fromTableRecordEntry({required TableRecordEntry? entry})
-      : super.fromTableRecordEntry(entry);
+    : super.fromTableRecordEntry(entry);
 
   static NamingTable? fromByteData({
     required ByteData byteData,
@@ -306,10 +308,7 @@ class NamingTableFormat0 extends NamingTable {
 
     final header = NamingTableFormat0Header.create(nameRecordList: recordList);
 
-    return NamingTableFormat0(
-      header: header,
-      stringList: stringList,
-    );
+    return NamingTableFormat0(header: header, stringList: stringList);
   }
 
   static NamingTableFormat0? fromByteData({
@@ -377,8 +376,9 @@ class NamingTableFormat0 extends NamingTable {
   @override
   String? getStringByNameId(NameID nameId) {
     final nameID = NameID.values.indexOf(nameId);
-    final familyIndex =
-        header.nameRecordList.indexWhere((e) => e.nameID == nameID);
+    final familyIndex = header.nameRecordList.indexWhere(
+      (e) => e.nameID == nameID,
+    );
 
     if (familyIndex == -1) {
       return null;

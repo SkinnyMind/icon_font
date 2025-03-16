@@ -12,10 +12,8 @@ import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
 class GlyphDataTable extends FontTable {
-  GlyphDataTable({
-    required TableRecordEntry? entry,
-    required this.glyphList,
-  }) : super.fromTableRecordEntry(entry);
+  GlyphDataTable({required TableRecordEntry? entry, required this.glyphList})
+    : super.fromTableRecordEntry(entry);
 
   factory GlyphDataTable.fromByteData({
     required ByteData byteData,
@@ -38,13 +36,14 @@ class GlyphDataTable extends FontTable {
       if (header.isComposite) {
         Log.logger.w('Composite glyph (glyph header offset $headerOffset)');
       } else {
-        final glyph = isEmpty
-            ? SimpleGlyph.empty()
-            : SimpleGlyph.fromByteData(
-                byteData: byteData,
-                header: header,
-                glyphOffset: headerOffset,
-              );
+        final glyph =
+            isEmpty
+                ? SimpleGlyph.empty()
+                : SimpleGlyph.fromByteData(
+                  byteData: byteData,
+                  header: header,
+                  glyphOffset: headerOffset,
+                );
         glyphList.add(glyph);
       }
     }
@@ -78,9 +77,9 @@ class GlyphDataTable extends FontTable {
 
   @override
   int get size => glyphList.fold<int>(
-        0,
-        (p, v) => p + OtfUtils.getPaddedTableSize(actualSize: v.size),
-      );
+    0,
+    (p, v) => p + OtfUtils.getPaddedTableSize(actualSize: v.size),
+  );
 
   int get maxPoints =>
       glyphList.fold<int>(0, (p, g) => math.max(p, g.pointList.length));

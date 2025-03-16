@@ -31,9 +31,10 @@ void main() {
 
   group('Reader', () {
     setUpAll(() {
-      font = OTFReader.fromByteData(
-        ByteData.sublistView(File(testFontPath).readAsBytesSync()),
-      ).read();
+      font =
+          OTFReader.fromByteData(
+            ByteData.sublistView(File(testFontPath).readAsBytesSync()),
+          ).read();
     });
 
     test('Offset table', () {
@@ -137,10 +138,15 @@ void main() {
       expect(glyphPdf.header.yMin, -88);
       expect(glyphPdf.header.xMax, 751);
       expect(glyphPdf.header.yMax, 788);
-      expect(
-        glyphPdf.flags.sublist(0, 7).map((f) => f.onCurvePoint).toList(),
-        [true, false, false, true, true, false, false],
-      );
+      expect(glyphPdf.flags.sublist(0, 7).map((f) => f.onCurvePoint).toList(), [
+        true,
+        false,
+        false,
+        true,
+        true,
+        false,
+        false,
+      ]);
       expect(glyphPdf.pointList.first.x, 63);
       expect(glyphPdf.pointList.last.x, 448);
       expect(glyphPdf.pointList.first.y, 788);
@@ -244,14 +250,26 @@ void main() {
       expect(format4table.glyphIdArray, List.generate(165, (i) => i + 1));
       expect(format4table.idDelta, [0, 0, 0, 0, 0, 0, 0, 1]);
       expect(format4table.idRangeOffset, [16, 16, 16, 16, 16, 16, 320, 0]);
-      expect(
-        format4table.startCode,
-        [59414, 59430, 59436, 59444, 59446, 62208, 62362, 65535],
-      );
-      expect(
-        format4table.endCode,
-        [59414, 59430, 59436, 59444, 59446, 62360, 62368, 65535],
-      );
+      expect(format4table.startCode, [
+        59414,
+        59430,
+        59436,
+        59444,
+        59446,
+        62208,
+        62362,
+        65535,
+      ]);
+      expect(format4table.endCode, [
+        59414,
+        59430,
+        59436,
+        59444,
+        59446,
+        62360,
+        62368,
+        65535,
+      ]);
 
       final format12table = table.data[1] as CmapSegmentedCoverageTable;
       expect(format12table.format, 12);
@@ -297,10 +315,7 @@ void main() {
       expect(table, isNotNull);
 
       expect(table.leftSideBearings, isEmpty);
-      expect(
-        table.hMetrics.map((m) => m.advanceWidth).toList(),
-        kHMTXadvWidth,
-      );
+      expect(table.hMetrics.map((m) => m.advanceWidth).toList(), kHMTXadvWidth);
       expect(table.hMetrics.map((m) => m.lsb).toList(), kHMTXlsb);
     });
 
@@ -366,17 +381,19 @@ void main() {
     late OpenTypeFont recreatedFont;
 
     setUpAll(() {
-      originalByteData =
-          ByteData.sublistView(File(testFontPath).readAsBytesSync());
+      originalByteData = ByteData.sublistView(
+        File(testFontPath).readAsBytesSync(),
+      );
       font = OTFReader.fromByteData(originalByteData).read();
 
-      final glyphNameList = (font.post.data! as PostScriptVersion20)
-          .glyphNames
-          .map((s) => s.string)
-          .toList();
-      final glyphList = font.glyf.glyphList
-          .map(GenericGlyph.fromSimpleTrueTypeGlyph)
-          .toList();
+      final glyphNameList =
+          (font.post.data! as PostScriptVersion20).glyphNames
+              .map((s) => s.string)
+              .toList();
+      final glyphList =
+          font.glyf.glyphList
+              .map(GenericGlyph.fromSimpleTrueTypeGlyph)
+              .toList();
 
       for (var i = 0; i < glyphList.length; i++) {
         glyphList[i].metadata.name = glyphNameList[i];
@@ -393,23 +410,21 @@ void main() {
       recreatedFont.encodeToBinary(recreatedByteData);
     });
 
-    test(
-      'Header table',
-      () {
-        const expected =
-            'AAEAAAABAADXpqNjXw889QALBAAAAAAA2lveGAAAAADaW94Y//X/ZwZkBAAAAAAIAAIAAAAA';
-        final actual = base64Encode(
-          recreatedByteData.buffer.asUint8List(
-            recreatedFont.head.entry!.offset,
-            recreatedFont.head.entry!.length,
-          ),
-        );
+    test('Header table', () {
+      const expected =
+          'AAEAAAABAADXpqNjXw889QALBAAAAAAA2lveGAAAAADaW94Y//X/ZwZkBAAAAAAIAAIAAAAA';
+      final actual = base64Encode(
+        recreatedByteData.buffer.asUint8List(
+          recreatedFont.head.entry!.offset,
+          recreatedFont.head.entry!.length,
+        ),
+      );
 
-        expect(actual, expected);
-        expect(recreatedFont.head.entry!.checkSum, 439353492);
-      },
-      skip: "Font's checksum is always changing, unskip later",
-    );
+      expect(actual, expected);
+      expect(recreatedFont.head.entry!.checkSum, 439353492);
+      // formatting issue
+      // ignore: require_trailing_commas
+    }, skip: "Font's checksum is always changing, unskip later");
 
     test('Glyph Substitution table', () {
       const expected =
@@ -478,15 +493,17 @@ void main() {
 
   group('Generic Glyph', () {
     setUpAll(() {
-      font = OTFReader.fromByteData(
-        ByteData.sublistView(File(testFontPath).readAsBytesSync()),
-      ).read();
+      font =
+          OTFReader.fromByteData(
+            ByteData.sublistView(File(testFontPath).readAsBytesSync()),
+          ).read();
     });
 
     test('Conversion from TrueType and back', () {
-      final genericList = font.glyf.glyphList
-          .map(GenericGlyph.fromSimpleTrueTypeGlyph)
-          .toList();
+      final genericList =
+          font.glyf.glyphList
+              .map(GenericGlyph.fromSimpleTrueTypeGlyph)
+              .toList();
       final simpleList =
           genericList.map((e) => e.toSimpleTrueTypeGlyph()).toList();
 
@@ -496,9 +513,10 @@ void main() {
     });
 
     test('Decompact and compact back', () {
-      final genericList = font.glyf.glyphList
-          .map(GenericGlyph.fromSimpleTrueTypeGlyph)
-          .toList();
+      final genericList =
+          font.glyf.glyphList
+              .map(GenericGlyph.fromSimpleTrueTypeGlyph)
+              .toList();
 
       for (final g in genericList) {
         for (final o in g.outlines) {
@@ -536,7 +554,8 @@ void main() {
   });
 
   group('Utils', () {
-    const testString = '[INFO] :谷���新道, ひば���ヶ丘２丁���,'
+    const testString =
+        '[INFO] :谷���新道, ひば���ヶ丘２丁���,'
         ' ひばりヶ���, 東久留米市 (Higashikurume)';
 
     test('Printable ASCII string', () {

@@ -109,10 +109,12 @@ class SimpleGlyph implements BinaryCodable {
       }
     }
 
-    final xAbsCoordinates =
-        OtfUtils.relToAbsCoordinates(relCoordinates: xCoordinates);
-    final yAbsCoordinates =
-        OtfUtils.relToAbsCoordinates(relCoordinates: yCoordinates);
+    final xAbsCoordinates = OtfUtils.relToAbsCoordinates(
+      relCoordinates: xCoordinates,
+    );
+    final yAbsCoordinates = OtfUtils.relToAbsCoordinates(
+      relCoordinates: yCoordinates,
+    );
 
     final points = [
       for (var i = 0; i < xAbsCoordinates.length; i++)
@@ -212,10 +214,12 @@ class SimpleGlyph implements BinaryCodable {
     final xAbsCoordinates = pointList.map((e) => e.x.toInt()).toList();
     final yAbsCoordinates = pointList.map((e) => e.y.toInt()).toList();
 
-    final xRelCoordinates =
-        OtfUtils.absToRelCoordinates(absCoordinates: xAbsCoordinates);
-    final yRelCoordinates =
-        OtfUtils.absToRelCoordinates(absCoordinates: yAbsCoordinates);
+    final xRelCoordinates = OtfUtils.absToRelCoordinates(
+      absCoordinates: xAbsCoordinates,
+    );
+    final yRelCoordinates = OtfUtils.absToRelCoordinates(
+      absCoordinates: yAbsCoordinates,
+    );
 
     for (var i = 0; i < numberOfPoints; i++) {
       final short = flags[i].xShortVector;

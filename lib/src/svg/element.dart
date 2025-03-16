@@ -20,23 +20,23 @@ abstract class SvgElement {
     return switch (element.name.local) {
       'path' => PathElement.fromXmlElement(parent: parent, element: element),
       'g' => GroupElement.fromXmlElement(
-          parent: parent,
-          element: element,
-          ignoreShapes: ignoreShapes,
-        ),
+        parent: parent,
+        element: element,
+        ignoreShapes: ignoreShapes,
+      ),
       'rect' => RectElement.fromXmlElement(parent: parent, element: element),
       'circle' => CircleElement.fromXmlElement(
-          parent: parent,
-          element: element,
-        ),
+        parent: parent,
+        element: element,
+      ),
       'polyline' => PolylineElement.fromXmlElement(
-          parent: parent,
-          element: element,
-        ),
+        parent: parent,
+        element: element,
+      ),
       'polygon' => PolygonElement.fromXmlElement(
-          parent: parent,
-          element: element,
-        ),
+        parent: parent,
+        element: element,
+      ),
       'line' => LineElement.fromXmlElement(parent: parent, element: element),
       _ => UnknownElement(parent: parent, xmlElement: element),
     };
@@ -79,11 +79,7 @@ class GroupElement extends SvgElement {
     required XmlElement element,
     required bool ignoreShapes,
   }) {
-    final g = GroupElement(
-      elementList: [],
-      parent: parent,
-      element: element,
-    );
+    final g = GroupElement(elementList: [], parent: parent, element: element);
 
     final children = element.parseSvgElements(
       parent: g,

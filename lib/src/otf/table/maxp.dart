@@ -19,21 +19,21 @@ class MaximumProfileTable extends FontTable {
   MaximumProfileTable.v0({
     required TableRecordEntry? entry,
     required this.numGlyphs,
-  })  : version = ProfileTableVersion.v0.value,
-        maxPoints = null,
-        maxContours = null,
-        maxCompositePoints = null,
-        maxCompositeContours = null,
-        maxZones = null,
-        maxTwilightPoints = null,
-        maxStorage = null,
-        maxFunctionDefs = null,
-        maxInstructionDefs = null,
-        maxStackElements = null,
-        maxSizeOfInstructions = null,
-        maxComponentElements = null,
-        maxComponentDepth = null,
-        super.fromTableRecordEntry(entry);
+  }) : version = ProfileTableVersion.v0.value,
+       maxPoints = null,
+       maxContours = null,
+       maxCompositePoints = null,
+       maxCompositeContours = null,
+       maxZones = null,
+       maxTwilightPoints = null,
+       maxStorage = null,
+       maxFunctionDefs = null,
+       maxInstructionDefs = null,
+       maxStackElements = null,
+       maxSizeOfInstructions = null,
+       maxComponentElements = null,
+       maxComponentDepth = null,
+       super.fromTableRecordEntry(entry);
 
   MaximumProfileTable.v1({
     required TableRecordEntry? entry,
@@ -51,8 +51,8 @@ class MaximumProfileTable extends FontTable {
     required this.maxSizeOfInstructions,
     required this.maxComponentElements,
     required this.maxComponentDepth,
-  })  : version = ProfileTableVersion.v1.value,
-        super.fromTableRecordEntry(entry);
+  }) : version = ProfileTableVersion.v1.value,
+       super.fromTableRecordEntry(entry);
 
   factory MaximumProfileTable.create({
     required int numGlyphs,

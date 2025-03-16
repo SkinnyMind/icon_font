@@ -80,11 +80,9 @@ class CFFDictEntry extends BinaryCodable {
       expectedOperandLength++;
 
       // Filling with empty value and fixed length
-      operandList.replaceRange(
-        operandIndex,
-        operandIndex + 1,
-        [CFFOperand(value: null, size: expectedOperandLength)],
-      );
+      operandList.replaceRange(operandIndex, operandIndex + 1, [
+        CFFOperand(value: null, size: expectedOperandLength),
+      ]);
 
       // Checking that offset's byte length is the same as current operand's
       // length

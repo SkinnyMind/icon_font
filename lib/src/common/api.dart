@@ -46,10 +46,11 @@ class IconFont {
       for (var i = 1; i < svgList.length; i++) {
         if (svgList[i - 1].viewBox.height != svgList[i].viewBox.height) {
           Log.once(
-              Level.warning,
-              'Some SVG files contain different view box height, '
-              'while normalization option is disabled. '
-              'This is not recommended.');
+            Level.warning,
+            'Some SVG files contain different view box height, '
+            'while normalization option is disabled. '
+            'This is not recommended.',
+          );
           break;
         }
       }
@@ -154,42 +155,45 @@ $classContent
     final iconNameSet = <String>{};
 
     return glyphList.map((g) {
-      final baseName = p
-          .basenameWithoutExtension(g.metadata.name!)
-          .replaceAll(RegExp(r'[^a-zA-Z0-9_$-]'), '')
-          .replaceFirstMapped(RegExp(r'^[^a-zA-Z$]'), (_) => '')
-          .camelCase;
-      final usingDefaultName = baseName.isEmpty;
+        final baseName =
+            p
+                .basenameWithoutExtension(g.metadata.name!)
+                .replaceAll(RegExp(r'[^a-zA-Z0-9_$-]'), '')
+                .replaceFirstMapped(RegExp(r'^[^a-zA-Z$]'), (_) => '')
+                .camelCase;
+        final usingDefaultName = baseName.isEmpty;
 
-      var variableName = usingDefaultName ? 'unnamed' : baseName;
+        var variableName = usingDefaultName ? 'unnamed' : baseName;
 
-      // Handling same names by adding numeration to them
-      if (iconNameSet.contains(variableName)) {
-        // If name already contains numeration, then splitting it
-        final countMatch = RegExp(r'^(.*)_([0-9]+)$').firstMatch(variableName);
+        // Handling same names by adding numeration to them
+        if (iconNameSet.contains(variableName)) {
+          // If name already contains numeration, then splitting it
+          final countMatch = RegExp(
+            r'^(.*)_([0-9]+)$',
+          ).firstMatch(variableName);
 
-        var variableNameCount = 1;
-        var variableWithoutCount = variableName;
+          var variableNameCount = 1;
+          var variableWithoutCount = variableName;
 
-        if (countMatch != null) {
-          variableNameCount = int.parse(countMatch.group(2)!);
-          variableWithoutCount = countMatch.group(1)!;
+          if (countMatch != null) {
+            variableNameCount = int.parse(countMatch.group(2)!);
+            variableWithoutCount = countMatch.group(1)!;
+          }
+
+          String variableNameWithCount;
+
+          do {
+            variableNameWithCount =
+                '${variableWithoutCount}_${++variableNameCount}';
+          } while (iconNameSet.contains(variableNameWithCount));
+
+          variableName = variableNameWithCount;
         }
 
-        String variableNameWithCount;
+        iconNameSet.add(variableName);
 
-        do {
-          variableNameWithCount =
-              '${variableWithoutCount}_${++variableNameCount}';
-        } while (iconNameSet.contains(variableNameWithCount));
-
-        variableName = variableNameWithCount;
-      }
-
-      iconNameSet.add(variableName);
-
-      return variableName;
-    }).toList()
+        return variableName;
+      }).toList()
       ..sort();
   }
 
@@ -261,7 +265,8 @@ class ReCase {
 
       sb.write(char);
 
-      final isEndOfWord = nextChar == null ||
+      final isEndOfWord =
+          nextChar == null ||
           (_upperAlphaRegex.hasMatch(nextChar) && !isAllCaps) ||
           symbolSet.contains(nextChar);
 

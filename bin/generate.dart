@@ -18,10 +18,7 @@ void main(List<String> args) {
   late final CliArguments parsedArgs;
 
   try {
-    parsedArgs = Arguments.parseArgsAndConfig(
-      argParser: argParser,
-      args: args,
-    );
+    parsedArgs = Arguments.parseArgsAndConfig(argParser: argParser, args: args);
   } on CliArgumentException catch (e) {
     _usageError(error: e.message, usage: argParser.usage);
   } on CliHelpException {
@@ -48,25 +45,32 @@ void _run(CliArguments parsedArgs) {
   if (hasClassFile && !parsedArgs.classFile!.existsSync()) {
     parsedArgs.classFile!.createSync(recursive: true);
   } else if (hasClassFile) {
-    Log.logger.t('Output file for a Flutter class already exists '
-        '(${parsedArgs.classFile!.path}) - overwriting it');
+    Log.logger.t(
+      'Output file for a Flutter class already exists '
+      '(${parsedArgs.classFile!.path}) - overwriting it',
+    );
   }
 
   if (!parsedArgs.fontFile.existsSync()) {
     parsedArgs.fontFile.createSync(recursive: true);
   } else {
-    Log.logger.t('Output file for a font file already exists '
-        '(${parsedArgs.fontFile.path}) - overwriting it');
+    Log.logger.t(
+      'Output file for a font file already exists '
+      '(${parsedArgs.fontFile.path}) - overwriting it',
+    );
   }
 
-  final svgFileList = parsedArgs.svgDir
-      .listSync(recursive: isRecursive)
-      .where((e) => p.extension(e.path).toLowerCase() == '.svg')
-      .toList();
+  final svgFileList =
+      parsedArgs.svgDir
+          .listSync(recursive: isRecursive)
+          .where((e) => p.extension(e.path).toLowerCase() == '.svg')
+          .toList();
 
   if (svgFileList.isEmpty) {
-    Log.logger.w("The input directory doesn't contain any SVG file "
-        "(${parsedArgs.svgDir.path}).");
+    Log.logger.w(
+      "The input directory doesn't contain any SVG file "
+      "(${parsedArgs.svgDir.path}).",
+    );
   }
 
   final svgMap = {
@@ -89,14 +93,18 @@ void _run(CliArguments parsedArgs) {
   final byteData = bytes;
   final extension = p.extension(file.path).toLowerCase();
   if (extension != '.otf' && otfResult.font.isOpenType) {
-    Log.logger.w('A font that contains only CFF outline data should have an '
-        '.OTF extension.');
+    Log.logger.w(
+      'A font that contains only CFF outline data should have an '
+      '.OTF extension.',
+    );
   }
   file.writeAsBytesSync(byteData.buffer.asUint8List());
 
   if (parsedArgs.classFile == null) {
-    Log.logger.t('No output path for Flutter class was specified - '
-        'skipping class generation.');
+    Log.logger.t(
+      'No output path for Flutter class was specified - '
+      'skipping class generation.',
+    );
   } else {
     final fontFileName = p.basename(parsedArgs.fontFile.path);
 
@@ -133,7 +141,8 @@ void _usageError({required String error, required String usage}) {
 }
 
 void _printUsage({required String usage, String? error}) {
-  final message = error ??
+  final message =
+      error ??
       'Converts .svg icons to an OpenType font and generates '
           'Flutter-compatible class.';
 

@@ -17,20 +17,23 @@ class Transform {
 
     final joinedTransformNames = TransformType.values.join('|');
     final transforms =
-        RegExp('($joinedTransformNames)s*(([^)]*))s*').allMatches(string).map(
-      (m) {
-        final name = m.group(1)!;
-        final type =
-            TransformType.values.firstWhere((value) => name == value.name);
+        RegExp('($joinedTransformNames)s*(([^)]*))s*').allMatches(string).map((
+          m,
+        ) {
+          final name = m.group(1)!;
+          final type = TransformType.values.firstWhere(
+            (value) => name == value.name,
+          );
 
-        final parameterString = m.group(2)!;
-        final parameterMatches = RegExp(r'[\w.-]+').allMatches(parameterString);
-        final parameterList =
-            parameterMatches.map((m) => double.parse(m.group(0)!)).toList();
+          final parameterString = m.group(2)!;
+          final parameterMatches = RegExp(
+            r'[\w.-]+',
+          ).allMatches(parameterString);
+          final parameterList =
+              parameterMatches.map((m) => double.parse(m.group(0)!)).toList();
 
-        return Transform(type: type, parameterList: parameterList);
-      },
-    ).toList();
+          return Transform(type: type, parameterList: parameterList);
+        }).toList();
 
     return transforms;
   }
@@ -38,9 +41,10 @@ class Transform {
   Matrix3? get matrix {
     switch (type) {
       case TransformType.matrix:
-        return Matrix3.fromList(
-          [...parameterList, ...List.filled(9 - parameterList.length, 0)],
-        );
+        return Matrix3.fromList([
+          ...parameterList,
+          ...List.filled(9 - parameterList.length, 0),
+        ]);
       case TransformType.translate:
         final dx = parameterList[0];
         final dy = [...parameterList, .0][1];
@@ -60,9 +64,10 @@ class Transform {
           final x = parameterList[1];
           final y = [...parameterList, .0][2];
 
-          final t = _getTranslateMatrix(dx: x, dy: y)
-            ..multiply(transform)
-            ..multiply(_getTranslateMatrix(dx: -x, dy: -y));
+          final t =
+              _getTranslateMatrix(dx: x, dy: y)
+                ..multiply(transform)
+                ..multiply(_getTranslateMatrix(dx: -x, dy: -y));
           transform = t;
         }
 

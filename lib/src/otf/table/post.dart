@@ -276,9 +276,10 @@ class PostScriptTable extends FontTable {
   }) {
     final glyphNameList = glyphList.map((e) => e.metadata.name ?? '').toList();
 
-    final data = usePostV2
-        ? PostScriptVersion20.create(glyphNameList: glyphNameList)
-        : PostScriptVersion30();
+    final data =
+        usePostV2
+            ? PostScriptVersion20.create(glyphNameList: glyphNameList)
+            : PostScriptVersion30();
 
     return PostScriptTable(
       entry: null,
