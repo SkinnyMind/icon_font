@@ -65,7 +65,6 @@ linter:
     - prefer_if_elements_to_conditional_expressions
     - prefer_int_literals
     - prefer_null_aware_method_calls
-    - require_trailing_commas
     - secure_pubspec_urls
     - sort_constructors_first
     - sort_pub_dependencies
