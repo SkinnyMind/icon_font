@@ -44,10 +44,9 @@ const _nameRecordTemplateList = [
 /// NOTE: There are more cases than this, but it will do for now.
 List<int> Function(String) _getEncoder({required NameRecord record}) {
   return switch (record.platformID) {
-    kPlatformWindows =>
-      (string) => [
-        for (final code in string.codeUnits) ...[code >> 8, code & 0xFF],
-      ],
+    kPlatformWindows => (string) => [
+      for (final code in string.codeUnits) ...[code >> 8, code & 0xFF],
+    ],
     _ => (string) => string.codeUnits,
   };
 }
@@ -57,11 +56,10 @@ List<int> Function(String) _getEncoder({required NameRecord record}) {
 /// NOTE: There are more cases than this, but it will do for now.
 String Function(List<int>) _getDecoder({required NameRecord record}) {
   return switch (record.platformID) {
-    kPlatformWindows =>
-      (byteList) => String.fromCharCodes([
-        for (var i = 0; i < byteList.length; i += 2)
-          byteList[i] << 8 | byteList[i + 1],
-      ]),
+    kPlatformWindows => (byteList) => String.fromCharCodes([
+      for (var i = 0; i < byteList.length; i += 2)
+        byteList[i] << 8 | byteList[i + 1],
+    ]),
     _ => String.fromCharCodes,
   };
 }

@@ -155,46 +155,42 @@ $classContent
     final iconNameSet = <String>{};
 
     return glyphList.map((g) {
-        final baseName =
-            p
-                .basenameWithoutExtension(g.metadata.name!)
-                .replaceAll(RegExp(r'[^a-zA-Z0-9_$-]'), '')
-                .replaceFirstMapped(RegExp(r'^[^a-zA-Z$]'), (_) => '')
-                .camelCase;
-        final usingDefaultName = baseName.isEmpty;
+      final baseName = p
+          .basenameWithoutExtension(g.metadata.name!)
+          .replaceAll(RegExp(r'[^a-zA-Z0-9_$-]'), '')
+          .replaceFirstMapped(RegExp(r'^[^a-zA-Z$]'), (_) => '')
+          .camelCase;
+      final usingDefaultName = baseName.isEmpty;
 
-        var variableName = usingDefaultName ? 'unnamed' : baseName;
+      var variableName = usingDefaultName ? 'unnamed' : baseName;
 
-        // Handling same names by adding numeration to them
-        if (iconNameSet.contains(variableName)) {
-          // If name already contains numeration, then splitting it
-          final countMatch = RegExp(
-            r'^(.*)_([0-9]+)$',
-          ).firstMatch(variableName);
+      // Handling same names by adding numeration to them
+      if (iconNameSet.contains(variableName)) {
+        // If name already contains numeration, then splitting it
+        final countMatch = RegExp(r'^(.*)_([0-9]+)$').firstMatch(variableName);
 
-          var variableNameCount = 1;
-          var variableWithoutCount = variableName;
+        var variableNameCount = 1;
+        var variableWithoutCount = variableName;
 
-          if (countMatch != null) {
-            variableNameCount = int.parse(countMatch.group(2)!);
-            variableWithoutCount = countMatch.group(1)!;
-          }
-
-          String variableNameWithCount;
-
-          do {
-            variableNameWithCount =
-                '${variableWithoutCount}_${++variableNameCount}';
-          } while (iconNameSet.contains(variableNameWithCount));
-
-          variableName = variableNameWithCount;
+        if (countMatch != null) {
+          variableNameCount = int.parse(countMatch.group(2)!);
+          variableWithoutCount = countMatch.group(1)!;
         }
 
-        iconNameSet.add(variableName);
+        String variableNameWithCount;
 
-        return variableName;
-      }).toList()
-      ..sort();
+        do {
+          variableNameWithCount =
+              '${variableWithoutCount}_${++variableNameCount}';
+        } while (iconNameSet.contains(variableNameWithCount));
+
+        variableName = variableNameWithCount;
+      }
+
+      iconNameSet.add(variableName);
+
+      return variableName;
+    }).toList()..sort();
   }
 
   static List<String> _generateIconConst({

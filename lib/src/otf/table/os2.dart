@@ -143,10 +143,12 @@ class OS2Table extends FontTable {
       usDefaultChar: !isV4 ? null : byteData.getUint16(entry.offset + 90),
       usBreakChar: !isV4 ? null : byteData.getUint16(entry.offset + 92),
       usMaxContext: !isV4 ? null : byteData.getUint16(entry.offset + 94),
-      usLowerOpticalPointSize:
-          !isV5 ? null : byteData.getUint16(entry.offset + 96),
-      usUpperOpticalPointSize:
-          !isV5 ? null : byteData.getUint16(entry.offset + 98),
+      usLowerOpticalPointSize: !isV5
+          ? null
+          : byteData.getUint16(entry.offset + 96),
+      usUpperOpticalPointSize: !isV5
+          ? null
+          : byteData.getUint16(entry.offset + 98),
     );
   }
 
@@ -176,15 +178,16 @@ class OS2Table extends FontTable {
 
     final scriptXsize = (emSize * _defaultSubscriptRelativeXsize).round();
     final scriptYsize = (height * _defaultSubscriptRelativeYsize).round();
-    final subscriptYoffset =
-        (height * _defaultSubscriptRelativeYoffset).round();
-    final superscriptYoffset =
-        (height * _defaultSuperscriptRelativeYoffset).round();
+    final subscriptYoffset = (height * _defaultSubscriptRelativeYoffset)
+        .round();
+    final superscriptYoffset = (height * _defaultSuperscriptRelativeYoffset)
+        .round();
     final strikeoutSize = (height * _defaultStrikeoutRelativeSize).round();
     final strikeoutOffset = (height * _defaultStrikeoutRelativeOffset).round();
 
-    final cmapFormat4subtable =
-        cmap.data.whereType<CmapSegmentMappingToDeltaValuesTable>().first;
+    final cmapFormat4subtable = cmap.data
+        .whereType<CmapSegmentMappingToDeltaValuesTable>()
+        .first;
 
     return OS2Table._(
       entry: null,

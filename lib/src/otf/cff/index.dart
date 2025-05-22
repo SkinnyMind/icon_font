@@ -161,10 +161,9 @@ class CFFIndexWithData<T> implements BinaryCodable, CalculatableOffsets {
 
   static Object Function(ByteData) _getDecoderForType(Type type) {
     return switch (type) {
-      const (Uint8List) =>
-        (bd) => Uint8List.fromList(
-          bd.buffer.asUint8List(bd.offsetInBytes, bd.lengthInBytes),
-        ),
+      const (Uint8List) => (bd) => Uint8List.fromList(
+        bd.buffer.asUint8List(bd.offsetInBytes, bd.lengthInBytes),
+      ),
       const (CFFDict) => CFFDict.fromByteData,
       _ => throw UnsupportedError('No decoder for type $type'),
     };

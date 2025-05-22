@@ -61,8 +61,9 @@ class RectElement extends SvgElement implements PathConvertible {
   PathElement getPath() {
     final topRight = rx != 0 || ry != 0 ? 'a $rx $ry 0 0 1 $rx $ry' : '';
     final bottomRight = rx != 0 || ry != 0 ? 'a $rx $ry 0 0 1 ${-rx} $ry' : '';
-    final bottomLeft =
-        rx != 0 || ry != 0 ? 'a $rx $ry 0 0 1 ${-rx} ${-ry}' : '';
+    final bottomLeft = rx != 0 || ry != 0
+        ? 'a $rx $ry 0 0 1 ${-rx} ${-ry}'
+        : '';
     final topLeft = rx != 0 || ry != 0 ? 'a $rx $ry 0 0 1 $rx ${-ry}' : '';
 
     final d =

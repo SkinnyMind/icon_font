@@ -474,16 +474,15 @@ class CmapSegmentedCoverageTable extends CmapData {
   factory CmapSegmentedCoverageTable.create({
     required List<Segment> segmentList,
   }) {
-    final groups =
-        segmentList
-            .map(
-              (e) => SequentialMapGroup(
-                startCharCode: e.startCode,
-                endCharCode: e.endCode,
-                startGlyphID: e.startGlyphID,
-              ),
-            )
-            .toList();
+    final groups = segmentList
+        .map(
+          (e) => SequentialMapGroup(
+            startCharCode: e.startCode,
+            endCharCode: e.endCode,
+            startGlyphID: e.startGlyphID,
+          ),
+        )
+        .toList();
 
     final numGroups = groups.length;
     final groupsSize = numGroups * _sequentialMapGroupSize;
@@ -545,14 +544,13 @@ class CharacterToGlyphTable extends FontTable {
       byteData: byteData,
       entry: entry,
     );
-    final data =
-        List.generate(
-          header.numTables,
-          (i) => CmapData.fromByteData(
-            byteData: byteData,
-            offset: entry.offset + header.encodingRecords[i].offset!,
-          ),
-        ).whereType<CmapData>().toList();
+    final data = List.generate(
+      header.numTables,
+      (i) => CmapData.fromByteData(
+        byteData: byteData,
+        offset: entry.offset + header.encodingRecords[i].offset!,
+      ),
+    ).whereType<CmapData>().toList();
 
     return CharacterToGlyphTable(entry: entry, header: header, data: data);
   }

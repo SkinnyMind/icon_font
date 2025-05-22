@@ -78,40 +78,38 @@ class OpenTypeFont implements BinaryCodable {
     final defaultGlyphList = _generateDefaultGlyphList(ascender: ascender);
     final fullGlyphList = [...defaultGlyphList, ...resizedGlyphList];
 
-    final defaultGlyphMetricsList =
-        defaultGlyphList.map((g) => g.metrics).toList();
+    final defaultGlyphMetricsList = defaultGlyphList
+        .map((g) => g.metrics)
+        .toList();
 
     // If normalization is off every custom glyph's size equals unitsPerEm
-    final customGlyphMetricsList =
-        normalize
-            ? resizedGlyphList.map((g) => g.metrics).toList()
-            : List.filled(
-              resizedGlyphList.length,
-              GenericGlyphMetrics.square(unitsPerEm: unitsPerEm),
-            );
+    final customGlyphMetricsList = normalize
+        ? resizedGlyphList.map((g) => g.metrics).toList()
+        : List.filled(
+            resizedGlyphList.length,
+            GenericGlyphMetrics.square(unitsPerEm: unitsPerEm),
+          );
 
     final glyphMetricsList = [
       ...defaultGlyphMetricsList,
       ...customGlyphMetricsList,
     ];
 
-    final glyf =
-        useOpenType
-            ? null
-            : GlyphDataTable.fromGlyphs(glyphList: fullGlyphList);
+    final glyf = useOpenType
+        ? null
+        : GlyphDataTable.fromGlyphs(glyphList: fullGlyphList);
     final head = HeaderTable.create(
       glyphMetricsList: glyphMetricsList,
       glyf: glyf,
       revision: revision,
       unitsPerEm: unitsPerEm,
     );
-    final loca =
-        useOpenType
-            ? null
-            : IndexToLocationTable.create(
-              indexToLocFormat: head.indexToLocFormat,
-              glyf: glyf!,
-            );
+    final loca = useOpenType
+        ? null
+        : IndexToLocationTable.create(
+            indexToLocFormat: head.indexToLocFormat,
+            glyf: glyf!,
+          );
     final hmtx = HorizontalMetricsTable.create(
       glyphMetricsList: glyphMetricsList,
       unitsPerEm: unitsPerEm,
@@ -152,15 +150,14 @@ class OpenTypeFont implements BinaryCodable {
       version: OS2TableVersion.v5.value,
     );
 
-    final cff =
-        useOpenType
-            ? CFF1Table.create(
-              glyphList: fullGlyphList,
-              head: head,
-              hmtx: hmtx,
-              name: name,
-            )
-            : null;
+    final cff = useOpenType
+        ? CFF1Table.create(
+            glyphList: fullGlyphList,
+            head: head,
+            hmtx: hmtx,
+            name: name,
+          )
+        : null;
 
     final tables = <String, FontTable>{
       if (!useOpenType) ...{kGlyfTag: glyf!, kLocaTag: loca!},

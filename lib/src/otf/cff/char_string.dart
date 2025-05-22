@@ -246,10 +246,9 @@ class CharStringInterpreter {
 }
 
 class CharStringInterpreterLimits {
-  factory CharStringInterpreterLimits({required bool isCFF1}) =>
-      isCFF1
-          ? const CharStringInterpreterLimits._cff1()
-          : const CharStringInterpreterLimits._cff2();
+  factory CharStringInterpreterLimits({required bool isCFF1}) => isCFF1
+      ? const CharStringInterpreterLimits._cff1()
+      : const CharStringInterpreterLimits._cff2();
 
   const CharStringInterpreterLimits._cff1() : argumentStackLimit = 48;
 

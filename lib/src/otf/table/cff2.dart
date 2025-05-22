@@ -81,8 +81,9 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
     fixedOffset += globalSubrsData.index!.size;
 
     /// CharStrings INDEX
-    final charStringsIndexEntry =
-        topDict.getEntryForOperator(operator: op.charStrings)!;
+    final charStringsIndexEntry = topDict.getEntryForOperator(
+      operator: op.charStrings,
+    )!;
     final charStringsIndexOffset =
         charStringsIndexEntry.operandList.first.value! as int;
     final charStringsIndexByteData = byteData.sublistView(
@@ -127,8 +128,9 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
     final localSubrsDataList = <CFFIndexWithData<Uint8List>>[];
 
     for (var i = 0; i < fontDictList.index!.count; i++) {
-      final privateEntry =
-          fontDictList.data[i].getEntryForOperator(operator: op.private)!;
+      final privateEntry = fontDictList.data[i].getEntryForOperator(
+        operator: op.private,
+      )!;
       final dictOffset =
           entry.offset + (privateEntry.operandList.last.value! as int);
       final dictLength = privateEntry.operandList.first.value! as int;
@@ -217,8 +219,9 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
     offset += fontDictList.size;
 
     final vstoreEntry = topDict.getEntryForOperator(operator: op.vstore);
-    final charStringsEntry =
-        topDict.getEntryForOperator(operator: op.charStrings)!;
+    final charStringsEntry = topDict.getEntryForOperator(
+      operator: op.charStrings,
+    )!;
     final fdArrayEntry = topDict.getEntryForOperator(operator: op.fdArray)!;
 
     final offsetList = [
@@ -227,11 +230,7 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
       fdArrayOffset,
     ];
 
-    final entryList = [
-      if (vstoreEntry != null) vstoreEntry,
-      charStringsEntry,
-      fdArrayEntry,
-    ];
+    final entryList = [?vstoreEntry, charStringsEntry, fdArrayEntry];
 
     _calculateEntryOffsets(
       entryList: entryList,

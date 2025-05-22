@@ -36,14 +36,13 @@ class GlyphDataTable extends FontTable {
       if (header.isComposite) {
         Log.logger.w('Composite glyph (glyph header offset $headerOffset)');
       } else {
-        final glyph =
-            isEmpty
-                ? SimpleGlyph.empty()
-                : SimpleGlyph.fromByteData(
-                  byteData: byteData,
-                  header: header,
-                  glyphOffset: headerOffset,
-                );
+        final glyph = isEmpty
+            ? SimpleGlyph.empty()
+            : SimpleGlyph.fromByteData(
+                byteData: byteData,
+                header: header,
+                glyphOffset: headerOffset,
+              );
         glyphList.add(glyph);
       }
     }
@@ -67,8 +66,9 @@ class GlyphDataTable extends FontTable {
       }
     }
 
-    final simpleGlyphList =
-        glyphListCopy.map((e) => e.toSimpleTrueTypeGlyph()).toList();
+    final simpleGlyphList = glyphListCopy
+        .map((e) => e.toSimpleTrueTypeGlyph())
+        .toList();
 
     return GlyphDataTable(entry: null, glyphList: simpleGlyphList);
   }
