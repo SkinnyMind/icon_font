@@ -157,14 +157,12 @@ class ItemVariationStore extends BinaryCodable {
     final variationRegionList = VariationRegionList.fromByteData(
       byteData: byteData.sublistView(variationRegionListOffset),
     );
-    final itemVariationDataList =
-        itemVariationDataOffsets
-            .map(
-              (o) => ItemVariationData.fromByteData(
-                byteData: byteData.sublistView(o),
-              ),
-            )
-            .toList();
+    final itemVariationDataList = itemVariationDataOffsets
+        .map(
+          (o) =>
+              ItemVariationData.fromByteData(byteData: byteData.sublistView(o)),
+        )
+        .toList();
 
     return ItemVariationStore(
       format: byteData.getUint16(0),

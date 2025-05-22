@@ -306,20 +306,16 @@ class GenericGlyph {
       return this;
     }
 
-    final newOutlines =
-        outlines.map((o) {
-          final newOutline = o.copy();
-          final newPointList =
-              newOutline.pointList
-                  .map(
-                    (e) => math.Point<num>(e.x * sideRatioX, e.y * sideRatioY),
-                  )
-                  .toList();
-          newOutline.pointList
-            ..clear()
-            ..addAll(newPointList);
-          return newOutline;
-        }).toList();
+    final newOutlines = outlines.map((o) {
+      final newOutline = o.copy();
+      final newPointList = newOutline.pointList
+          .map((e) => math.Point<num>(e.x * sideRatioX, e.y * sideRatioY))
+          .toList();
+      newOutline.pointList
+        ..clear()
+        ..addAll(newPointList);
+      return newOutline;
+    }).toList();
 
     final newBounds = math.Rectangle.fromPoints(
       math.Point<num>(
@@ -350,18 +346,16 @@ class GenericGlyph {
     final offsetY =
         (ascender + descender) / 2 - metrics.height / 2 - metrics.yMin + offset;
 
-    final newOutlines =
-        outlines.map((o) {
-          final newOutline = o.copy();
-          final newPointList =
-              newOutline.pointList
-                  .map((e) => math.Point<num>(e.x + offsetX, e.y + offsetY))
-                  .toList();
-          newOutline.pointList
-            ..clear()
-            ..addAll(newPointList);
-          return newOutline;
-        }).toList();
+    final newOutlines = outlines.map((o) {
+      final newOutline = o.copy();
+      final newPointList = newOutline.pointList
+          .map((e) => math.Point<num>(e.x + offsetX, e.y + offsetY))
+          .toList();
+      newOutline.pointList
+        ..clear()
+        ..addAll(newPointList);
+      return newOutline;
+    }).toList();
 
     final newBounds = math.Rectangle(
       bounds.left + offsetX,

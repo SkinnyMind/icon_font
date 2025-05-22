@@ -92,8 +92,9 @@ class Arguments {
       return null;
     }
 
-    final entries =
-        iconFontGeneratorYamlmap.entries.map(_mapConfigKeyEntry).nonNulls;
+    final entries = iconFontGeneratorYamlmap.entries
+        .map(_mapConfigKeyEntry)
+        .nonNulls;
 
     return Map<CliArgument, Object?>.fromEntries(entries);
   }

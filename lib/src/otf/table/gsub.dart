@@ -40,8 +40,9 @@ class GlyphSubstitutionTableHeader implements BinaryCodable {
       scriptListOffset: byteData.getUint16(entry.offset + 4),
       featureListOffset: byteData.getUint16(entry.offset + 6),
       lookupListOffset: byteData.getUint16(entry.offset + 8),
-      featureVariationsOffset:
-          isV10 ? null : byteData.getUint32(entry.offset + 10),
+      featureVariationsOffset: isV10
+          ? null
+          : byteData.getUint32(entry.offset + 10),
     );
   }
 

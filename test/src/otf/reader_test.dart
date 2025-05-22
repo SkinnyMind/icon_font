@@ -31,10 +31,9 @@ void main() {
 
   group('Reader', () {
     setUpAll(() {
-      font =
-          OTFReader.fromByteData(
-            ByteData.sublistView(File(testFontPath).readAsBytesSync()),
-          ).read();
+      font = OTFReader.fromByteData(
+        ByteData.sublistView(File(testFontPath).readAsBytesSync()),
+      ).read();
     });
 
     test('Offset table', () {
@@ -386,14 +385,12 @@ void main() {
       );
       font = OTFReader.fromByteData(originalByteData).read();
 
-      final glyphNameList =
-          (font.post.data! as PostScriptVersion20).glyphNames
-              .map((s) => s.string)
-              .toList();
-      final glyphList =
-          font.glyf.glyphList
-              .map(GenericGlyph.fromSimpleTrueTypeGlyph)
-              .toList();
+      final glyphNameList = (font.post.data! as PostScriptVersion20).glyphNames
+          .map((s) => s.string)
+          .toList();
+      final glyphList = font.glyf.glyphList
+          .map(GenericGlyph.fromSimpleTrueTypeGlyph)
+          .toList();
 
       for (var i = 0; i < glyphList.length; i++) {
         glyphList[i].metadata.name = glyphNameList[i];
@@ -459,8 +456,9 @@ void main() {
     test('CFF2 Read & Write', () {
       final table = font.cff2;
 
-      final originalCFF2byteList =
-          byteData.buffer.asUint8List(table.entry!.offset, table.size).toList();
+      final originalCFF2byteList = byteData.buffer
+          .asUint8List(table.entry!.offset, table.size)
+          .toList();
       final encodedCFF2byteData = ByteData(table.size);
 
       expect(table.size, table.entry!.length);
@@ -469,8 +467,9 @@ void main() {
         ..recalculateOffsets()
         ..encodeToBinary(encodedCFF2byteData);
 
-      final encodedCFF2byteList =
-          encodedCFF2byteData.buffer.asUint8List().toList();
+      final encodedCFF2byteList = encodedCFF2byteData.buffer
+          .asUint8List()
+          .toList();
       expect(encodedCFF2byteList, originalCFF2byteList);
     });
 
@@ -493,19 +492,18 @@ void main() {
 
   group('Generic Glyph', () {
     setUpAll(() {
-      font =
-          OTFReader.fromByteData(
-            ByteData.sublistView(File(testFontPath).readAsBytesSync()),
-          ).read();
+      font = OTFReader.fromByteData(
+        ByteData.sublistView(File(testFontPath).readAsBytesSync()),
+      ).read();
     });
 
     test('Conversion from TrueType and back', () {
-      final genericList =
-          font.glyf.glyphList
-              .map(GenericGlyph.fromSimpleTrueTypeGlyph)
-              .toList();
-      final simpleList =
-          genericList.map((e) => e.toSimpleTrueTypeGlyph()).toList();
+      final genericList = font.glyf.glyphList
+          .map(GenericGlyph.fromSimpleTrueTypeGlyph)
+          .toList();
+      final simpleList = genericList
+          .map((e) => e.toSimpleTrueTypeGlyph())
+          .toList();
 
       for (var i = 0; i < genericList.length; i++) {
         expect(simpleList[i].pointList, font.glyf.glyphList[i].pointList);
@@ -513,10 +511,9 @@ void main() {
     });
 
     test('Decompact and compact back', () {
-      final genericList =
-          font.glyf.glyphList
-              .map(GenericGlyph.fromSimpleTrueTypeGlyph)
-              .toList();
+      final genericList = font.glyf.glyphList
+          .map(GenericGlyph.fromSimpleTrueTypeGlyph)
+          .toList();
 
       for (final g in genericList) {
         for (final o in g.outlines) {
@@ -526,8 +523,9 @@ void main() {
         }
       }
 
-      final simpleList =
-          genericList.map((e) => e.toSimpleTrueTypeGlyph()).toList();
+      final simpleList = genericList
+          .map((e) => e.toSimpleTrueTypeGlyph())
+          .toList();
 
       // Those were compacted more than they were originally. Expecting just
       // new size.

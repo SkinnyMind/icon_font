@@ -89,8 +89,9 @@ extension CliArgumentMapExtension on Map<CliArgument, Object?> {
       final argType = this[arg].runtimeType;
 
       if (argType != Null && arg.allowedType != argType) {
-        final argName =
-            arg.optionName.isNotEmpty ? arg.optionName : arg.configName;
+        final argName = arg.optionName.isNotEmpty
+            ? arg.optionName
+            : arg.configName;
         throw CliArgumentException(
           message:
               "'$argName' argument's type "

@@ -16,10 +16,9 @@ class Transform {
     }
 
     final joinedTransformNames = TransformType.values.join('|');
-    final transforms =
-        RegExp('($joinedTransformNames)s*(([^)]*))s*').allMatches(string).map((
-          m,
-        ) {
+    final transforms = RegExp('($joinedTransformNames)s*(([^)]*))s*')
+        .allMatches(string)
+        .map((m) {
           final name = m.group(1)!;
           final type = TransformType.values.firstWhere(
             (value) => name == value.name,
@@ -29,11 +28,13 @@ class Transform {
           final parameterMatches = RegExp(
             r'[\w.-]+',
           ).allMatches(parameterString);
-          final parameterList =
-              parameterMatches.map((m) => double.parse(m.group(0)!)).toList();
+          final parameterList = parameterMatches
+              .map((m) => double.parse(m.group(0)!))
+              .toList();
 
           return Transform(type: type, parameterList: parameterList);
-        }).toList();
+        })
+        .toList();
 
     return transforms;
   }
@@ -64,10 +65,9 @@ class Transform {
           final x = parameterList[1];
           final y = [...parameterList, .0][2];
 
-          final t =
-              _getTranslateMatrix(dx: x, dy: y)
-                ..multiply(transform)
-                ..multiply(_getTranslateMatrix(dx: -x, dy: -y));
+          final t = _getTranslateMatrix(dx: x, dy: y)
+            ..multiply(transform)
+            ..multiply(_getTranslateMatrix(dx: -x, dy: -y));
           transform = t;
         }
 

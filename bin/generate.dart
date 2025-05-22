@@ -60,11 +60,10 @@ void _run(CliArguments parsedArgs) {
     );
   }
 
-  final svgFileList =
-      parsedArgs.svgDir
-          .listSync(recursive: isRecursive)
-          .where((e) => p.extension(e.path).toLowerCase() == '.svg')
-          .toList();
+  final svgFileList = parsedArgs.svgDir
+      .listSync(recursive: isRecursive)
+      .where((e) => p.extension(e.path).toLowerCase() == '.svg')
+      .toList();
 
   if (svgFileList.isEmpty) {
     Log.logger.w(
