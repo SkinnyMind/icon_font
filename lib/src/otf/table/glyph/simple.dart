@@ -66,11 +66,11 @@ class SimpleGlyph implements BinaryCodable {
       offset += flag.size;
       flags.add(flag);
 
-      for (var j = 0; j < flag.repeatTimes; j++) {
+      for (var j = 0; j < flag.repeat; j++) {
         flags.add(flag);
       }
 
-      i += flag.repeatTimes;
+      i += flag.repeat;
     }
 
     final xCoordinates = <int>[];
@@ -163,8 +163,8 @@ class SimpleGlyph implements BinaryCodable {
 
       flagsSize += flag.size;
 
-      if (flag.repeatTimes > 0) {
-        i += flag.repeatTimes;
+      if (flag.repeat > 0) {
+        i += flag.repeat;
       }
     }
 
@@ -208,7 +208,7 @@ class SimpleGlyph implements BinaryCodable {
       flag.encodeToBinary(byteData.sublistView(offset, flag.size));
 
       offset += flag.size;
-      i += flag.repeatTimes;
+      i += flag.repeat;
     }
 
     final xAbsCoordinates = pointList.map((e) => e.x.toInt()).toList();
