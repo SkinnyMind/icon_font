@@ -6,7 +6,7 @@ import 'package:icon_font/src/utils/otf_utils.dart';
 const _onCurvePointValue = 0x01;
 const _xShortVectorValue = 0x02;
 const _yShortVectorValue = 0x04;
-const _repeatFlagValue = 0x08;
+const repeatFlagValue = 0x08;
 const _xIsSameValue = 0x10;
 const _yIsSameValue = 0x20;
 const _overlapSimpleValue = 0x40;
@@ -17,14 +17,17 @@ class SimpleGlyphFlag implements BinaryCodable {
     required this.onCurvePoint,
     required this.xShortVector,
     required this.yShortVector,
-    required this.repeat,
     required this.xIsSameOrPositive,
     required this.yIsSameOrPositive,
     required this.overlapSimple,
     required this.reserved,
+    this.repeat = 0,
   });
 
-  factory SimpleGlyphFlag.fromIntValue({required int flag, int? repeatTimes}) {
+  factory SimpleGlyphFlag.fromIntValue({
+    required int flag,
+    int repeatTimes = 0,
+  }) {
     return SimpleGlyphFlag(
       onCurvePoint: OtfUtils.checkBitMask(
         value: flag,
@@ -62,9 +65,9 @@ class SimpleGlyphFlag implements BinaryCodable {
     final flag = byteData.getUint8(offset);
     final repeatFlag = OtfUtils.checkBitMask(
       value: flag,
-      mask: _repeatFlagValue,
+      mask: repeatFlagValue,
     );
-    final repeatTimes = repeatFlag ? byteData.getUint8(offset + 1) : null;
+    final repeatTimes = repeatFlag ? byteData.getUint8(offset + 1) : 0;
 
     return SimpleGlyphFlag.fromIntValue(flag: flag, repeatTimes: repeatTimes);
   }
@@ -81,7 +84,6 @@ class SimpleGlyphFlag implements BinaryCodable {
       onCurvePoint: isOnCurve,
       xShortVector: xIsShort,
       yShortVector: yIsShort,
-      repeat: null,
       // 1 if short and positive, 0 otherwise
       xIsSameOrPositive: xIsShort && !x.isNegative,
       // 1 if short and positive, 0 otherwise
@@ -94,7 +96,7 @@ class SimpleGlyphFlag implements BinaryCodable {
   final bool onCurvePoint;
   final bool xShortVector;
   final bool yShortVector;
-  final int? repeat;
+  final int repeat;
   final bool xIsSameOrPositive;
   final bool yIsSameOrPositive;
   final bool overlapSimple;
@@ -108,12 +110,10 @@ class SimpleGlyphFlag implements BinaryCodable {
     _yIsSameValue: yIsSameOrPositive,
     _overlapSimpleValue: overlapSimple,
     _reservedValue: reserved,
-    _repeatFlagValue: isRepeating,
+    repeatFlagValue: isRepeating,
   };
 
-  bool get isRepeating => repeat != null;
-
-  int get repeatTimes => repeat ?? 0;
+  bool get isRepeating => repeat > 0;
 
   int get intValue {
     var value = 0;
@@ -133,7 +133,7 @@ class SimpleGlyphFlag implements BinaryCodable {
     byteData.setUint8(0, intValue);
 
     if (isRepeating) {
-      byteData.setUint8(1, repeatTimes);
+      byteData.setUint8(1, repeat);
     }
   }
 }
