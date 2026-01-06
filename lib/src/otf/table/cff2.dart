@@ -1,6 +1,15 @@
-part of 'cff.dart';
+import 'dart:typed_data';
 
-const _cff2HeaderSize = 5;
+import 'package:icon_font/src/common/binary_codable.dart';
+import 'package:icon_font/src/common/calculatable_offsets.dart';
+import 'package:icon_font/src/otf/cff/dict.dart';
+import 'package:icon_font/src/otf/cff/dict_operator.dart' as op;
+import 'package:icon_font/src/otf/cff/index.dart';
+import 'package:icon_font/src/otf/cff/operand.dart';
+import 'package:icon_font/src/otf/cff/variations.dart';
+import 'package:icon_font/src/otf/table/cff.dart';
+import 'package:icon_font/src/otf/table/table_record_entry.dart';
+import 'package:icon_font/src/utils/extensions.dart';
 
 class CFF2TableHeader implements BinaryCodable {
   CFF2TableHeader({
@@ -22,7 +31,7 @@ class CFF2TableHeader implements BinaryCodable {
   factory CFF2TableHeader.create() => CFF2TableHeader(
     majorVersion: 0x0002,
     minorVersion: 0,
-    headerSize: _cff2HeaderSize,
+    headerSize: cff2HeaderSize,
     topDictLength: null,
   );
 
@@ -30,6 +39,8 @@ class CFF2TableHeader implements BinaryCodable {
   final int minorVersion;
   final int headerSize;
   int? topDictLength;
+
+  static const cff2HeaderSize = 5;
 
   @override
   void encodeToBinary(ByteData byteData) {
@@ -41,7 +52,7 @@ class CFF2TableHeader implements BinaryCodable {
   }
 
   @override
-  int get size => _cff2HeaderSize;
+  int get size => cff2HeaderSize;
 }
 
 class CFF2Table extends CFFTable implements CalculatableOffsets {
@@ -65,9 +76,12 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
     var fixedOffset = entry.offset;
 
     final header = CFF2TableHeader.fromByteData(
-      byteData: byteData.sublistView(fixedOffset, _cff2HeaderSize),
+      byteData: byteData.sublistView(
+        fixedOffset,
+        CFF2TableHeader.cff2HeaderSize,
+      ),
     );
-    fixedOffset += _cff2HeaderSize;
+    fixedOffset += CFF2TableHeader.cff2HeaderSize;
 
     final topDict = CFFDict.fromByteData(
       byteData.sublistView(fixedOffset, header.topDictLength!),
@@ -232,7 +246,7 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
 
     final entryList = [?vstoreEntry, charStringsEntry, fdArrayEntry];
 
-    _calculateEntryOffsets(
+    calculateEntryOffsets(
       entryList: entryList,
       offsetList: offsetList,
       operandIndex: 0,
@@ -280,7 +294,7 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
         );
       }
 
-      _calculateEntryOffsets(
+      calculateEntryOffsets(
         entryList: [privateEntry],
         offsetList: [fontDictOffset],
         operandIndex: 1,

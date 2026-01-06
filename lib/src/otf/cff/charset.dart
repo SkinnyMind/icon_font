@@ -1,6 +1,9 @@
-part of '../table/cff.dart';
+import 'dart:typed_data';
 
-const _range1Size = 3;
+import 'package:icon_font/src/common/binary_codable.dart';
+import 'package:icon_font/src/utils/constants.dart';
+import 'package:icon_font/src/utils/extensions.dart';
+import 'package:icon_font/src/utils/logger.dart';
 
 abstract class CharsetEntry implements BinaryCodable {
   const CharsetEntry({required this.format});
@@ -42,7 +45,7 @@ class CharsetEntryFormat1 extends CharsetEntry {
 
     for (var i = 0; i < glyphCount - 1;) {
       final range = Range1.fromByteData(
-        byteData: byteData.sublistView(offset, _range1Size),
+        byteData: byteData.sublistView(offset, Range1.range1Size),
       );
 
       rangeList.add(range);
@@ -94,13 +97,13 @@ class CharsetEntryFormat1 extends CharsetEntry {
 
     for (var i = 0; i < rangeList.length; i++) {
       rangeList[i].encodeToBinary(
-        byteData.sublistView(1 + i * _range1Size, _range1Size),
+        byteData.sublistView(1 + i * Range1.range1Size, Range1.range1Size),
       );
     }
   }
 
   @override
-  int get size => 1 + rangeList.length * _range1Size;
+  int get size => 1 + rangeList.length * Range1.range1Size;
 }
 
 class Range1 implements BinaryCodable {
@@ -109,6 +112,8 @@ class Range1 implements BinaryCodable {
   factory Range1.fromByteData({required ByteData byteData}) {
     return Range1(sId: byteData.getUint16(0), nLeft: byteData.getUint8(2));
   }
+
+  static const range1Size = 3;
 
   final int sId;
   final int nLeft;
@@ -121,5 +126,5 @@ class Range1 implements BinaryCodable {
   }
 
   @override
-  int get size => _range1Size;
+  int get size => range1Size;
 }

@@ -1,28 +1,12 @@
 import 'dart:typed_data';
 
-import 'package:icon_font/src/common/binary_codable.dart';
-import 'package:icon_font/src/common/calculatable_offsets.dart';
-import 'package:icon_font/src/common/generic_glyph.dart';
-import 'package:icon_font/src/otf/cff/char_string.dart';
-import 'package:icon_font/src/otf/cff/char_string_operator.dart' as cs_op;
-import 'package:icon_font/src/otf/cff/char_string_optimizer.dart';
 import 'package:icon_font/src/otf/cff/dict.dart';
-import 'package:icon_font/src/otf/cff/dict_operator.dart' as op;
-import 'package:icon_font/src/otf/cff/index.dart';
 import 'package:icon_font/src/otf/cff/operand.dart';
-import 'package:icon_font/src/otf/cff/variations.dart';
 import 'package:icon_font/src/otf/table/abstract.dart';
-import 'package:icon_font/src/otf/table/head.dart';
-import 'package:icon_font/src/otf/table/hmtx.dart';
-import 'package:icon_font/src/otf/table/name.dart';
+import 'package:icon_font/src/otf/table/cff1.dart';
+import 'package:icon_font/src/otf/table/cff2.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
-import 'package:icon_font/src/utils/constants.dart';
-import 'package:icon_font/src/utils/extensions.dart';
 import 'package:icon_font/src/utils/logger.dart';
-
-part '../cff/charset.dart';
-part 'cff1.dart';
-part 'cff2.dart';
 
 abstract class CFFTable extends FontTable {
   CFFTable.fromTableRecordEntry(super.entry) : super.fromTableRecordEntry();
@@ -47,7 +31,7 @@ abstract class CFFTable extends FontTable {
   bool get isCFF1 => this is CFF1Table;
 }
 
-void _calculateEntryOffsets({
+void calculateEntryOffsets({
   required List<CFFDictEntry> entryList,
   required List<int> offsetList,
   int? operandIndex,

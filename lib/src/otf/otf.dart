@@ -6,6 +6,8 @@ import 'package:icon_font/src/common/calculatable_offsets.dart';
 import 'package:icon_font/src/common/generic_glyph.dart';
 import 'package:icon_font/src/common/outline.dart';
 import 'package:icon_font/src/otf/table/all.dart';
+import 'package:icon_font/src/otf/table/cff1.dart';
+import 'package:icon_font/src/otf/table/cff2.dart';
 import 'package:icon_font/src/utils/constants.dart';
 import 'package:icon_font/src/utils/exceptions.dart';
 import 'package:icon_font/src/utils/extensions.dart';
