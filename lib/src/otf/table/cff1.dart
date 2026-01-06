@@ -1,6 +1,26 @@
-part of 'cff.dart';
-
 // NOTE: local subrs, encodings are omitted
+
+import 'dart:typed_data';
+
+import 'package:icon_font/src/common/binary_codable.dart';
+import 'package:icon_font/src/common/calculatable_offsets.dart';
+import 'package:icon_font/src/common/generic_glyph.dart';
+import 'package:icon_font/src/otf/cff/char_string.dart';
+import 'package:icon_font/src/otf/cff/char_string_operator.dart' as cs_op;
+import 'package:icon_font/src/otf/cff/char_string_optimizer.dart';
+import 'package:icon_font/src/otf/cff/charset.dart';
+import 'package:icon_font/src/otf/cff/dict.dart';
+import 'package:icon_font/src/otf/cff/dict_operator.dart' as op;
+import 'package:icon_font/src/otf/cff/index.dart';
+import 'package:icon_font/src/otf/cff/operand.dart';
+import 'package:icon_font/src/otf/table/cff.dart';
+import 'package:icon_font/src/otf/table/cff2.dart';
+import 'package:icon_font/src/otf/table/head.dart';
+import 'package:icon_font/src/otf/table/hmtx.dart';
+import 'package:icon_font/src/otf/table/name.dart';
+import 'package:icon_font/src/otf/table/table_record_entry.dart';
+import 'package:icon_font/src/utils/constants.dart';
+import 'package:icon_font/src/utils/extensions.dart';
 
 class CFF1TableHeader implements BinaryCodable {
   CFF1TableHeader({
@@ -69,7 +89,7 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
     var fixedOffset = entry.offset;
 
     final header = CFF1TableHeader.fromByteData(
-      byteData.sublistView(fixedOffset, _cff2HeaderSize),
+      byteData.sublistView(fixedOffset, CFF2TableHeader.cff2HeaderSize),
     );
     fixedOffset += header.size;
 
@@ -385,7 +405,7 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
 
     final entryList = [charsetEntry, charStringsEntry, privateEntry];
 
-    _calculateEntryOffsets(
+    calculateEntryOffsets(
       entryList: entryList,
       offsetList: offsetList,
       operandIndexList: [0, 0, 1],
