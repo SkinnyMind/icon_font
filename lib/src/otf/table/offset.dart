@@ -14,10 +14,8 @@ class OffsetTable implements BinaryCodable {
   });
 
   factory OffsetTable.fromByteData({required ByteData data}) {
-    final version = data.getUint32(0);
-
     return OffsetTable(
-      sfntVersion: version,
+      sfntVersion: data.getUint32(0),
       numTables: data.getUint16(4),
       searchRange: data.getUint16(6),
       entrySelector: data.getUint16(8),

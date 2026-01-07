@@ -16,19 +16,15 @@ abstract class CharsetEntry implements BinaryCodable {
   }) {
     final format = byteData.getUint8(0);
 
-    switch (format) {
-      case 1:
-        return CharsetEntryFormat1.fromByteData(
-          byteData: byteData.sublistView(1),
-          glyphCount: glyphCount,
-        );
-      case 0:
-      case 2:
-      default:
-        Log.unsupportedTableFormat('charsets', format);
+    if (format == 1) {
+      return CharsetEntryFormat1.fromByteData(
+        byteData: byteData.sublistView(1),
+        glyphCount: glyphCount,
+      );
+    } else {
+      Log.unsupportedTableFormat('charsets', format);
+      return null;
     }
-
-    return null;
   }
 }
 

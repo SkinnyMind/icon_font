@@ -17,15 +17,14 @@ abstract class CFFTable extends FontTable {
   }) {
     final major = byteData.getUint8(entry.offset);
 
-    switch (major) {
-      case 0x0001:
-        return CFF1Table.fromByteData(byteData: byteData, entry: entry);
-      case 0x0002:
-        return CFF2Table.fromByteData(byteData: byteData, entry: entry);
-    }
-
-    Log.unsupportedTableVersion('CFF', major);
-    return null;
+    return switch (major) {
+      0x0001 => CFF1Table.fromByteData(byteData: byteData, entry: entry),
+      0x0002 => CFF2Table.fromByteData(byteData: byteData, entry: entry),
+      _ => () {
+        Log.unsupportedTableVersion('CFF', major);
+        return null;
+      }(),
+    };
   }
 
   bool get isCFF1 => this is CFF1Table;

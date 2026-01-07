@@ -14,16 +14,16 @@ abstract class SubstitutionSubtable implements BinaryCodable {
     required int offset,
     required int lookupType,
   }) {
-    switch (lookupType) {
-      case 4:
-        return LigatureSubstitutionSubtable.fromByteData(
-          byteData: byteData,
-          offset: offset,
-        );
-      default:
+    return switch (lookupType) {
+      4 => LigatureSubstitutionSubtable.fromByteData(
+        byteData: byteData,
+        offset: offset,
+      ),
+      _ => () {
         Log.unsupportedTableFormat('Lookup', lookupType);
         return null;
-    }
+      }(),
+    };
   }
 
   int get maxContext;

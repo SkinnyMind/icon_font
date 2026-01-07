@@ -169,45 +169,41 @@ abstract class CmapData implements BinaryCodable {
   }) {
     final format = byteData.getUint16(offset);
 
-    switch (format) {
-      case _format0:
-        return CmapByteEncodingTable.fromByteData(
-          byteData: byteData,
-          offset: offset,
-        );
-      case _format4:
-        return CmapSegmentMappingToDeltaValuesTable.fromByteData(
-          byteData: byteData,
-          startOffset: offset,
-        );
-      case _format12:
-        return CmapSegmentedCoverageTable.fromByteData(
-          byteData: byteData,
-          offset: offset,
-        );
-      default:
+    return switch (format) {
+      _format0 => CmapByteEncodingTable.fromByteData(
+        byteData: byteData,
+        offset: offset,
+      ),
+      _format4 => CmapSegmentMappingToDeltaValuesTable.fromByteData(
+        byteData: byteData,
+        startOffset: offset,
+      ),
+      _format12 => CmapSegmentedCoverageTable.fromByteData(
+        byteData: byteData,
+        offset: offset,
+      ),
+      _ => () {
         Log.unsupportedTableFormat(kCmapTag, format);
         return null;
-    }
+      }(),
+    };
   }
 
   static CmapData? create({
     required List<Segment> segmentList,
     required int format,
   }) {
-    switch (format) {
-      case _format0:
-        return CmapByteEncodingTable.create();
-      case _format4:
-        return CmapSegmentMappingToDeltaValuesTable.create(
-          segmentList: segmentList,
-        );
-      case _format12:
-        return CmapSegmentedCoverageTable.create(segmentList: segmentList);
-      default:
+    return switch (format) {
+      _format0 => CmapByteEncodingTable.create(),
+      _format4 => CmapSegmentMappingToDeltaValuesTable.create(
+        segmentList: segmentList,
+      ),
+      _format12 => CmapSegmentedCoverageTable.create(segmentList: segmentList),
+      _ => () {
         Log.unsupportedTableFormat(kCmapTag, format);
         return null;
-    }
+      }(),
+    };
   }
 
   final int format;
