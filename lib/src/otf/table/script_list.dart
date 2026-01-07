@@ -5,7 +5,7 @@ import 'package:icon_font/src/otf/table/language_system.dart';
 import 'package:icon_font/src/utils/constants.dart';
 import 'package:icon_font/src/utils/extensions.dart';
 
-const kScriptRecordSize = 6;
+const _scriptRecordSize = 6;
 
 class ScriptRecord implements BinaryCodable {
   ScriptRecord({required this.scriptTag, required this.scriptOffset});
@@ -26,7 +26,7 @@ class ScriptRecord implements BinaryCodable {
   int? scriptOffset;
 
   @override
-  int get size => kScriptRecordSize;
+  int get size => _scriptRecordSize;
 
   @override
   void encodeToBinary(ByteData byteData) {
@@ -148,7 +148,7 @@ class ScriptListTable implements BinaryCodable {
       scriptCount,
       (i) => ScriptRecord.fromByteData(
         byteData: byteData,
-        offset: offset + 2 + kScriptRecordSize * i,
+        offset: offset + 2 + _scriptRecordSize * i,
       ),
     );
     final scriptTables = List.generate(
@@ -211,12 +211,12 @@ class ScriptListTable implements BinaryCodable {
     byteData.setUint16(0, scriptCount);
 
     var recordOffset = 2;
-    var tableRelativeOffset = 2 + kScriptRecordSize * scriptCount;
+    var tableRelativeOffset = 2 + _scriptRecordSize * scriptCount;
 
     for (var i = 0; i < scriptCount; i++) {
       final record = scriptRecords[i]
         ..scriptOffset = tableRelativeOffset
-        ..encodeToBinary(byteData.sublistView(recordOffset, kScriptRecordSize));
+        ..encodeToBinary(byteData.sublistView(recordOffset, _scriptRecordSize));
 
       final table = scriptTables[i];
       table.encodeToBinary(

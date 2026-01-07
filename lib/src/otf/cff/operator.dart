@@ -43,19 +43,11 @@ class CFFOperator implements BinaryCodable {
 
   @override
   String toString() {
-    var name = '<unknown>';
-
-    switch (context) {
-      case CFFOperatorContext.dict:
-        if (dictOperatorNames.containsKey(this)) {
-          name = dictOperatorNames[this]!;
-        }
-      case CFFOperatorContext.charString:
-        if (charStringOperatorNames.containsKey(this)) {
-          name = charStringOperatorNames[this]!;
-        }
-    }
-
-    return name;
+    return switch (context) {
+      CFFOperatorContext.dict =>
+        DictOperator.values.firstWhere((o) => o.operator == this).label,
+      CFFOperatorContext.charString =>
+        CharStringOperator.values.firstWhere((o) => o.operator == this).name,
+    };
   }
 }

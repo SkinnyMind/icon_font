@@ -1,84 +1,44 @@
-import 'dart:collection';
-
 import 'package:icon_font/src/otf/cff/operator.dart';
 
-// CharString operators
-const hstem = CFFOperator(context: CFFOperatorContext.charString, b0: 1);
-const vstem = CFFOperator(context: CFFOperatorContext.charString, b0: 3);
-const vmoveto = CFFOperator(context: CFFOperatorContext.charString, b0: 4);
-const rlineto = CFFOperator(context: CFFOperatorContext.charString, b0: 5);
-const hlineto = CFFOperator(context: CFFOperatorContext.charString, b0: 6);
-const vlineto = CFFOperator(context: CFFOperatorContext.charString, b0: 7);
-const rrcurveto = CFFOperator(context: CFFOperatorContext.charString, b0: 8);
-const callsubr = CFFOperator(context: CFFOperatorContext.charString, b0: 10);
-const escape = CFFOperator(context: CFFOperatorContext.charString, b0: 12);
-const vsindex = CFFOperator(context: CFFOperatorContext.charString, b0: 15);
-const blend = CFFOperator(context: CFFOperatorContext.charString, b0: 16);
-const hstemhm = CFFOperator(context: CFFOperatorContext.charString, b0: 18);
-const hintmask = CFFOperator(context: CFFOperatorContext.charString, b0: 19);
-const cntrmask = CFFOperator(context: CFFOperatorContext.charString, b0: 20);
-const rmoveto = CFFOperator(context: CFFOperatorContext.charString, b0: 21);
-const hmoveto = CFFOperator(context: CFFOperatorContext.charString, b0: 22);
-const vstemhm = CFFOperator(context: CFFOperatorContext.charString, b0: 23);
-const rcurveline = CFFOperator(context: CFFOperatorContext.charString, b0: 24);
-const rlinecurve = CFFOperator(context: CFFOperatorContext.charString, b0: 25);
-const vvcurveto = CFFOperator(context: CFFOperatorContext.charString, b0: 26);
-const hhcurveto = CFFOperator(context: CFFOperatorContext.charString, b0: 27);
-const callgsubr = CFFOperator(context: CFFOperatorContext.charString, b0: 29);
-const vhcurveto = CFFOperator(context: CFFOperatorContext.charString, b0: 30);
-const hvcurveto = CFFOperator(context: CFFOperatorContext.charString, b0: 31);
+enum CharStringOperator {
+  hstem(b0: 1),
+  vstem(b0: 3),
+  vmoveto(b0: 4),
+  rlineto(b0: 5),
+  hlineto(b0: 6),
+  vlineto(b0: 7),
+  rrcurveto(b0: 8),
+  callsubr(b0: 10),
+  escape(b0: 12),
+  endchar(b0: 14),
+  vsindex(b0: 15),
+  blend(b0: 16),
+  hstemhm(b0: 18),
+  hintmask(b0: 19),
+  cntrmask(b0: 20),
+  rmoveto(b0: 21),
+  hmoveto(b0: 22),
+  vstemhm(b0: 23),
+  rcurveline(b0: 24),
+  rlinecurve(b0: 25),
+  vvcurveto(b0: 26),
+  hhcurveto(b0: 27),
+  callgsubr(b0: 29),
+  vhcurveto(b0: 30),
+  hvcurveto(b0: 31),
+  hflex(b0: 12, b1: 34),
+  flex(b0: 12, b1: 35),
+  hflex1(b0: 12, b1: 36),
+  flex1(b0: 12, b1: 37);
 
-const hflex = CFFOperator(
-  context: CFFOperatorContext.charString,
-  b0: 12,
-  b1: 34,
-);
-const flex = CFFOperator(
-  context: CFFOperatorContext.charString,
-  b0: 12,
-  b1: 35,
-);
-const hflex1 = CFFOperator(
-  context: CFFOperatorContext.charString,
-  b0: 12,
-  b1: 36,
-);
-const flex1 = CFFOperator(
-  context: CFFOperatorContext.charString,
-  b0: 12,
-  b1: 37,
-);
+  const CharStringOperator({required int b0, int? b1})
+    : _b0 = b0,
+      _b1 = b1,
+      context = CFFOperatorContext.charString;
 
-/// CFF1 endchar
-const endchar = CFFOperator(context: CFFOperatorContext.charString, b0: 14);
+  final int _b0;
+  final int? _b1;
+  final CFFOperatorContext context;
 
-final Map<CFFOperator, String> charStringOperatorNames = UnmodifiableMapView({
-  vstem: 'vstem',
-  vmoveto: 'vmoveto',
-  rlineto: 'rlineto',
-  hlineto: 'hlineto',
-  vlineto: 'vlineto',
-  rrcurveto: 'rrcurveto',
-  callsubr: 'callsubr',
-  escape: 'escape',
-  vsindex: 'vsindex',
-  blend: 'blend',
-  hstemhm: 'hstemhm',
-  hintmask: 'hintmask',
-  cntrmask: 'cntrmask',
-  rmoveto: 'rmoveto',
-  hmoveto: 'hmoveto',
-  vstemhm: 'vstemhm',
-  rcurveline: 'rcurveline',
-  rlinecurve: 'rlinecurve',
-  vvcurveto: 'vvcurveto',
-  hhcurveto: 'hhcurveto',
-  callgsubr: 'callgsubr',
-  vhcurveto: 'vhcurveto',
-  hvcurveto: 'hvcurveto',
-  hflex: 'hflex',
-  flex: 'flex',
-  hflex1: 'hflex1',
-  flex1: 'flex1',
-  endchar: 'endchar',
-});
+  CFFOperator get operator => CFFOperator(context: context, b0: _b0, b1: _b1);
+}
