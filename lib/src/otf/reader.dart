@@ -1,7 +1,21 @@
 import 'dart:typed_data';
 
 import 'package:icon_font/src/otf/otf.dart';
-import 'package:icon_font/src/otf/table/all.dart';
+import 'package:icon_font/src/otf/table/abstract.dart';
+import 'package:icon_font/src/otf/table/cff.dart';
+import 'package:icon_font/src/otf/table/cmap.dart';
+import 'package:icon_font/src/otf/table/glyf.dart';
+import 'package:icon_font/src/otf/table/gsub.dart';
+import 'package:icon_font/src/otf/table/head.dart';
+import 'package:icon_font/src/otf/table/hhea.dart';
+import 'package:icon_font/src/otf/table/hmtx.dart';
+import 'package:icon_font/src/otf/table/loca.dart';
+import 'package:icon_font/src/otf/table/maxp.dart';
+import 'package:icon_font/src/otf/table/name.dart';
+import 'package:icon_font/src/otf/table/offset.dart';
+import 'package:icon_font/src/otf/table/os2.dart';
+import 'package:icon_font/src/otf/table/post.dart';
+import 'package:icon_font/src/otf/table/table_record_entry.dart';
 import 'package:icon_font/src/utils/constants.dart';
 import 'package:icon_font/src/utils/exceptions.dart';
 import 'package:icon_font/src/utils/logger.dart';

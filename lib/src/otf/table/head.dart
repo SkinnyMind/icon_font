@@ -2,7 +2,9 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:icon_font/src/common/generic_glyph.dart';
-import 'package:icon_font/src/otf/table/all.dart';
+import 'package:icon_font/src/otf/table/abstract.dart';
+import 'package:icon_font/src/otf/table/glyf.dart';
+import 'package:icon_font/src/otf/table/table_record_entry.dart';
 import 'package:icon_font/src/utils/constants.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
