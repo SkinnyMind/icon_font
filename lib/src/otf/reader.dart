@@ -94,60 +94,55 @@ class OTFReader {
   }
 
   FontTable? _createTableFromEntry({required TableRecordEntry entry}) {
-    switch (entry.tag) {
-      case kHeadTag:
-        return HeaderTable.fromByteData(data: _byteData, entry: entry);
-      case kMaxpTag:
-        return MaximumProfileTable.fromByteData(data: _byteData, entry: entry);
-      case kLocaTag:
-        return IndexToLocationTable.fromByteData(
-          byteData: _byteData,
-          entry: entry,
-          indexToLocFormat: _indexToLocFormat,
-          numGlyphs: numGlyphs,
-        );
-      case kGlyfTag:
-        return GlyphDataTable.fromByteData(
-          byteData: _byteData,
-          entry: entry,
-          locationTable: _font.loca,
-          numGlyphs: numGlyphs,
-        );
-      case kGSUBTag:
-        return GlyphSubstitutionTable.fromByteData(
-          byteData: _byteData,
-          entry: entry,
-        );
-      case kOS2Tag:
-        return OS2Table.fromByteData(byteData: _byteData, entry: entry);
-      case kPostTag:
-        return PostScriptTable.fromByteData(byteData: _byteData, entry: entry);
-      case kNameTag:
-        return NamingTable.fromByteData(byteData: _byteData, entry: entry);
-      case kCmapTag:
-        return CharacterToGlyphTable.fromByteData(
-          byteData: _byteData,
-          entry: entry,
-        );
-      case kHheaTag:
-        return HorizontalHeaderTable.fromByteData(
-          byteData: _byteData,
-          entry: entry,
-        );
-      case kHmtxTag:
-        return HorizontalMetricsTable.fromByteData(
-          byteData: _byteData,
-          entry: entry,
-          hhea: _font.hhea,
-          numGlyphs: numGlyphs,
-        );
-      case kCFFTag:
-      case kCFF2Tag:
-        return CFFTable.fromByteData(byteData: _byteData, entry: entry);
-      default:
+    return switch (entry.tag) {
+      kHeadTag => HeaderTable.fromByteData(data: _byteData, entry: entry),
+      kMaxpTag => MaximumProfileTable.fromByteData(
+        data: _byteData,
+        entry: entry,
+      ),
+      kLocaTag => IndexToLocationTable.fromByteData(
+        byteData: _byteData,
+        entry: entry,
+        indexToLocFormat: _indexToLocFormat,
+        numGlyphs: numGlyphs,
+      ),
+      kGlyfTag => GlyphDataTable.fromByteData(
+        byteData: _byteData,
+        entry: entry,
+        locationTable: _font.loca,
+        numGlyphs: numGlyphs,
+      ),
+      kGSUBTag => GlyphSubstitutionTable.fromByteData(
+        byteData: _byteData,
+        entry: entry,
+      ),
+      kOS2Tag => OS2Table.fromByteData(byteData: _byteData, entry: entry),
+      kPostTag => PostScriptTable.fromByteData(
+        byteData: _byteData,
+        entry: entry,
+      ),
+      kNameTag => NamingTable.fromByteData(byteData: _byteData, entry: entry),
+      kCmapTag => CharacterToGlyphTable.fromByteData(
+        byteData: _byteData,
+        entry: entry,
+      ),
+      kHheaTag => HorizontalHeaderTable.fromByteData(
+        byteData: _byteData,
+        entry: entry,
+      ),
+      kHmtxTag => HorizontalMetricsTable.fromByteData(
+        byteData: _byteData,
+        entry: entry,
+        hhea: _font.hhea,
+        numGlyphs: numGlyphs,
+      ),
+      kCFFTag ||
+      kCFF2Tag => CFFTable.fromByteData(byteData: _byteData, entry: entry),
+      _ => () {
         Log.logger.w('Unsupported table: ${entry.tag}');
         return null;
-    }
+      }(),
+    };
   }
 
   /// Validates tables' and font's checksum

@@ -91,27 +91,23 @@ class CFFOperand extends BinaryCodable {
       return double.parse(sb.toString());
     }
 
-    if (b0 == 28) {
-      return CFFOperand(value: decodeThreeByte(), size: 3);
-    } else if (b0 == 29) {
-      return CFFOperand(value: decodeFiveByte(), size: 5);
-    } else if (b0 == 30) {
-      final startNumberOffset = offset;
-      return CFFOperand(
-        value: decodeRealNumber(),
-        size: offset - startNumberOffset + 1, // + 1 because of byte 0
-      );
-    } else if (b0 >= 32 && b0 <= 246) {
-      return CFFOperand(value: decodeOneByte(), size: 1);
-    } else if (b0 >= 247 && b0 <= 250) {
-      return CFFOperand(value: decodeTwoBytePositive(), size: 2);
-    } else if (b0 >= 251 && b0 <= 254) {
-      return CFFOperand(value: decodeTwoByteNegative(), size: 2);
-    } else {
-      throw TableDataFormatException(
+    return switch (b0) {
+      28 => CFFOperand(value: decodeThreeByte(), size: 3),
+      29 => CFFOperand(value: decodeFiveByte(), size: 5),
+      30 => () {
+        final startNumberOffset = offset;
+        return CFFOperand(
+          value: decodeRealNumber(),
+          size: offset - startNumberOffset + 1, // + 1 because of byte 0
+        );
+      }(),
+      >= 32 && <= 246 => CFFOperand(value: decodeOneByte(), size: 1),
+      >= 247 && <= 250 => CFFOperand(value: decodeTwoBytePositive(), size: 2),
+      >= 251 && <= 254 => CFFOperand(value: decodeTwoByteNegative(), size: 2),
+      _ => throw TableDataFormatException(
         'Unknown operand type in CFF table (offset $offset)',
-      );
-    }
+      ),
+    };
   }
 
   /// Either real or integer number

@@ -97,18 +97,17 @@ abstract class PostScriptData implements BinaryCodable {
   }) {
     final version = header.version.int32value;
 
-    switch (version) {
-      case _version20:
-        return PostScriptVersion20.fromByteData(
-          byteData: byteData,
-          offset: offset,
-        );
-      case _version30:
-        return PostScriptVersion30();
-      default:
+    return switch (version) {
+      _version20 => PostScriptVersion20.fromByteData(
+        byteData: byteData,
+        offset: offset,
+      ),
+      _version30 => PostScriptVersion30(),
+      _ => () {
         Log.unsupportedTableVersion(kPostTag, version);
         return null;
-    }
+      }(),
+    };
   }
 
   Revision get version;

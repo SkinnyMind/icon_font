@@ -40,26 +40,22 @@ class Transform {
   }
 
   Matrix3? get matrix {
-    switch (type) {
-      case TransformType.matrix:
-        return Matrix3.fromList([
-          ...parameterList,
-          ...List.filled(9 - parameterList.length, 0),
-        ]);
-      case TransformType.translate:
-        final dx = parameterList[0];
-        final dy = [...parameterList, .0][1];
-
-        return _getTranslateMatrix(dx: dx, dy: dy);
-      case TransformType.scale:
-        final sw = parameterList[0];
-        final sh = [...parameterList, .0][1];
-
-        return _getScaleMatrix(sw: sw, sh: sh);
-      case TransformType.rotate:
+    return switch (type) {
+      TransformType.matrix => Matrix3.fromList([
+        ...parameterList,
+        ...List.filled(9 - parameterList.length, 0),
+      ]),
+      TransformType.translate => _getTranslateMatrix(
+        dx: parameterList[0],
+        dy: [...parameterList, .0][1],
+      ),
+      TransformType.scale => _getScaleMatrix(
+        sw: parameterList[0],
+        sh: [...parameterList, .0][1],
+      ),
+      TransformType.rotate => () {
         final degrees = parameterList[0];
         var transform = _getRotateMatrix(degrees: degrees);
-
         // The rotation is about the point (x, y)
         if (parameterList.length > 1) {
           final x = parameterList[1];
@@ -70,15 +66,12 @@ class Transform {
             ..multiply(_getTranslateMatrix(dx: -x, dy: -y));
           transform = t;
         }
-
         return transform;
-      case TransformType.skewX:
-        return _skewX(degrees: parameterList[0]);
-      case TransformType.skewY:
-        return _skewY(degrees: parameterList[0]);
-      case null:
-        return null;
-    }
+      }(),
+      TransformType.skewX => _skewX(degrees: parameterList[0]),
+      TransformType.skewY => _skewY(degrees: parameterList[0]),
+      null => null,
+    };
   }
 }
 

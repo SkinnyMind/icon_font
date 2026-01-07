@@ -12,16 +12,16 @@ abstract class CoverageTable implements BinaryCodable {
   }) {
     final format = byteData.getUint16(offset);
 
-    switch (format) {
-      case 1:
-        return CoverageTableFormat1.fromByteData(
-          byteData: byteData,
-          offset: offset,
-        );
-      default:
+    return switch (format) {
+      1 => CoverageTableFormat1.fromByteData(
+        byteData: byteData,
+        offset: offset,
+      ),
+      _ => () {
         Log.unsupportedTableFormat('Coverage', format);
         return null;
-    }
+      }(),
+    };
   }
 }
 
