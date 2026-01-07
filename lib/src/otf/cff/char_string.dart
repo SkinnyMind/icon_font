@@ -50,21 +50,21 @@ class CharStringCommand implements BinaryCodable {
 
   factory CharStringCommand.hmoveto({required int dx}) {
     return CharStringCommand(
-      operator: hmoveto,
+      operator: CharStringOperator.hmoveto.operator,
       operandList: _getOperandList(operandValues: [dx]),
     );
   }
 
   factory CharStringCommand.vmoveto({required int dy}) {
     return CharStringCommand(
-      operator: vmoveto,
+      operator: CharStringOperator.vmoveto.operator,
       operandList: _getOperandList(operandValues: [dy]),
     );
   }
 
   factory CharStringCommand.rmoveto({required int dx, required int dy}) {
     return CharStringCommand(
-      operator: rmoveto,
+      operator: CharStringOperator.rmoveto.operator,
       operandList: _getOperandList(operandValues: [dx, dy]),
     );
   }
@@ -81,14 +81,14 @@ class CharStringCommand implements BinaryCodable {
 
   factory CharStringCommand.hlineto({required int dx}) {
     return CharStringCommand(
-      operator: hlineto,
+      operator: CharStringOperator.hlineto.operator,
       operandList: _getOperandList(operandValues: [dx]),
     );
   }
 
   factory CharStringCommand.vlineto({required int dy}) {
     return CharStringCommand(
-      operator: vlineto,
+      operator: CharStringOperator.vlineto.operator,
       operandList: _getOperandList(operandValues: [dy]),
     );
   }
@@ -99,7 +99,7 @@ class CharStringCommand implements BinaryCodable {
     }
 
     return CharStringCommand(
-      operator: rlineto,
+      operator: CharStringOperator.rlineto.operator,
       operandList: _getOperandList(operandValues: dlist),
     );
   }
@@ -120,7 +120,7 @@ class CharStringCommand implements BinaryCodable {
     }
 
     return CharStringCommand(
-      operator: hhcurveto,
+      operator: CharStringOperator.hhcurveto.operator,
       operandList: _getOperandList(operandValues: dlist),
     );
   }
@@ -131,7 +131,7 @@ class CharStringCommand implements BinaryCodable {
     }
 
     return CharStringCommand(
-      operator: vvcurveto,
+      operator: CharStringOperator.vvcurveto.operator,
       operandList: _getOperandList(operandValues: dlist),
     );
   }
@@ -162,7 +162,7 @@ class CharStringCommand implements BinaryCodable {
     }
 
     return CharStringCommand(
-      operator: rrcurveto,
+      operator: CharStringOperator.rrcurveto.operator,
       operandList: _getOperandList(operandValues: dlist),
     );
   }

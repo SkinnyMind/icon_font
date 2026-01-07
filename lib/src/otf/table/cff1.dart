@@ -123,7 +123,7 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
 
     /// CharStrings INDEX
     final charStringsIndexEntry = topDict.getEntryForOperator(
-      operator: op.charStrings,
+      operator: op.DictOperator.charStrings.operator,
     )!;
     final charStringsIndexOffset =
         charStringsIndexEntry.operandList.first.value! as int;
@@ -139,7 +139,9 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
     /// Charsets
     final charsetsOffset =
         topDict
-                .getEntryForOperator(operator: op.charset)!
+                .getEntryForOperator(
+                  operator: op.DictOperator.charset.operator,
+                )!
                 .operandList
                 .first
                 .value!
@@ -153,7 +155,9 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
       glyphCount: charStringsData.index!.count,
     )!;
 
-    final privateEntry = topDict.getEntryForOperator(operator: op.private)!;
+    final privateEntry = topDict.getEntryForOperator(
+      operator: op.DictOperator.private.operator,
+    )!;
     final dictOffset =
         entry.offset + (privateEntry.operandList.last.value! as int);
     final dictLength = privateEntry.operandList.first.value! as int;
@@ -167,7 +171,9 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
     final localSubrsDataList = <CFFIndexWithData<Uint8List>>[];
 
     // NOTE: reading only first local subrs
-    final localSubrEntry = privateDict.getEntryForOperator(operator: op.subrs);
+    final localSubrEntry = privateDict.getEntryForOperator(
+      operator: op.DictOperator.subrs.operator,
+    );
     if (localSubrEntry != null) {
       /// Offset from the start of the Private DICT
       final localSubrOffset = localSubrEntry.operandList.first.value! as int;
@@ -232,9 +238,11 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
     final fontName = name.getStringByNameId(NameID.fullFontName)!;
 
     final topDictStringEntryMap = {
-      op.version: name.getStringByNameId(NameID.version),
-      op.fullName: fontName,
-      op.weight: name.getStringByNameId(NameID.fontSubfamily),
+      op.DictOperator.version.operator: name.getStringByNameId(NameID.version),
+      op.DictOperator.fullName.operator: fontName,
+      op.DictOperator.weight.operator: name.getStringByNameId(
+        NameID.fontSubfamily,
+      ),
     };
 
     final entryList = [
@@ -251,7 +259,7 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
           CFFOperand.fromValue(head.xMax),
           CFFOperand.fromValue(head.yMax),
         ],
-        operator: op.fontBBox,
+        operator: op.DictOperator.fontBBox.operator,
       ),
     ];
     final topDicts = CFFIndexWithData.create(
@@ -278,7 +286,10 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
         ...glyph.toCharStringCommands(
           optimizer: CharStringOptimizer(isCFF1: true),
         ),
-        CharStringCommand(operator: cs_op.endchar, operandList: []),
+        CharStringCommand(
+          operator: cs_op.CharStringOperator.endchar.operator,
+          operandList: [],
+        ),
       ];
       final byteData = CharStringInterpreter(isCFF1: true).writeCommands(
         commandList: commandList,
@@ -299,7 +310,7 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
       entryList: [
         CFFDictEntry(
           operandList: [CFFOperand.fromValue(0)],
-          operator: op.nominalWidthX,
+          operator: op.DictOperator.nominalWidthX.operator,
         ),
       ],
     );
@@ -356,18 +367,18 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
     final entryList = <CFFDictEntry>[
       CFFDictEntry(
         operandList: [CFFOperand.fromValue(0)],
-        operator: op.charset,
+        operator: op.DictOperator.charset.operator,
       ),
       CFFDictEntry(
         operandList: [CFFOperand.fromValue(0)],
-        operator: op.charStrings,
+        operator: op.DictOperator.charStrings.operator,
       ),
       CFFDictEntry(
         operandList: [
           CFFOperand.fromValue(privateDictList.first.size),
           CFFOperand.fromValue(0),
         ],
-        operator: op.private,
+        operator: op.DictOperator.private.operator,
       ),
     ];
 
@@ -395,11 +406,15 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
     final privateDictOffset = offset;
     offset += privateDict.size;
 
-    final charsetEntry = topDict.getEntryForOperator(operator: op.charset)!;
-    final charStringsEntry = topDict.getEntryForOperator(
-      operator: op.charStrings,
+    final charsetEntry = topDict.getEntryForOperator(
+      operator: op.DictOperator.charset.operator,
     )!;
-    final privateEntry = topDict.getEntryForOperator(operator: op.private)!;
+    final charStringsEntry = topDict.getEntryForOperator(
+      operator: op.DictOperator.charStrings.operator,
+    )!;
+    final privateEntry = topDict.getEntryForOperator(
+      operator: op.DictOperator.private.operator,
+    )!;
 
     final offsetList = [charsetOffset, charStringsOffset, privateDictOffset];
 
@@ -428,7 +443,9 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
     }
 
     // Last data offset
-    final lastDataEntry = topDict.getEntryForOperator(operator: op.private)!;
+    final lastDataEntry = topDict.getEntryForOperator(
+      operator: op.DictOperator.private.operator,
+    )!;
     final lastDataOffset = lastDataEntry.operandList.last.value! as int;
     header.offSize = (lastDataOffset.bitLength / 8).ceil();
   }

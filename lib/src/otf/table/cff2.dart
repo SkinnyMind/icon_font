@@ -96,7 +96,7 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
 
     /// CharStrings INDEX
     final charStringsIndexEntry = topDict.getEntryForOperator(
-      operator: op.charStrings,
+      operator: op.DictOperator.charStrings.operator,
     )!;
     final charStringsIndexOffset =
         charStringsIndexEntry.operandList.first.value! as int;
@@ -110,7 +110,9 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
     );
 
     /// VariationStore
-    final vstoreEntry = topDict.getEntryForOperator(operator: op.vstore);
+    final vstoreEntry = topDict.getEntryForOperator(
+      operator: op.DictOperator.vstore.operator,
+    );
     VariationStoreData? vstoreData;
 
     if (vstoreEntry != null) {
@@ -122,7 +124,9 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
     // NOTE: not decoding FDSelect - using single Font DICT only
 
     /// Font DICT INDEX
-    final fdArrayEntry = topDict.getEntryForOperator(operator: op.fdArray)!;
+    final fdArrayEntry = topDict.getEntryForOperator(
+      operator: op.DictOperator.fdArray.operator,
+    )!;
     final fdArrayOffset = fdArrayEntry.operandList.first.value! as int;
 
     final fontIndexByteData = byteData.sublistView(
@@ -143,7 +147,7 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
 
     for (var i = 0; i < fontDictList.index!.count; i++) {
       final privateEntry = fontDictList.data[i].getEntryForOperator(
-        operator: op.private,
+        operator: op.DictOperator.private.operator,
       )!;
       final dictOffset =
           entry.offset + (privateEntry.operandList.last.value! as int);
@@ -153,7 +157,9 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
       final dict = CFFDict.fromByteData(dictByteData);
       privateDictList.add(dict);
 
-      final localSubrEntry = dict.getEntryForOperator(operator: op.subrs);
+      final localSubrEntry = dict.getEntryForOperator(
+        operator: op.DictOperator.subrs.operator,
+      );
 
       if (localSubrEntry != null) {
         /// Offset from the start of the Private DICT
@@ -197,16 +203,16 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
     final entryList = <CFFDictEntry>[
       CFFDictEntry(
         operandList: [CFFOperand.fromValue(0)],
-        operator: op.charStrings,
+        operator: op.DictOperator.charStrings.operator,
       ),
       if (vstoreData != null)
         CFFDictEntry(
           operandList: [CFFOperand.fromValue(0)],
-          operator: op.vstore,
+          operator: op.DictOperator.vstore.operator,
         ),
       CFFDictEntry(
         operandList: [CFFOperand.fromValue(0)],
-        operator: op.fdArray,
+        operator: op.DictOperator.fdArray.operator,
       ),
       // NOTE: not encoding FDSelect - using single Font DICT only
     ];
@@ -232,11 +238,15 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
     final fdArrayOffset = offset;
     offset += fontDictList.size;
 
-    final vstoreEntry = topDict.getEntryForOperator(operator: op.vstore);
+    final vstoreEntry = topDict.getEntryForOperator(
+      operator: op.DictOperator.vstore.operator,
+    );
     final charStringsEntry = topDict.getEntryForOperator(
-      operator: op.charStrings,
+      operator: op.DictOperator.charStrings.operator,
     )!;
-    final fdArrayEntry = topDict.getEntryForOperator(operator: op.fdArray)!;
+    final fdArrayEntry = topDict.getEntryForOperator(
+      operator: op.DictOperator.fdArray.operator,
+    )!;
 
     final offsetList = [
       if (vstoreData != null) vstoreOffset!,
@@ -264,7 +274,9 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
     charStringsData.recalculateOffsets();
 
     // Recalculating font DICTs private offsets and SUBRS entries offsets
-    final fdArrayEntry = topDict.getEntryForOperator(operator: op.fdArray)!;
+    final fdArrayEntry = topDict.getEntryForOperator(
+      operator: op.DictOperator.fdArray.operator,
+    )!;
     final fdArrayOffset = fdArrayEntry.operandList.first.value! as int;
 
     var fontDictOffset = fdArrayOffset + fontDictList.index!.size;
@@ -272,7 +284,9 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
     for (var i = 0; i < fontDictList.data.length; i++) {
       final fontDict = fontDictList.data[i];
       final privateDict = privateDictList[i];
-      final privateEntry = fontDict.getEntryForOperator(operator: op.private)!;
+      final privateEntry = fontDict.getEntryForOperator(
+        operator: op.DictOperator.private.operator,
+      )!;
 
       final newOperands = [
         CFFOperand.fromValue(privateDict.size),
@@ -283,7 +297,9 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
         ..addAll(newOperands);
       fontDictOffset += fontDict.size;
 
-      final subrsEntry = privateDict.getEntryForOperator(operator: op.subrs);
+      final subrsEntry = privateDict.getEntryForOperator(
+        operator: op.DictOperator.subrs.operator,
+      );
       if (subrsEntry != null) {
         subrsEntry.operandList
           ..clear()

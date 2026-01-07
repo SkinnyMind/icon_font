@@ -29,10 +29,11 @@ class CharStringOptimizer {
 
     final op = next.operator;
 
-    if (op == rlineto) {
+    if (op == CharStringOperator.rlineto.operator) {
       prevOpnds.addAll(currOpnds);
       return true;
-    } else if (op == hlineto || op == vlineto) {
+    } else if (op == CharStringOperator.hlineto.operator ||
+        op == CharStringOperator.vlineto.operator) {
       final prevIsOdd = prevOpnds.length.isOdd;
       final currIsOdd = currOpnds.length.isOdd;
 
@@ -43,10 +44,11 @@ class CharStringOptimizer {
         prevOpnds.addAll(currOpnds);
         return true;
       }
-    } else if (op == rrcurveto) {
+    } else if (op == CharStringOperator.rrcurveto.operator) {
       prevOpnds.addAll(currOpnds);
       return true;
-    } else if (op == hhcurveto || op == vvcurveto) {
+    } else if (op == CharStringOperator.hhcurveto.operator ||
+        op == CharStringOperator.vvcurveto.operator) {
       final prevHasDelta = prevOpnds.length % 4 != 0;
       final currHasDelta = currOpnds.length % 4 != 0;
 
@@ -74,11 +76,11 @@ class CharStringOptimizer {
     return commandList.where((e) {
       final everyOperandIsZero = e.operandList.every((o) => o.value == 0);
       final isCurveToOperator = [
-        rrcurveto,
-        vvcurveto,
-        hhcurveto,
-        vhcurveto,
-        hvcurveto,
+        CharStringOperator.rrcurveto.operator,
+        CharStringOperator.vvcurveto.operator,
+        CharStringOperator.hhcurveto.operator,
+        CharStringOperator.vhcurveto.operator,
+        CharStringOperator.hvcurveto.operator,
       ].contains(e.operator);
 
       if (isCurveToOperator) {
