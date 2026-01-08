@@ -1,3 +1,10 @@
+## 0.1.0
+
+- docs: update README with correct instructions
+- deps: bump Dart SDK to 3.10.0
+- deps: update versions and checkin `pubspec.lock`
+- feat: use `@staticIconProvider` to enable tree shaking
+
 ## 0.0.1
 
 - hard fork of [icon_font_generator](https://github.com/ScerIO/icon_font_generator) 4.0.0
