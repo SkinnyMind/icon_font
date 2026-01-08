@@ -79,15 +79,27 @@ class OpenTypeFont implements BinaryCodable {
     // A power of two is recommended only for TrueType outlines
     final unitsPerEm = useOpenType ? defaultOpenTypeUnitsPerEm : 1024;
 
-    final baselineExtension = normalize ? 150 : 0;
-    final ascender = unitsPerEm - baselineExtension;
-    final descender = -baselineExtension;
+    final GlyphScalingStrategy scalingStrategy;
+    final int ascender;
+    final int descender;
+
+    if (normalize) {
+      const baselineExtension = 150;
+      ascender = unitsPerEm - baselineExtension;
+      descender = -baselineExtension;
+      scalingStrategy = AscenderDescenderScalingStrategy(
+        ascender: ascender,
+        descender: descender,
+      );
+    } else {
+      ascender = unitsPerEm;
+      descender = 0;
+      scalingStrategy = FontHeightScalingStrategy(unitsPerEm);
+    }
 
     final resizedGlyphList = _resizeAndCenter(
       glyphList: glyphList,
-      ascender: normalize ? ascender : null,
-      descender: normalize ? descender : null,
-      fontHeight: normalize ? null : unitsPerEm,
+      strategy: scalingStrategy,
     );
 
     final defaultGlyphList = _generateDefaultGlyphList(ascender: ascender);
@@ -315,40 +327,11 @@ class OpenTypeFont implements BinaryCodable {
   @override
   int get size => offsetTableLength + entryListSize + tableListSize;
 
-  // TODO: I don't like this. Refactor it later. Use "strategy" or something.
   static List<GenericGlyph> _resizeAndCenter({
     required List<GenericGlyph> glyphList,
-    int? ascender,
-    int? descender,
-    int? fontHeight,
+    required GlyphScalingStrategy strategy,
   }) {
-    return glyphList.map((g) {
-      if (fontHeight != null) {
-        // Not normalizing glyphs, just resizing them according to unitsPerEm
-        return g.resize(
-          fontHeight: fontHeight,
-          ratioX: g.metadata.ratioX,
-          ratioY: g.metadata.ratioY,
-        );
-      }
-
-      if (ascender != null && descender != null) {
-        return g
-            .resize(
-              ascender: ascender,
-              descender: descender,
-              ratioX: g.metadata.ratioX,
-              ratioY: g.metadata.ratioY,
-            )
-            .center(
-              ascender: ascender,
-              descender: descender,
-              offset: g.metadata.offset ?? 0,
-            );
-      }
-
-      throw ArgumentError('ascender/descender or fontHeight must not be null');
-    }).toList();
+    return glyphList.map((g) => strategy.scale(g)).toList();
   }
 
   static List<GenericGlyph> _generateCharCodes({
@@ -419,5 +402,53 @@ class OpenTypeFont implements BinaryCodable {
     ];
 
     return GenericGlyph(outlines: outlines, bounds: outerRect);
+  }
+}
+
+/// Interface for glyph scaling logic.
+abstract class GlyphScalingStrategy {
+  GenericGlyph scale(GenericGlyph glyph);
+}
+
+/// Strategy for resizing according to unitsPerEm (fontHeight).
+class FontHeightScalingStrategy implements GlyphScalingStrategy {
+  FontHeightScalingStrategy(this.fontHeight);
+
+  final int fontHeight;
+
+  @override
+  GenericGlyph scale(GenericGlyph glyph) {
+    return glyph.resize(
+      fontHeight: fontHeight,
+      ratioX: glyph.metadata.ratioX,
+      ratioY: glyph.metadata.ratioY,
+    );
+  }
+}
+
+/// Strategy for resizing and centering within ascender/descender bounds.
+class AscenderDescenderScalingStrategy implements GlyphScalingStrategy {
+  AscenderDescenderScalingStrategy({
+    required this.ascender,
+    required this.descender,
+  });
+
+  final int ascender;
+  final int descender;
+
+  @override
+  GenericGlyph scale(GenericGlyph glyph) {
+    return glyph
+        .resize(
+          ascender: ascender,
+          descender: descender,
+          ratioX: glyph.metadata.ratioX,
+          ratioY: glyph.metadata.ratioY,
+        )
+        .center(
+          ascender: ascender,
+          descender: descender,
+          offset: glyph.metadata.offset ?? 0,
+        );
   }
 }
