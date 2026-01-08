@@ -158,7 +158,6 @@ class CFFIndexWithData<T> implements BinaryCodable, CalculatableOffsets {
   CFFIndex? index;
   final List<T> data;
   final bool isCFF1;
-  CFFIndex? _cachedIndex;
 
   static Object Function(ByteData) _getDecoderForType(Type type) {
     return switch (type) {
@@ -192,18 +191,20 @@ class CFFIndexWithData<T> implements BinaryCodable, CalculatableOffsets {
 
   @override
   void recalculateOffsets() {
-    _cachedIndex = null;
     index = data.isEmpty ? CFFIndex.empty(isCFF1: isCFF1) : _calculateIndex();
   }
 
+  // comment for todo
+  // ignore: lines_longer_than_80_chars
+  // TODO: memoize: called three times when writing font - on creating ByteData for font, on creating sublistView and on calling encode
   CFFIndex _calculateIndex() {
-    if (_cachedIndex != null) return _cachedIndex!;
-
     final lengthCallback = _getByteLengthCallback();
+
     final dataSizeList = data.map(lengthCallback).toList();
 
     /// Generating offset list starting with 1
     final offsetList = [1];
+
     for (final elementSize in dataSizeList) {
       offsetList.add(offsetList.last + elementSize);
     }
@@ -222,14 +223,12 @@ class CFFIndexWithData<T> implements BinaryCodable, CalculatableOffsets {
         isCFF1: isCFF1,
       );
       actualOffSize = (offsetList.last.bitLength / 8).ceil();
-      if (actualOffSize == 0) actualOffSize = 1;
     } while (actualOffSize != expectedOffSize);
 
     if (actualOffSize > 4) {
       throw TableDataFormatException('INDEX offset overflow');
     }
 
-    _cachedIndex = newIndex;
     return newIndex;
   }
 
@@ -244,13 +243,24 @@ class CFFIndexWithData<T> implements BinaryCodable, CalculatableOffsets {
     return newIndex.size + newIndex.offsetList.last - 1;
   }
 
+  CFFIndex get _guardedIndex {
+    if (index == null) {
+      throw StateError('index must not be null');
+    }
+
+    return index!;
+  }
+
   @override
   void encodeToBinary(ByteData byteData) {
-    final index = data.isEmpty
-        ? CFFIndex.empty(isCFF1: isCFF1)
-        : _calculateIndex();
+    final index = _guardedIndex;
+
+    if (data.isEmpty) {
+      index.encodeToBinary(byteData.sublistView(0, index.size));
+    }
 
     var offset = 0;
+
     final indexSize = index.size;
 
     index.encodeToBinary(byteData.sublistView(offset, indexSize));
