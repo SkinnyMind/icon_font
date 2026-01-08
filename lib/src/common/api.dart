@@ -143,6 +143,7 @@ import 'package:flutter/widgets.dart';
 ///       fonts:
 ///         - asset: packages/package_name/fonts/$fontFileName
 /// ```
+@staticIconProvider
 class $className {
 $classContent
 }
