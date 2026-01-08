@@ -122,7 +122,7 @@ It's possible to specify any other config file by using `--config-file` option.
 - SVG transforms are applied to paths according to specs.
 - SVG `<g>` element's children are expanded to the root with transformations applied.
   Anything else related to the group is ignored and group referencing is not supported.
-- Consider using [Non-zero fill rule][].
+- Consider using [Non-zero fill rule][], or using tools like [svg-fixer](https://github.com/oslllo/svg-fixer), [pico-svg](https://github.com/googlefonts/picosvg) or similar.
 - When `ignoreShapes` is set to false,
   every SVG shape's (circle, rect, etc.) outline is converted to path.
   Note that any attributes like "fill" or "stroke" are ignored and only the outline is used,
