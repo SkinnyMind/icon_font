@@ -50,30 +50,30 @@ class ScriptTable implements BinaryCodable {
     required int offset,
     required ScriptRecord record,
   }) {
-    offset += record.scriptOffset!;
+    final currentOffset = offset + record.scriptOffset!;
 
-    final defaultLangSysOffset = byteData.getUint16(offset);
+    final defaultLangSysOffset = byteData.getUint16(currentOffset);
     LanguageSystemTable? defaultLangSys;
     if (defaultLangSysOffset != 0) {
       defaultLangSys = LanguageSystemTable.fromByteData(
         byteData: byteData,
-        offset: offset + defaultLangSysOffset,
+        offset: currentOffset + defaultLangSysOffset,
       );
     }
 
-    final langSysCount = byteData.getUint16(offset + 2);
+    final langSysCount = byteData.getUint16(currentOffset + 2);
     final langSysRecords = List.generate(
       langSysCount,
       (i) => LanguageSystemRecord.fromByteData(
         byteData: byteData,
-        offset: offset + 4 + langSysRecordSize * i,
+        offset: currentOffset + 4 + langSysRecordSize * i,
       ),
     );
     final langSysTables = langSysRecords
         .map(
           (r) => LanguageSystemTable.fromByteData(
             byteData: byteData,
-            offset: offset + r.langSysOffset,
+            offset: currentOffset + r.langSysOffset,
           ),
         )
         .toList();

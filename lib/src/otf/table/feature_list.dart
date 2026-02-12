@@ -47,16 +47,16 @@ class FeatureTable implements BinaryCodable {
     int offset,
     FeatureRecord record,
   ) {
-    offset += record.featureOffset!;
+    final currentOffset = offset + record.featureOffset!;
 
-    final lookupIndexCount = byteData.getUint16(offset + 2);
+    final lookupIndexCount = byteData.getUint16(currentOffset + 2);
     final lookupListIndices = List.generate(
       lookupIndexCount,
-      (i) => byteData.getUint16(offset + 4 + i * 2),
+      (i) => byteData.getUint16(currentOffset + 4 + i * 2),
     );
 
     return FeatureTable(
-      featureParams: byteData.getUint16(offset),
+      featureParams: byteData.getUint16(currentOffset),
       lookupIndexCount: lookupIndexCount,
       lookupListIndices: lookupListIndices,
     );
