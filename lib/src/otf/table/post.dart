@@ -137,14 +137,15 @@ class PostScriptVersion20 extends PostScriptData {
     required ByteData byteData,
     required int offset,
   }) {
-    final numberOfGlyphs = byteData.getUint16(offset);
-    offset += 2;
+    var currentOffset = offset;
+    final numberOfGlyphs = byteData.getUint16(currentOffset);
+    currentOffset += 2;
 
     final glyphNameIndex = List.generate(
       numberOfGlyphs,
-      (i) => byteData.getUint16(offset + i * 2),
+      (i) => byteData.getUint16(currentOffset + i * 2),
     );
-    offset += numberOfGlyphs * 2;
+    currentOffset += numberOfGlyphs * 2;
 
     final glyphNames = <PascalString>[];
 
@@ -155,9 +156,9 @@ class PostScriptVersion20 extends PostScriptData {
 
       final string = PascalString.fromByteData(
         byteData: byteData,
-        offset: offset,
+        offset: currentOffset,
       );
-      offset += string.size;
+      currentOffset += string.size;
 
       glyphNames.add(string);
     }

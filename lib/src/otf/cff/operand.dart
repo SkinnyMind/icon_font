@@ -31,6 +31,8 @@ class CFFOperand extends BinaryCodable {
   CFFOperand.fromValue(this.value, {this.forceLargeInt = false});
 
   factory CFFOperand.fromByteData(ByteData byteData, int offset, int b0) {
+    var currentOffset = offset;
+
     /// -107 to +107
     int decodeOneByte() {
       return b0 - 139;
@@ -38,30 +40,30 @@ class CFFOperand extends BinaryCodable {
 
     /// +108 to +1131
     int decodeTwoBytePositive() {
-      final b1 = byteData.getUint8(offset++);
+      final b1 = byteData.getUint8(currentOffset++);
 
       return (b0 - 247) * 256 + b1 + 108;
     }
 
     /// -1131 to -108
     int decodeTwoByteNegative() {
-      final b1 = byteData.getUint8(offset++);
+      final b1 = byteData.getUint8(currentOffset++);
 
       return -(b0 - 251) * 256 - b1 - 108;
     }
 
     /// -32768 to +32767
     int decodeThreeByte() {
-      final value = byteData.getUint16(offset);
-      offset += 2;
+      final value = byteData.getUint16(currentOffset);
+      currentOffset += 2;
 
       return value;
     }
 
     /// -(2^31) to +(2^31 - 1)
     int decodeFiveByte() {
-      final value = byteData.getUint32(offset);
-      offset += 4;
+      final value = byteData.getUint32(currentOffset);
+      currentOffset += 4;
 
       return value;
     }
@@ -71,7 +73,7 @@ class CFFOperand extends BinaryCodable {
       final sb = StringBuffer();
 
       while (true) {
-        final b = byteData.getUint8(offset++);
+        final b = byteData.getUint8(currentOffset++);
 
         final n1 = b >> 4;
         if (n1 == _realNumberTerminator) {
@@ -95,17 +97,17 @@ class CFFOperand extends BinaryCodable {
       28 => CFFOperand(value: decodeThreeByte(), size: 3),
       29 => CFFOperand(value: decodeFiveByte(), size: 5),
       30 => () {
-        final startNumberOffset = offset;
+        final startNumberOffset = currentOffset;
         return CFFOperand(
           value: decodeRealNumber(),
-          size: offset - startNumberOffset + 1, // + 1 because of byte 0
+          size: currentOffset - startNumberOffset + 1, // + 1 because of byte 0
         );
       }(),
       >= 32 && <= 246 => CFFOperand(value: decodeOneByte(), size: 1),
       >= 247 && <= 250 => CFFOperand(value: decodeTwoBytePositive(), size: 2),
       >= 251 && <= 254 => CFFOperand(value: decodeTwoByteNegative(), size: 2),
       _ => throw TableDataFormatException(
-        'Unknown operand type in CFF table (offset $offset)',
+        'Unknown operand type in CFF table (offset $currentOffset)',
       ),
     };
   }

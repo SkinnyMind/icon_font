@@ -63,18 +63,17 @@ class OpenTypeFont implements BinaryCodable {
     bool? usePostV2,
     bool? normalize,
   }) {
-    if (fontName?.isEmpty ?? false) {
-      fontName = null;
-    }
+    var localFontName = (fontName?.isEmpty ?? false) ? null : fontName;
+    var localGlyphList = glyphList;
 
     revision ??= const Revision(1, 0);
     achVendID ??= '    ';
-    fontName ??= defaultFontFamily;
+    localFontName ??= defaultFontFamily;
     useOpenType ??= true;
     normalize ??= true;
     usePostV2 ??= false;
 
-    glyphList = _generateCharCodes(glyphList: glyphList);
+    localGlyphList = _generateCharCodes(glyphList: localGlyphList);
 
     // A power of two is recommended only for TrueType outlines
     final unitsPerEm = useOpenType ? defaultOpenTypeUnitsPerEm : 1024;
@@ -98,7 +97,7 @@ class OpenTypeFont implements BinaryCodable {
     }
 
     final resizedGlyphList = _resizeAndCenter(
-      glyphList: glyphList,
+      glyphList: localGlyphList,
       strategy: scalingStrategy,
     );
 
@@ -152,7 +151,7 @@ class OpenTypeFont implements BinaryCodable {
       usePostV2: usePostV2,
     );
     final name = NamingTable.create(
-      fontName: fontName,
+      fontName: localFontName,
       description: description,
       revision: revision,
     );
