@@ -5,14 +5,14 @@ import 'package:icon_font/src/otf/table/glyf.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
-class IndexToLocationTable extends FontTable {
-  IndexToLocationTable({
-    required TableRecordEntry? entry,
-    required this.glyphOffsets,
-    required this.isShort,
-  }) : super.fromTableRecordEntry(entry);
+class IndexToLocationTable({
+  required TableRecordEntry? entry,
+  required final List<int> glyphOffsets,
+  required final bool isShort,
+}) extends FontTable {
+  this : super.fromTableRecordEntry(entry);
 
-  factory IndexToLocationTable.fromByteData({
+  factory fromByteData({
     required ByteData byteData,
     required TableRecordEntry entry,
     required int indexToLocFormat,
@@ -22,9 +22,10 @@ class IndexToLocationTable extends FontTable {
 
     final offsets = <int>[
       for (var i = 0; i < numGlyphs + 1; i++)
-        isShort
-            ? byteData.getUint16(entry.offset + 2 * i) * 2
-            : byteData.getUint32(entry.offset + 4 * i),
+        if (isShort)
+          byteData.getUint16(entry.offset + 2 * i) * 2
+        else
+          byteData.getUint32(entry.offset + 4 * i),
     ];
 
     return IndexToLocationTable(
@@ -34,7 +35,7 @@ class IndexToLocationTable extends FontTable {
     );
   }
 
-  factory IndexToLocationTable.create({
+  factory create({
     required int indexToLocFormat,
     required GlyphDataTable glyf,
   }) {
@@ -56,9 +57,6 @@ class IndexToLocationTable extends FontTable {
       isShort: isShort,
     );
   }
-
-  final List<int> glyphOffsets;
-  final bool isShort;
 
   @override
   void encodeToBinary(ByteData byteData) {

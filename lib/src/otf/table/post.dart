@@ -13,20 +13,18 @@ const _version30 = 0x00030000;
 
 const _headerSize = 32;
 
-class PostScriptTableHeader implements BinaryCodable {
-  PostScriptTableHeader({
-    required this.version,
-    required this.italicAngle,
-    required this.underlinePosition,
-    required this.underlineThickness,
-    required this.isFixedPitch,
-    required this.minMemType42,
-    required this.maxMemType42,
-    required this.minMemType1,
-    required this.maxMemType1,
-  });
-
-  factory PostScriptTableHeader.fromByteData({
+class const PostScriptTableHeader({
+  required final Revision version,
+  required final int italicAngle,
+  required final int underlinePosition,
+  required final int underlineThickness,
+  required final int isFixedPitch,
+  required final int minMemType42,
+  required final int maxMemType42,
+  required final int minMemType1,
+  required final int maxMemType1,
+}) implements BinaryCodable {
+  factory fromByteData({
     required ByteData byteData,
     required TableRecordEntry entry,
   }) {
@@ -45,7 +43,7 @@ class PostScriptTableHeader implements BinaryCodable {
     );
   }
 
-  factory PostScriptTableHeader.create({required Revision version}) {
+  factory create({required Revision version}) {
     return PostScriptTableHeader(
       version: version,
       italicAngle: 0, // upright text
@@ -58,16 +56,6 @@ class PostScriptTableHeader implements BinaryCodable {
       maxMemType1: 0,
     );
   }
-
-  final Revision version;
-  final int italicAngle;
-  final int underlinePosition;
-  final int underlineThickness;
-  final int isFixedPitch;
-  final int minMemType42;
-  final int maxMemType42;
-  final int minMemType1;
-  final int maxMemType1;
 
   @override
   int get size => _headerSize;
@@ -87,9 +75,7 @@ class PostScriptTableHeader implements BinaryCodable {
   }
 }
 
-abstract class PostScriptData implements BinaryCodable {
-  PostScriptData();
-
+abstract class const PostScriptData() implements BinaryCodable {
   static PostScriptData? fromByteData({
     required ByteData byteData,
     required int offset,
@@ -102,7 +88,7 @@ abstract class PostScriptData implements BinaryCodable {
         byteData: byteData,
         offset: offset,
       ),
-      _version30 => PostScriptVersion30(),
+      _version30 => const PostScriptVersion30(),
       _ => () {
         Log.unsupportedTableVersion(kPostTag, version);
         return null;
@@ -113,9 +99,7 @@ abstract class PostScriptData implements BinaryCodable {
   Revision get version;
 }
 
-class PostScriptVersion30 extends PostScriptData {
-  PostScriptVersion30();
-
+class const PostScriptVersion30() extends PostScriptData {
   @override
   int get size => 0;
 
@@ -126,17 +110,12 @@ class PostScriptVersion30 extends PostScriptData {
   void encodeToBinary(_) {}
 }
 
-class PostScriptVersion20 extends PostScriptData {
-  PostScriptVersion20({
-    required this.numberOfGlyphs,
-    required this.glyphNameIndex,
-    required this.glyphNames,
-  });
-
-  factory PostScriptVersion20.fromByteData({
-    required ByteData byteData,
-    required int offset,
-  }) {
+class const PostScriptVersion20({
+  required final int numberOfGlyphs,
+  required final List<int> glyphNameIndex,
+  required final List<PascalString> glyphNames,
+}) extends PostScriptData {
+  factory fromByteData({required ByteData byteData, required int offset}) {
     var currentOffset = offset;
     final numberOfGlyphs = byteData.getUint16(currentOffset);
     currentOffset += 2;
@@ -170,7 +149,7 @@ class PostScriptVersion20 extends PostScriptData {
     );
   }
 
-  factory PostScriptVersion20.create({required List<String> glyphNameList}) {
+  factory create({required List<String> glyphNameList}) {
     final glyphNameIndex = [
       0, // .notdef
       3, // space
@@ -188,10 +167,6 @@ class PostScriptVersion20 extends PostScriptData {
       glyphNames: glyphNames,
     );
   }
-
-  final int numberOfGlyphs;
-  final List<int> glyphNameIndex;
-  final List<PascalString> glyphNames;
 
   @override
   int get size {
@@ -239,14 +214,14 @@ class PostScriptVersion20 extends PostScriptData {
   }
 }
 
-class PostScriptTable extends FontTable {
-  PostScriptTable({
-    required TableRecordEntry? entry,
-    required this.header,
-    required this.data,
-  }) : super.fromTableRecordEntry(entry);
+class PostScriptTable({
+  required TableRecordEntry? entry,
+  required final PostScriptTableHeader header,
+  required final PostScriptData? data,
+}) extends FontTable {
+  this : super.fromTableRecordEntry(entry);
 
-  factory PostScriptTable.fromByteData({
+  factory fromByteData({
     required ByteData byteData,
     required TableRecordEntry entry,
   }) {
@@ -270,7 +245,7 @@ class PostScriptTable extends FontTable {
   ///
   /// [glyphList] contains non-default characters.
   /// If [usePostV2] is true, version 2 table is generated.
-  factory PostScriptTable.create({
+  factory create({
     required List<GenericGlyph> glyphList,
     required bool usePostV2,
   }) {
@@ -278,7 +253,7 @@ class PostScriptTable extends FontTable {
 
     final data = usePostV2
         ? PostScriptVersion20.create(glyphNameList: glyphNameList)
-        : PostScriptVersion30();
+        : const PostScriptVersion30();
 
     return PostScriptTable(
       entry: null,
@@ -286,9 +261,6 @@ class PostScriptTable extends FontTable {
       data: data,
     );
   }
-
-  final PostScriptTableHeader header;
-  final PostScriptData? data;
 
   @override
   int get size => header.size + (data?.size ?? 0);
@@ -564,13 +536,11 @@ const _macStandardGlyphNames = [
   'dcroat',
 ];
 
-class PascalString implements BinaryCodable {
-  PascalString({required this.string, required this.length});
-
-  factory PascalString.fromByteData({
-    required ByteData byteData,
-    required int offset,
-  }) {
+class const PascalString({
+  required final String string,
+  required final int length,
+}) implements BinaryCodable {
+  factory fromByteData({required ByteData byteData, required int offset}) {
     final length = byteData.getUint8(offset++);
     final bytes = List.generate(length, (i) => byteData.getUint8(offset + i));
     return PascalString(string: String.fromCharCodes(bytes), length: length);
@@ -578,9 +548,6 @@ class PascalString implements BinaryCodable {
 
   factory PascalString.fromString(String string) =>
       PascalString(string: string, length: string.length);
-
-  final String string;
-  final int length;
 
   @override
   int get size => length + 1;

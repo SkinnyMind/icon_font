@@ -6,9 +6,7 @@ import 'package:icon_font/src/utils/extensions.dart';
 import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
-abstract class SubstitutionSubtable implements BinaryCodable {
-  const SubstitutionSubtable();
-
+abstract class const SubstitutionSubtable() implements BinaryCodable {
   static SubstitutionSubtable? fromByteData({
     required ByteData byteData,
     required int offset,
@@ -29,19 +27,14 @@ abstract class SubstitutionSubtable implements BinaryCodable {
   int get maxContext;
 }
 
-class LigatureSubstitutionSubtable extends SubstitutionSubtable {
-  const LigatureSubstitutionSubtable({
-    required this.substFormat,
-    required this.coverageOffset,
-    required this.ligatureSetCount,
-    required this.ligatureSetOffsets,
-    required this.coverageTable,
-  });
-
-  factory LigatureSubstitutionSubtable.fromByteData({
-    required ByteData byteData,
-    required int offset,
-  }) {
+class const LigatureSubstitutionSubtable({
+  required final int substFormat,
+  required final int coverageOffset,
+  required final int ligatureSetCount,
+  required final List<int> ligatureSetOffsets,
+  required final CoverageTable? coverageTable,
+}) extends SubstitutionSubtable {
+  factory fromByteData({required ByteData byteData, required int offset}) {
     final coverageOffset = byteData.getUint16(offset + 2);
     final ligatureSetCount = byteData.getUint16(offset + 4);
     final subtableOffsets = List.generate(
@@ -62,13 +55,6 @@ class LigatureSubstitutionSubtable extends SubstitutionSubtable {
       coverageTable: coverageTable,
     );
   }
-
-  final int substFormat;
-  final int coverageOffset;
-  final int ligatureSetCount;
-  final List<int> ligatureSetOffsets;
-
-  final CoverageTable? coverageTable;
 
   @override
   int get size => 6 + 2 * ligatureSetCount + (coverageTable?.size ?? 0);
@@ -98,20 +84,15 @@ class LigatureSubstitutionSubtable extends SubstitutionSubtable {
   }
 }
 
-class LookupTable implements BinaryCodable {
-  const LookupTable({
-    required this.lookupType,
-    required this.lookupFlag,
-    required this.subTableCount,
-    required this.subtableOffsets,
-    required this.markFilteringSet,
-    required this.subtables,
-  });
-
-  factory LookupTable.fromByteData({
-    required ByteData byteData,
-    required int offset,
-  }) {
+class const LookupTable({
+  required final int lookupType,
+  required final int lookupFlag,
+  required final int subTableCount,
+  required final List<int> subtableOffsets,
+  required final int? markFilteringSet,
+  required final List<SubstitutionSubtable> subtables,
+}) implements BinaryCodable {
+  factory fromByteData({required ByteData byteData, required int offset}) {
     final lookupType = byteData.getUint16(offset);
     final lookupFlag = byteData.getUint16(offset + 2);
     final subTableCount = byteData.getUint16(offset + 4);
@@ -142,14 +123,6 @@ class LookupTable implements BinaryCodable {
       subtables: subtables,
     );
   }
-
-  final int lookupType;
-  final int lookupFlag;
-  final int subTableCount;
-  final List<int> subtableOffsets;
-  final int? markFilteringSet;
-
-  final List<SubstitutionSubtable> subtables;
 
   static bool _useMarkFilteringSet({required int lookupFlag}) =>
       OtfUtils.checkBitMask(value: lookupFlag, mask: 0x0010);
@@ -191,17 +164,12 @@ class LookupTable implements BinaryCodable {
   }
 }
 
-class LookupListTable implements BinaryCodable {
-  LookupListTable({
-    required this.lookupCount,
-    required this.lookups,
-    required this.lookupTables,
-  });
-
-  factory LookupListTable.fromByteData({
-    required ByteData byteData,
-    required int offset,
-  }) {
+class const LookupListTable({
+  required final int lookupCount,
+  required final List<int> lookups,
+  required final List<LookupTable> lookupTables,
+}) implements BinaryCodable {
+  factory fromByteData({required ByteData byteData, required int offset}) {
     final lookupCount = byteData.getUint16(offset);
     final lookups = List.generate(
       lookupCount,
@@ -222,7 +190,7 @@ class LookupListTable implements BinaryCodable {
     );
   }
 
-  factory LookupListTable.create() {
+  factory create() {
     const coverageTable = CoverageTableFormat1(
       coverageFormat: 1,
       glyphCount: 0,
@@ -248,17 +216,12 @@ class LookupListTable implements BinaryCodable {
       ),
     ];
 
-    return LookupListTable(
+    return const LookupListTable(
       lookupCount: 1,
       lookups: [4],
       lookupTables: lookupTables,
     );
   }
-
-  final int lookupCount;
-  final List<int> lookups;
-
-  final List<LookupTable> lookupTables;
 
   @override
   int get size {

@@ -5,14 +5,14 @@ import 'package:icon_font/src/utils/extensions.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:xml/xml.dart';
 
-abstract class SvgElement {
-  SvgElement({
-    required this.parent,
-    required this.xmlElement,
-    Matrix3? transform,
-  }) : transform = transform ?? xmlElement?.parseTransformMatrix();
+abstract class SvgElement({
+  required var SvgElement? parent,
+  required final XmlElement? xmlElement,
+  Matrix3? transform,
+}) {
+  this : transform = transform ?? xmlElement?.parseTransformMatrix();
 
-  factory SvgElement.fromXmlElement({
+  factory fromXmlElement({
     required SvgElement? parent,
     required XmlElement element,
     required bool ignoreShapes,
@@ -42,9 +42,7 @@ abstract class SvgElement {
     };
   }
 
-  final XmlElement? xmlElement;
   Matrix3? transform;
-  SvgElement? parent;
 
   /// Traverses parent elements and calculates result transform matrix.
   ///
@@ -67,14 +65,14 @@ abstract class SvgElement {
   }
 }
 
-class GroupElement extends SvgElement {
-  GroupElement({
-    required this.elementList,
-    required XmlElement element,
-    super.parent,
-  }) : super(xmlElement: element);
+class GroupElement({
+  required final List<SvgElement> elementList,
+  required XmlElement element,
+  super.parent,
+}) extends SvgElement {
+  this : super(xmlElement: element);
 
-  factory GroupElement.fromXmlElement({
+  factory fromXmlElement({
     required SvgElement? parent,
     required XmlElement element,
     required bool ignoreShapes,
@@ -89,8 +87,6 @@ class GroupElement extends SvgElement {
 
     return g;
   }
-
-  final List<SvgElement> elementList;
 
   /// Applies group's transform on every child element
   /// and sets group's transform to null

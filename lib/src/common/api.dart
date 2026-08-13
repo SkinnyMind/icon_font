@@ -6,9 +6,7 @@ import 'package:icon_font/src/utils/logger.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart' as p;
 
-class IconFont {
-  const IconFont._();
-
+class const IconFont._() {
   /// Converts SVG icons to OTF font.
   ///
   /// * [svgMap] contains name (key) to data (value) SVG mapping. Required.
@@ -227,15 +225,13 @@ $classContent
 /// Result of svg-to-otf conversion.
 ///
 /// Contains list of generated glyphs and created font.
-class SvgToOtfResult {
-  SvgToOtfResult._({required this.glyphList, required this.font});
+class const SvgToOtfResult._({
+  required final List<GenericGlyph> glyphList,
+  required final OpenTypeFont font,
+});
 
-  final List<GenericGlyph> glyphList;
-  final OpenTypeFont font;
-}
-
-class ReCase {
-  ReCase(String text) {
+class ReCase(String text) {
+  this {
     originalText = text;
     _words = _groupIntoWords(text);
   }

@@ -7,16 +7,16 @@ import 'package:icon_font/src/utils/extensions.dart';
 import 'package:xml/xml.dart';
 
 /// SVG root element.
-class Svg extends SvgElement {
-  Svg({
-    required this.name,
-    required this.viewBox,
-    required this.elementList,
-    required XmlElement xmlElement,
-    required this.ratioX,
-    required this.ratioY,
-    required this.offset,
-  }) : super(parent: null, xmlElement: xmlElement);
+class Svg({
+  required final String name,
+  required final math.Rectangle viewBox,
+  required final List<SvgElement> elementList,
+  required XmlElement xmlElement,
+  required final double ratioX,
+  required final double ratioY,
+  required final int offset,
+}) extends SvgElement {
+  this : super(parent: null, xmlElement: xmlElement);
 
   /// Parses SVG.
   ///
@@ -28,7 +28,7 @@ class Svg extends SvgElement {
   ///
   /// Throws [XmlParserException] if XML parsing exception occurs.
   /// Throws [SvgParserException] on any problem related to SVG parsing.
-  factory Svg.parse({
+  factory parse({
     required String name,
     required String xmlString,
     bool ignoreShapes = true,
@@ -90,13 +90,6 @@ class Svg extends SvgElement {
 
     return svg;
   }
-
-  final String name;
-  final math.Rectangle viewBox;
-  final List<SvgElement> elementList;
-  final double ratioX;
-  final double ratioY;
-  final int offset;
 
   final Codec<String, String> _stringToBase64 = utf8.fuse(base64);
 

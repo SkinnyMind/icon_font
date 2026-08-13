@@ -7,13 +7,11 @@ import 'package:icon_font/src/otf/cff/operator.dart';
 import 'package:icon_font/src/utils/exceptions.dart';
 import 'package:icon_font/src/utils/extensions.dart';
 
-class CFFDictEntry extends BinaryCodable {
-  CFFDictEntry({required this.operandList, required this.operator});
-
-  factory CFFDictEntry.fromByteData({
-    required ByteData byteData,
-    required int startOffset,
-  }) {
+class const CFFDictEntry({
+  required final List<CFFOperand> operandList,
+  required final CFFOperator operator,
+}) extends BinaryCodable {
+  factory fromByteData({required ByteData byteData, required int startOffset}) {
     final operandList = <CFFOperand>[];
 
     var offset = startOffset;
@@ -47,9 +45,6 @@ class CFFDictEntry extends BinaryCodable {
 
     throw TableDataFormatException('No operator for CFF dict entry');
   }
-
-  final CFFOperator operator;
-  final List<CFFOperand> operandList;
 
   @override
   void encodeToBinary(ByteData byteData) {

@@ -16,25 +16,14 @@ import 'package:icon_font/src/utils/otf_utils.dart';
 import 'package:logger/logger.dart';
 
 /// Metadata for a generic glyph.
-class GenericGlyphMetadata {
-  GenericGlyphMetadata({
-    this.charCode,
-    this.name,
-    this.ratioX,
-    this.ratioY,
-    this.offset,
-    this.preview,
-  });
-
-  int? charCode;
-  String? name;
-  double? ratioX;
-  double? ratioY;
-  int? offset;
-
-  /// base64 encoded image
-  String? preview;
-
+class GenericGlyphMetadata({
+  var int? charCode,
+  var String? name,
+  var double? ratioX,
+  var double? ratioY,
+  var int? offset,
+  var String? preview,
+}) {
   /// Deep copy
   GenericGlyphMetadata copy() {
     return GenericGlyphMetadata(charCode: charCode, name: name);
@@ -42,24 +31,17 @@ class GenericGlyphMetadata {
 }
 
 /// Metrics for a generic glyph.
-class GenericGlyphMetrics {
-  GenericGlyphMetrics({
-    required this.xMin,
-    required this.xMax,
-    required this.yMin,
-    required this.yMax,
-  });
-
-  factory GenericGlyphMetrics.empty() =>
-      GenericGlyphMetrics(xMin: 0, xMax: 0, yMin: 0, yMax: 0);
+class const GenericGlyphMetrics({
+  required final int xMin,
+  required final int xMax,
+  required final int yMin,
+  required final int yMax,
+}) {
+  factory empty() =>
+      const GenericGlyphMetrics(xMin: 0, xMax: 0, yMin: 0, yMax: 0);
 
   factory GenericGlyphMetrics.square({required int unitsPerEm}) =>
       GenericGlyphMetrics(xMin: 0, xMax: unitsPerEm, yMin: 0, yMax: unitsPerEm);
-
-  final int xMin;
-  final int xMax;
-  final int yMin;
-  final int yMax;
 
   int get width => xMax - xMin;
 
@@ -76,12 +58,12 @@ class GenericGlyph {
     GenericGlyphMetadata? metadata,
   }) : metadata = metadata ?? GenericGlyphMetadata();
 
-  GenericGlyph.empty()
+  new empty()
     : outlines = [],
       bounds = const math.Rectangle(0, 0, 0, 0),
       metadata = GenericGlyphMetadata();
 
-  factory GenericGlyph.fromSimpleTrueTypeGlyph(SimpleGlyph glyph) {
+  factory fromSimpleTrueTypeGlyph(SimpleGlyph glyph) {
     final isOnCurveList = glyph.flags.map((e) => e.onCurvePoint).toList();
     final endPoints = [-1, ...glyph.endPtsOfContours];
 
@@ -112,7 +94,7 @@ class GenericGlyph {
     return GenericGlyph(outlines: outlines, bounds: bounds);
   }
 
-  factory GenericGlyph.fromSvg(Svg svg) {
+  factory fromSvg(Svg svg) {
     final pathList = svg.elementList.whereType<PathElement>();
 
     final outlines = [

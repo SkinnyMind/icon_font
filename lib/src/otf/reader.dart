@@ -22,11 +22,7 @@ import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
 /// A helper for reading an OpenType font from a binary data.
-class OTFReader {
-  OTFReader.fromByteData(this._byteData);
-
-  final ByteData _byteData;
-
+class OTFReader.fromByteData(final ByteData _byteData) {
   late OffsetTable _offsetTable;
   late OpenTypeFont _font;
 

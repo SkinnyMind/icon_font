@@ -12,22 +12,17 @@ const _yIsSameValue = 0x20;
 const _overlapSimpleValue = 0x40;
 const _reservedValue = 0x80;
 
-class SimpleGlyphFlag implements BinaryCodable {
-  SimpleGlyphFlag({
-    required this.onCurvePoint,
-    required this.xShortVector,
-    required this.yShortVector,
-    required this.xIsSameOrPositive,
-    required this.yIsSameOrPositive,
-    required this.overlapSimple,
-    required this.reserved,
-    this.repeat = 0,
-  });
-
-  factory SimpleGlyphFlag.fromIntValue({
-    required int flag,
-    int repeatTimes = 0,
-  }) {
+class const SimpleGlyphFlag({
+  required final bool onCurvePoint,
+  required final bool xShortVector,
+  required final bool yShortVector,
+  required final bool xIsSameOrPositive,
+  required final bool yIsSameOrPositive,
+  required final bool overlapSimple,
+  required final bool reserved,
+  final int repeat = 0,
+}) implements BinaryCodable {
+  factory fromIntValue({required int flag, int repeatTimes = 0}) {
     return SimpleGlyphFlag(
       onCurvePoint: OtfUtils.checkBitMask(
         value: flag,
@@ -58,10 +53,7 @@ class SimpleGlyphFlag implements BinaryCodable {
     );
   }
 
-  factory SimpleGlyphFlag.fromByteData({
-    required ByteData byteData,
-    required int offset,
-  }) {
+  factory fromByteData({required ByteData byteData, required int offset}) {
     final flag = byteData.getUint8(offset);
     final repeatFlag = OtfUtils.checkBitMask(
       value: flag,
@@ -72,7 +64,7 @@ class SimpleGlyphFlag implements BinaryCodable {
     return SimpleGlyphFlag.fromIntValue(flag: flag, repeatTimes: repeatTimes);
   }
 
-  factory SimpleGlyphFlag.createForPoint({
+  factory createForPoint({
     required int x,
     required int y,
     required bool isOnCurve,
@@ -92,15 +84,6 @@ class SimpleGlyphFlag implements BinaryCodable {
       reserved: false,
     );
   }
-
-  final bool onCurvePoint;
-  final bool xShortVector;
-  final bool yShortVector;
-  final int repeat;
-  final bool xIsSameOrPositive;
-  final bool yIsSameOrPositive;
-  final bool overlapSimple;
-  final bool reserved;
 
   Map<int, bool> get _valueForMaskMap => {
     _onCurvePointValue: onCurvePoint,

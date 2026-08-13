@@ -1,8 +1,4 @@
-class TableDataFormatException implements Exception {
-  TableDataFormatException(this.message);
-
-  final String message;
-
+class TableDataFormatException(final String message) implements Exception {
   @override
   String toString() => 'Table data format exception: $message';
 }
@@ -18,11 +14,7 @@ class ChecksumException implements Exception {
   String toString() => 'Wrong checksum for $entityName';
 }
 
-class SvgParserException implements Exception {
-  SvgParserException({required this.message});
-
-  final String message;
-
+class SvgParserException({required final String message}) implements Exception {
   @override
   String toString() => 'SvgParserException($message)';
 }

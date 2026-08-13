@@ -7,12 +7,10 @@ import 'package:path_parsing/path_parsing.dart';
 import 'package:vector_math/vector_math.dart';
 
 /// A helper for converting SVG path to generic outline format.
-class PathToOutlineConverter extends PathProxy {
-  PathToOutlineConverter({required this.svg, required this.path});
-
-  final Svg svg;
-  final PathElement path;
-
+class PathToOutlineConverter({
+  required final Svg svg,
+  required final PathElement path,
+}) extends PathProxy {
   final _outlines = <Outline>[];
   final _points = <math.Point<num>>[];
   final _isOnCurve = <bool>[];

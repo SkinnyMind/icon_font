@@ -28,9 +28,10 @@ import 'package:icon_font/src/utils/otf_utils.dart';
 
 /// An OpenType font.
 /// Contains either TrueType (glyf table) or OpenType (CFF2 table) outlines
-class OpenTypeFont implements BinaryCodable {
-  OpenTypeFont({required this.offsetTable, required this.tableMap});
-
+class const OpenTypeFont({
+  required final OffsetTable offsetTable,
+  required final Map<String, FontTable> tableMap,
+}) implements BinaryCodable {
   /// Generates new OpenType font.
   ///
   /// Mutates every glyph's metadata,
@@ -53,7 +54,7 @@ class OpenTypeFont implements BinaryCodable {
   /// * If [normalize] is set to true,
   /// glyphs are resized and centered to fit in coordinates grid (unitsPerEm).
   /// Defaults to true.
-  factory OpenTypeFont.createFromGlyphs({
+  factory createFromGlyphs({
     required List<GenericGlyph> glyphList,
     String? fontName,
     String? description,
@@ -206,9 +207,6 @@ class OpenTypeFont implements BinaryCodable {
 
     return OpenTypeFont(offsetTable: offsetTable, tableMap: tables);
   }
-
-  final OffsetTable offsetTable;
-  final Map<String, FontTable> tableMap;
 
   HeaderTable get head => tableMap[kHeadTag]! as HeaderTable;
 
@@ -405,16 +403,13 @@ class OpenTypeFont implements BinaryCodable {
 }
 
 /// Interface for glyph scaling logic.
-abstract class GlyphScalingStrategy {
+abstract class GlyphScalingStrategy() {
   GenericGlyph scale(GenericGlyph glyph);
 }
 
 /// Strategy for resizing according to unitsPerEm (fontHeight).
-class FontHeightScalingStrategy implements GlyphScalingStrategy {
-  FontHeightScalingStrategy(this.fontHeight);
-
-  final int fontHeight;
-
+class const FontHeightScalingStrategy(final int fontHeight)
+    implements GlyphScalingStrategy {
   @override
   GenericGlyph scale(GenericGlyph glyph) {
     return glyph.resize(
@@ -426,15 +421,10 @@ class FontHeightScalingStrategy implements GlyphScalingStrategy {
 }
 
 /// Strategy for resizing and centering within ascender/descender bounds.
-class AscenderDescenderScalingStrategy implements GlyphScalingStrategy {
-  AscenderDescenderScalingStrategy({
-    required this.ascender,
-    required this.descender,
-  });
-
-  final int ascender;
-  final int descender;
-
+class const AscenderDescenderScalingStrategy({
+  required final int ascender,
+  required final int descender,
+}) implements GlyphScalingStrategy {
   @override
   GenericGlyph scale(GenericGlyph glyph) {
     return glyph

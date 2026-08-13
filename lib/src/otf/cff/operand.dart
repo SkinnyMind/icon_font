@@ -25,12 +25,11 @@ const _stringForRealNumberByte = [
 ];
 
 class CFFOperand extends BinaryCodable {
-  CFFOperand({required this.value, int? size, this.forceLargeInt = false})
-    : _size = size;
+  CFFOperand({required this.value, this._size, this.forceLargeInt = false});
 
   CFFOperand.fromValue(this.value, {this.forceLargeInt = false});
 
-  factory CFFOperand.fromByteData(ByteData byteData, int offset, int b0) {
+  factory fromByteData(ByteData byteData, int offset, int b0) {
     var currentOffset = offset;
 
     /// -107 to +107

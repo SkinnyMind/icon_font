@@ -11,7 +11,7 @@ const _nameRecordSize = 12;
 
 const _format0 = 0x0;
 
-enum NameID {
+enum NameID() {
   fontFamily,
   fontSubfamily,
   uniqueID,
@@ -19,7 +19,7 @@ enum NameID {
   version,
   postScriptName,
   manufacturer,
-  description,
+  description
 }
 
 /// List of name record templates, sorted by platform and encoding ID
@@ -139,17 +139,13 @@ class NameRecord implements BinaryCodable {
   }
 }
 
-class NamingTableFormat0Header implements BinaryCodable {
-  NamingTableFormat0Header({
-    required this.format,
-    required this.count,
-    required this.stringOffset,
-    required this.nameRecordList,
-  });
-
-  factory NamingTableFormat0Header.create({
-    required List<NameRecord> nameRecordList,
-  }) {
+class const NamingTableFormat0Header({
+  required final int format,
+  required final int count,
+  required final int stringOffset,
+  required final List<NameRecord> nameRecordList,
+}) implements BinaryCodable {
+  factory create({required List<NameRecord> nameRecordList}) {
     return NamingTableFormat0Header(
       format: _format0,
       count: nameRecordList.length,
@@ -187,11 +183,6 @@ class NamingTableFormat0Header implements BinaryCodable {
     );
   }
 
-  final int format;
-  final int count;
-  final int stringOffset;
-  final List<NameRecord> nameRecordList;
-
   @override
   int get size => 6 + nameRecordList.length * _nameRecordSize;
 
@@ -211,9 +202,10 @@ class NamingTableFormat0Header implements BinaryCodable {
   }
 }
 
-abstract class NamingTable extends FontTable {
-  NamingTable.fromTableRecordEntry({required TableRecordEntry? entry})
-    : super.fromTableRecordEntry(entry);
+abstract class NamingTable.fromTableRecordEntry({
+  required TableRecordEntry? entry,
+}) extends FontTable {
+  this : super.fromTableRecordEntry(entry);
 
   static NamingTable? fromByteData({
     required ByteData byteData,
@@ -257,12 +249,12 @@ abstract class NamingTable extends FontTable {
   String? getStringByNameId(NameID nameId);
 }
 
-class NamingTableFormat0 extends NamingTable {
-  NamingTableFormat0({
-    required this.header,
-    required this.stringList,
-    super.entry,
-  }) : super.fromTableRecordEntry();
+class NamingTableFormat0({
+  required final NamingTableFormat0Header header,
+  required final List<String> stringList,
+  super.entry,
+}) extends NamingTable {
+  this : super.fromTableRecordEntry();
 
   factory NamingTableFormat0.create({
     required String fontName,
@@ -340,9 +332,6 @@ class NamingTableFormat0 extends NamingTable {
       stringList: stringList,
     );
   }
-
-  final NamingTableFormat0Header header;
-  final List<String> stringList;
 
   @override
   int get size =>

@@ -1,8 +1,6 @@
 import 'package:logger/logger.dart';
 
-class Log {
-  const Log._();
-
+class const Log._() {
   static final Logger logger = Logger(
     filter: ProductionFilter(),
     printer: SimplePrinter(),

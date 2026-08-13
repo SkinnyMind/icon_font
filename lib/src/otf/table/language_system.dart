@@ -4,13 +4,11 @@ import 'package:icon_font/src/common/binary_codable.dart';
 import 'package:icon_font/src/utils/constants.dart';
 import 'package:icon_font/src/utils/extensions.dart';
 
-class LanguageSystemRecord implements BinaryCodable {
-  LanguageSystemRecord({required this.langSysTag, required this.langSysOffset});
-
-  factory LanguageSystemRecord.fromByteData({
-    required ByteData byteData,
-    required int offset,
-  }) {
+class LanguageSystemRecord({
+  required final String langSysTag,
+  required var int langSysOffset,
+}) implements BinaryCodable {
+  factory fromByteData({required ByteData byteData, required int offset}) {
     final langSysTag = String.fromCharCodes(
       Uint8List.view(byteData.buffer, offset, 4),
     );
@@ -19,9 +17,6 @@ class LanguageSystemRecord implements BinaryCodable {
       langSysOffset: byteData.getUint16(offset + 4),
     );
   }
-
-  final String langSysTag;
-  int langSysOffset;
 
   @override
   int get size => langSysRecordSize;
@@ -34,18 +29,13 @@ class LanguageSystemRecord implements BinaryCodable {
   }
 }
 
-class LanguageSystemTable implements BinaryCodable {
-  const LanguageSystemTable({
-    required this.lookupOrder,
-    required this.requiredFeatureIndex,
-    required this.featureIndexCount,
-    required this.featureIndices,
-  });
-
-  factory LanguageSystemTable.fromByteData({
-    required ByteData byteData,
-    required int offset,
-  }) {
+class const LanguageSystemTable({
+  required final int lookupOrder,
+  required final int requiredFeatureIndex,
+  required final int featureIndexCount,
+  required final List<int> featureIndices,
+}) implements BinaryCodable {
+  factory fromByteData({required ByteData byteData, required int offset}) {
     final featureIndexCount = byteData.getUint16(offset + 4);
     final featureIndices = List.generate(
       featureIndexCount,
@@ -59,11 +49,6 @@ class LanguageSystemTable implements BinaryCodable {
       featureIndices: featureIndices,
     );
   }
-
-  final int lookupOrder;
-  final int requiredFeatureIndex;
-  final int featureIndexCount;
-  final List<int> featureIndices;
 
   @override
   int get size => 6 + 2 * featureIndexCount;

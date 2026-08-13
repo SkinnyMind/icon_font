@@ -5,11 +5,8 @@ import 'package:icon_font/src/utils/constants.dart';
 import 'package:icon_font/src/utils/extensions.dart';
 import 'package:icon_font/src/utils/logger.dart';
 
-abstract class CharsetEntry implements BinaryCodable {
-  const CharsetEntry({required this.format});
-
-  final int format;
-
+abstract class const CharsetEntry({required final int format})
+    implements BinaryCodable {
   static CharsetEntry? fromByteData({
     required ByteData byteData,
     required int glyphCount,
@@ -28,13 +25,11 @@ abstract class CharsetEntry implements BinaryCodable {
   }
 }
 
-class CharsetEntryFormat1 extends CharsetEntry {
-  CharsetEntryFormat1({required super.format, required this.rangeList});
-
-  factory CharsetEntryFormat1.fromByteData({
-    required ByteData byteData,
-    required int glyphCount,
-  }) {
+class const CharsetEntryFormat1({
+  required super.format,
+  required final List<Range1> rangeList,
+}) extends CharsetEntry {
+  factory fromByteData({required ByteData byteData, required int glyphCount}) {
     final rangeList = <Range1>[];
 
     var offset = 0;
@@ -53,7 +48,7 @@ class CharsetEntryFormat1 extends CharsetEntry {
     return CharsetEntryFormat1(format: 1, rangeList: rangeList);
   }
 
-  factory CharsetEntryFormat1.create({required List<int> sIdList}) {
+  factory create({required List<int> sIdList}) {
     final rangeList = <Range1>[];
 
     if (sIdList.isNotEmpty) {
@@ -85,8 +80,6 @@ class CharsetEntryFormat1 extends CharsetEntry {
     return CharsetEntryFormat1(format: 1, rangeList: rangeList);
   }
 
-  final List<Range1> rangeList;
-
   @override
   void encodeToBinary(ByteData byteData) {
     byteData.setUint8(0, format);
@@ -102,17 +95,13 @@ class CharsetEntryFormat1 extends CharsetEntry {
   int get size => 1 + rangeList.length * Range1.range1Size;
 }
 
-class Range1 implements BinaryCodable {
-  const Range1({required this.sId, required this.nLeft});
-
-  factory Range1.fromByteData({required ByteData byteData}) {
+class const Range1({required final int sId, required final int nLeft})
+    implements BinaryCodable {
+  factory fromByteData({required ByteData byteData}) {
     return Range1(sId: byteData.getUint16(0), nLeft: byteData.getUint8(2));
   }
 
   static const range1Size = 3;
-
-  final int sId;
-  final int nLeft;
 
   @override
   void encodeToBinary(ByteData byteData) {

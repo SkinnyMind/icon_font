@@ -11,15 +11,13 @@ import 'package:icon_font/src/otf/table/cff.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
 import 'package:icon_font/src/utils/extensions.dart';
 
-class CFF2TableHeader implements BinaryCodable {
-  CFF2TableHeader({
-    required this.majorVersion,
-    required this.minorVersion,
-    required this.headerSize,
-    required this.topDictLength,
-  });
-
-  factory CFF2TableHeader.fromByteData({required ByteData byteData}) {
+class CFF2TableHeader({
+  required final int majorVersion,
+  required final int minorVersion,
+  required final int headerSize,
+  required var int? topDictLength,
+}) implements BinaryCodable {
+  factory fromByteData({required ByteData byteData}) {
     return CFF2TableHeader(
       majorVersion: byteData.getUint8(0),
       minorVersion: byteData.getUint8(1),
@@ -28,17 +26,12 @@ class CFF2TableHeader implements BinaryCodable {
     );
   }
 
-  factory CFF2TableHeader.create() => CFF2TableHeader(
+  factory create() => CFF2TableHeader(
     majorVersion: 0x0002,
     minorVersion: 0,
     headerSize: cff2HeaderSize,
     topDictLength: null,
   );
-
-  final int majorVersion;
-  final int minorVersion;
-  final int headerSize;
-  int? topDictLength;
 
   static const cff2HeaderSize = 5;
 
@@ -55,20 +48,20 @@ class CFF2TableHeader implements BinaryCodable {
   int get size => cff2HeaderSize;
 }
 
-class CFF2Table extends CFFTable implements CalculatableOffsets {
-  CFF2Table({
-    required TableRecordEntry? entry,
-    required this.header,
-    required this.topDict,
-    required this.globalSubrsData,
-    required this.charStringsData,
-    required this.vstoreData,
-    required this.fontDictList,
-    required this.privateDictList,
-    required this.localSubrsDataList,
-  }) : super.fromTableRecordEntry(entry);
+class CFF2Table({
+  required TableRecordEntry? entry,
+  required final CFF2TableHeader header,
+  required final CFFDict topDict,
+  required final CFFIndexWithData<Uint8List> globalSubrsData,
+  required final CFFIndexWithData<Uint8List> charStringsData,
+  required final VariationStoreData? vstoreData,
+  required final CFFIndexWithData<CFFDict> fontDictList,
+  required final List<CFFDict> privateDictList,
+  required final List<CFFIndexWithData<Uint8List>> localSubrsDataList,
+}) extends CFFTable implements CalculatableOffsets {
+  this : super.fromTableRecordEntry(entry);
 
-  factory CFF2Table.fromByteData({
+  factory fromByteData({
     required ByteData byteData,
     required TableRecordEntry entry,
   }) {
@@ -189,15 +182,6 @@ class CFF2Table extends CFFTable implements CalculatableOffsets {
       localSubrsDataList: localSubrsDataList,
     );
   }
-
-  final CFF2TableHeader header;
-  final CFFDict topDict;
-  final CFFIndexWithData<Uint8List> globalSubrsData;
-  final CFFIndexWithData<Uint8List> charStringsData;
-  final VariationStoreData? vstoreData;
-  final CFFIndexWithData<CFFDict> fontDictList;
-  final List<CFFDict> privateDictList;
-  final List<CFFIndexWithData<Uint8List>> localSubrsDataList;
 
   void _generateTopDictEntries() {
     final entryList = <CFFDictEntry>[

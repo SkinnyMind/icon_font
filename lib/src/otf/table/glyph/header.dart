@@ -2,19 +2,14 @@ import 'dart:typed_data';
 
 import 'package:icon_font/src/common/binary_codable.dart';
 
-class GlyphHeader implements BinaryCodable {
-  GlyphHeader({
-    required this.numberOfContours,
-    required this.xMin,
-    required this.yMin,
-    required this.xMax,
-    required this.yMax,
-  });
-
-  factory GlyphHeader.fromByteData({
-    required ByteData byteData,
-    required int offset,
-  }) {
+class const GlyphHeader({
+  required final int numberOfContours,
+  required final int xMin,
+  required final int yMin,
+  required final int xMax,
+  required final int yMax,
+}) implements BinaryCodable {
+  factory fromByteData({required ByteData byteData, required int offset}) {
     return GlyphHeader(
       numberOfContours: byteData.getInt16(offset),
       xMin: byteData.getInt16(offset + 2),
@@ -23,12 +18,6 @@ class GlyphHeader implements BinaryCodable {
       yMax: byteData.getInt16(offset + 8),
     );
   }
-
-  final int numberOfContours;
-  final int xMin;
-  final int yMin;
-  final int xMax;
-  final int yMax;
 
   bool get isComposite => numberOfContours.isNegative;
 

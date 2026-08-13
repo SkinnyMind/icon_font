@@ -7,17 +7,15 @@ import 'package:icon_font/src/otf/table/glyph/header.dart';
 import 'package:icon_font/src/utils/extensions.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
-class SimpleGlyph implements BinaryCodable {
-  SimpleGlyph({
-    required this.header,
-    required this.endPtsOfContours,
-    required this.instructions,
-    required this.flags,
-    required this.pointList,
-  });
-
-  factory SimpleGlyph.empty() {
-    return SimpleGlyph(
+class const SimpleGlyph({
+  required final GlyphHeader header,
+  required final List<int> endPtsOfContours,
+  required final List<int> instructions,
+  required final List<SimpleGlyphFlag> flags,
+  required final List<math.Point<num>> pointList,
+}) implements BinaryCodable {
+  factory empty() {
+    return const SimpleGlyph(
       header: GlyphHeader(
         numberOfContours: 0,
         xMin: 0,
@@ -129,13 +127,6 @@ class SimpleGlyph implements BinaryCodable {
       pointList: points,
     );
   }
-
-  final GlyphHeader header;
-  final List<int> endPtsOfContours;
-  final List<int> instructions;
-  final List<SimpleGlyphFlag> flags;
-
-  final List<math.Point<num>> pointList;
 
   bool get isEmpty => header.numberOfContours == 0;
 

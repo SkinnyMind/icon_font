@@ -7,13 +7,11 @@ import 'package:icon_font/src/utils/extensions.dart';
 
 const _scriptRecordSize = 6;
 
-class ScriptRecord implements BinaryCodable {
-  ScriptRecord({required this.scriptTag, required this.scriptOffset});
-
-  factory ScriptRecord.fromByteData({
-    required ByteData byteData,
-    required int offset,
-  }) {
+class ScriptRecord({
+  required final String scriptTag,
+  required var int? scriptOffset,
+}) implements BinaryCodable {
+  factory fromByteData({required ByteData byteData, required int offset}) {
     return ScriptRecord(
       scriptTag: String.fromCharCodes(
         Uint8List.view(byteData.buffer, offset, 4),
@@ -21,9 +19,6 @@ class ScriptRecord implements BinaryCodable {
       scriptOffset: byteData.getUint16(offset + 4),
     );
   }
-
-  final String scriptTag;
-  int? scriptOffset;
 
   @override
   int get size => _scriptRecordSize;
@@ -36,16 +31,14 @@ class ScriptRecord implements BinaryCodable {
   }
 }
 
-class ScriptTable implements BinaryCodable {
-  const ScriptTable({
-    required this.defaultLangSysOffset,
-    required this.langSysCount,
-    required this.langSysRecords,
-    required this.langSysTables,
-    required this.defaultLangSys,
-  });
-
-  factory ScriptTable.fromByteData({
+class const ScriptTable({
+  required final int defaultLangSysOffset,
+  required final int langSysCount,
+  required final List<LanguageSystemRecord> langSysRecords,
+  required final List<LanguageSystemTable> langSysTables,
+  required final LanguageSystemTable? defaultLangSys,
+}) implements BinaryCodable {
+  factory fromByteData({
     required ByteData byteData,
     required int offset,
     required ScriptRecord record,
@@ -87,13 +80,6 @@ class ScriptTable implements BinaryCodable {
     );
   }
 
-  final int defaultLangSysOffset;
-  final int langSysCount;
-  final List<LanguageSystemRecord> langSysRecords;
-
-  final List<LanguageSystemTable> langSysTables;
-  final LanguageSystemTable? defaultLangSys;
-
   @override
   int get size {
     final recordListSize = langSysRecords.fold<int>(0, (p, r) => p + r.size);
@@ -132,17 +118,12 @@ class ScriptTable implements BinaryCodable {
   }
 }
 
-class ScriptListTable implements BinaryCodable {
-  ScriptListTable({
-    required this.scriptCount,
-    required this.scriptRecords,
-    required this.scriptTables,
-  });
-
-  factory ScriptListTable.fromByteData({
-    required ByteData byteData,
-    required int offset,
-  }) {
+class const ScriptListTable({
+  required final int scriptCount,
+  required final List<ScriptRecord> scriptRecords,
+  required final List<ScriptTable> scriptTables,
+}) implements BinaryCodable {
+  factory fromByteData({required ByteData byteData, required int offset}) {
     final scriptCount = byteData.getUint16(offset);
     final scriptRecords = List.generate(
       scriptCount,
@@ -167,7 +148,7 @@ class ScriptListTable implements BinaryCodable {
     );
   }
 
-  factory ScriptListTable.create() {
+  factory create() {
     final scriptRecords = [
       ScriptRecord(scriptTag: 'DFLT', scriptOffset: null),
       ScriptRecord(scriptTag: 'latn', scriptOffset: null),
@@ -192,11 +173,6 @@ class ScriptListTable implements BinaryCodable {
       scriptTables: List.generate(scriptRecords.length, (index) => scriptTable),
     );
   }
-
-  final int scriptCount;
-  final List<ScriptRecord> scriptRecords;
-
-  final List<ScriptTable> scriptTables;
 
   @override
   int get size {

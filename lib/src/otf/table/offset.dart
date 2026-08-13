@@ -4,16 +4,14 @@ import 'dart:typed_data';
 import 'package:icon_font/src/common/binary_codable.dart';
 import 'package:icon_font/src/utils/constants.dart';
 
-class OffsetTable implements BinaryCodable {
-  OffsetTable({
-    required this.sfntVersion,
-    required this.numTables,
-    required this.searchRange,
-    required this.entrySelector,
-    required this.rangeShift,
-  });
-
-  factory OffsetTable.fromByteData({required ByteData data}) {
+class const OffsetTable({
+  required final int sfntVersion,
+  required final int numTables,
+  required final int searchRange,
+  required final int entrySelector,
+  required final int rangeShift,
+}) implements BinaryCodable {
+  factory fromByteData({required ByteData data}) {
     return OffsetTable(
       sfntVersion: data.getUint32(0),
       numTables: data.getUint16(4),
@@ -23,10 +21,7 @@ class OffsetTable implements BinaryCodable {
     );
   }
 
-  factory OffsetTable.create({
-    required int numTables,
-    required bool isOpenType,
-  }) {
+  factory create({required int numTables, required bool isOpenType}) {
     final entrySelector = (math.log(numTables) / math.ln2).floor();
     final searchRange = 16 * math.pow(2, entrySelector).toInt();
     final rangeShift = numTables * 16 - searchRange;
@@ -39,12 +34,6 @@ class OffsetTable implements BinaryCodable {
       rangeShift: rangeShift,
     );
   }
-
-  final int sfntVersion;
-  final int numTables;
-  final int searchRange;
-  final int entrySelector;
-  final int rangeShift;
 
   bool get isOpenType => sfntVersion == 0x4F54544F;
 

@@ -6,20 +6,20 @@ import 'package:icon_font/src/utils/extensions.dart';
 import 'package:xml/xml.dart';
 
 /// Element convertable to path.
-abstract class PathConvertible {
+abstract class const PathConvertible() {
   PathElement getPath();
 }
 
-class RectElement extends SvgElement implements PathConvertible {
-  RectElement({
-    required this.rectangle,
-    required this.rx,
-    required this.ry,
-    required super.parent,
-    required XmlElement element,
-  }) : super(xmlElement: element);
+class RectElement({
+  required final math.Rectangle rectangle,
+  required final num rx,
+  required final num ry,
+  required super.parent,
+  required XmlElement element,
+}) extends SvgElement implements PathConvertible {
+  this : super(xmlElement: element);
 
-  factory RectElement.fromXmlElement({
+  factory fromXmlElement({
     required SvgElement? parent,
     required XmlElement element,
   }) {
@@ -44,10 +44,6 @@ class RectElement extends SvgElement implements PathConvertible {
       element: element,
     );
   }
-
-  final math.Rectangle rectangle;
-  final num rx;
-  final num ry;
 
   num get x => rectangle.left;
 
@@ -80,15 +76,15 @@ class RectElement extends SvgElement implements PathConvertible {
   }
 }
 
-class CircleElement extends SvgElement implements PathConvertible {
-  CircleElement({
-    required this.center,
-    required this.r,
-    required super.parent,
-    required XmlElement element,
-  }) : super(xmlElement: element);
+class CircleElement({
+  required final math.Point center,
+  required final num r,
+  required super.parent,
+  required XmlElement element,
+}) extends SvgElement implements PathConvertible {
+  this : super(xmlElement: element);
 
-  factory CircleElement.fromXmlElement({
+  factory fromXmlElement({
     required SvgElement? parent,
     required XmlElement element,
   }) {
@@ -106,9 +102,6 @@ class CircleElement extends SvgElement implements PathConvertible {
       element: element,
     );
   }
-
-  final math.Point center;
-  final num r;
 
   num get cx => center.x;
 
@@ -129,14 +122,14 @@ class CircleElement extends SvgElement implements PathConvertible {
   }
 }
 
-class PolylineElement extends SvgElement implements PathConvertible {
-  PolylineElement({
-    required this.points,
-    required super.parent,
-    required XmlElement element,
-  }) : super(xmlElement: element);
+class PolylineElement({
+  required final String points,
+  required super.parent,
+  required XmlElement element,
+}) extends SvgElement implements PathConvertible {
+  this : super(xmlElement: element);
 
-  factory PolylineElement.fromXmlElement({
+  factory fromXmlElement({
     required SvgElement? parent,
     required XmlElement element,
   }) {
@@ -145,8 +138,6 @@ class PolylineElement extends SvgElement implements PathConvertible {
     return PolylineElement(points: points, parent: parent, element: element);
   }
 
-  final String points;
-
   @override
   PathElement getPath() {
     final d = 'M${points}z';
@@ -160,14 +151,14 @@ class PolylineElement extends SvgElement implements PathConvertible {
   }
 }
 
-class PolygonElement extends SvgElement implements PathConvertible {
-  PolygonElement({
-    required this.points,
-    required super.parent,
-    required XmlElement element,
-  }) : super(xmlElement: element);
+class PolygonElement({
+  required final String points,
+  required super.parent,
+  required XmlElement element,
+}) extends SvgElement implements PathConvertible {
+  this : super(xmlElement: element);
 
-  factory PolygonElement.fromXmlElement({
+  factory fromXmlElement({
     required SvgElement? parent,
     required XmlElement element,
   }) {
@@ -176,8 +167,6 @@ class PolygonElement extends SvgElement implements PathConvertible {
     return PolygonElement(points: points, parent: parent, element: element);
   }
 
-  final String points;
-
   @override
   PathElement getPath() {
     final d = 'M${points}z';
@@ -191,15 +180,15 @@ class PolygonElement extends SvgElement implements PathConvertible {
   }
 }
 
-class LineElement extends SvgElement implements PathConvertible {
-  LineElement({
-    required this.p1,
-    required this.p2,
-    required super.parent,
-    required XmlElement element,
-  }) : super(xmlElement: element);
+class LineElement({
+  required final math.Point p1,
+  required final math.Point p2,
+  required super.parent,
+  required XmlElement element,
+}) extends SvgElement implements PathConvertible {
+  this : super(xmlElement: element);
 
-  factory LineElement.fromXmlElement({
+  factory fromXmlElement({
     required SvgElement? parent,
     required XmlElement element,
   }) {
@@ -215,9 +204,6 @@ class LineElement extends SvgElement implements PathConvertible {
 
     return LineElement(p1: p1, p2: p2, parent: parent, element: element);
   }
-
-  final math.Point p1;
-  final math.Point p2;
 
   num get x1 => p1.x;
 

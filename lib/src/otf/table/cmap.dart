@@ -25,17 +25,11 @@ const _defaultEncodingRecordFormatList = [
   _format12,
 ];
 
-class Segment {
-  Segment({
-    required this.startCode,
-    required this.endCode,
-    required this.startGlyphID,
-  });
-
-  final int startCode;
-  final int endCode;
-  final int startGlyphID;
-
+class const Segment({
+  required final int startCode,
+  required final int endCode,
+  required final int startGlyphID,
+}) {
   int get idDelta => startGlyphID - startCode;
 }
 
@@ -76,27 +70,18 @@ class EncodingRecord implements BinaryCodable {
   }
 }
 
-class SequentialMapGroup implements BinaryCodable {
-  SequentialMapGroup({
-    required this.startCharCode,
-    required this.endCharCode,
-    required this.startGlyphID,
-  });
-
-  factory SequentialMapGroup.fromByteData({
-    required ByteData byteData,
-    required int offset,
-  }) {
+class const SequentialMapGroup({
+  required final int startCharCode,
+  required final int endCharCode,
+  required final int startGlyphID,
+}) implements BinaryCodable {
+  factory fromByteData({required ByteData byteData, required int offset}) {
     return SequentialMapGroup(
       startCharCode: byteData.getUint32(offset),
       endCharCode: byteData.getUint32(offset + 4),
       startGlyphID: byteData.getUint32(offset + 8),
     );
   }
-
-  final int startCharCode;
-  final int endCharCode;
-  final int startGlyphID;
 
   @override
   int get size => _sequentialMapGroupSize;
@@ -110,14 +95,12 @@ class SequentialMapGroup implements BinaryCodable {
   }
 }
 
-class CharacterToGlyphTableHeader implements BinaryCodable {
-  CharacterToGlyphTableHeader({
-    required this.version,
-    required this.numTables,
-    required this.encodingRecords,
-  });
-
-  factory CharacterToGlyphTableHeader.fromByteData({
+class const CharacterToGlyphTableHeader({
+  required final int version,
+  required final int numTables,
+  required final List<EncodingRecord> encodingRecords,
+}) implements BinaryCodable {
+  factory fromByteData({
     required ByteData byteData,
     required TableRecordEntry entry,
   }) {
@@ -138,10 +121,6 @@ class CharacterToGlyphTableHeader implements BinaryCodable {
     );
   }
 
-  final int version;
-  final int numTables;
-  final List<EncodingRecord> encodingRecords;
-
   @override
   int get size => 4 + _encodingRecordSize * encodingRecords.length;
 
@@ -160,9 +139,8 @@ class CharacterToGlyphTableHeader implements BinaryCodable {
   }
 }
 
-abstract class CmapData implements BinaryCodable {
-  CmapData({required this.format});
-
+abstract class const CmapData({required final int format})
+    implements BinaryCodable {
   static CmapData? fromByteData({
     required ByteData byteData,
     required int offset,
@@ -205,22 +183,15 @@ abstract class CmapData implements BinaryCodable {
       }(),
     };
   }
-
-  final int format;
 }
 
-class CmapByteEncodingTable extends CmapData {
-  CmapByteEncodingTable({
-    required super.format,
-    required this.length,
-    required this.language,
-    required this.glyphIdArray,
-  });
-
-  factory CmapByteEncodingTable.fromByteData({
-    required ByteData byteData,
-    required int offset,
-  }) {
+class const CmapByteEncodingTable({
+  required super.format,
+  required final int length,
+  required final int language,
+  required final List<int> glyphIdArray,
+}) extends CmapData {
+  factory fromByteData({required ByteData byteData, required int offset}) {
     return CmapByteEncodingTable(
       format: byteData.getUint16(offset),
       length: byteData.getUint16(offset + 2),
@@ -232,7 +203,7 @@ class CmapByteEncodingTable extends CmapData {
     );
   }
 
-  factory CmapByteEncodingTable.create() {
+  factory create() {
     return CmapByteEncodingTable(
       format: _format0,
       length: 256 + 6,
@@ -240,10 +211,6 @@ class CmapByteEncodingTable extends CmapData {
       glyphIdArray: List.filled(256, 0), // Not using standard mac glyphs
     );
   }
-
-  final int length;
-  final int language;
-  final List<int> glyphIdArray;
 
   @override
   int get size => 256 + 6;
@@ -261,27 +228,22 @@ class CmapByteEncodingTable extends CmapData {
   }
 }
 
-class CmapSegmentMappingToDeltaValuesTable extends CmapData {
-  CmapSegmentMappingToDeltaValuesTable({
-    required super.format,
-    required this.length,
-    required this.language,
-    required this.segCount,
-    required this.searchRange,
-    required this.entrySelector,
-    required this.rangeShift,
-    required this.endCode,
-    required this.reservedPad,
-    required this.startCode,
-    required this.idDelta,
-    required this.idRangeOffset,
-    required this.glyphIdArray,
-  });
-
-  factory CmapSegmentMappingToDeltaValuesTable.fromByteData({
-    required ByteData byteData,
-    required int startOffset,
-  }) {
+class const CmapSegmentMappingToDeltaValuesTable({
+  required super.format,
+  required final int length,
+  required final int language,
+  required final int segCount,
+  required final int searchRange,
+  required final int entrySelector,
+  required final int rangeShift,
+  required final List<int> endCode,
+  required final int reservedPad,
+  required final List<int> startCode,
+  required final List<int> idDelta,
+  required final List<int> idRangeOffset,
+  required final List<int> glyphIdArray,
+}) extends CmapData {
+  factory fromByteData({required ByteData byteData, required int startOffset}) {
     final length = byteData.getUint16(startOffset + 2);
     final segCount = byteData.getUint16(startOffset + 6) ~/ 2;
 
@@ -337,9 +299,7 @@ class CmapSegmentMappingToDeltaValuesTable extends CmapData {
     );
   }
 
-  factory CmapSegmentMappingToDeltaValuesTable.create({
-    required List<Segment> segmentList,
-  }) {
+  factory create({required List<Segment> segmentList}) {
     final startCode = segmentList.map((e) => e.startCode).toList();
     final endCode = segmentList.map((e) => e.endCode).toList();
     final idDelta = segmentList.map((e) => e.idDelta).toList();
@@ -375,19 +335,6 @@ class CmapSegmentMappingToDeltaValuesTable extends CmapData {
       glyphIdArray: glyphIdArray,
     );
   }
-
-  final int length;
-  final int language;
-  final int segCount;
-  final int searchRange;
-  final int entrySelector;
-  final int rangeShift;
-  final List<int> endCode;
-  final int reservedPad;
-  final List<int> startCode;
-  final List<int> idDelta;
-  final List<int> idRangeOffset;
-  final List<int> glyphIdArray;
 
   @override
   int get size => length;
@@ -435,20 +382,15 @@ class CmapSegmentMappingToDeltaValuesTable extends CmapData {
   }
 }
 
-class CmapSegmentedCoverageTable extends CmapData {
-  CmapSegmentedCoverageTable({
-    required super.format,
-    required this.reserved,
-    required this.length,
-    required this.language,
-    required this.numGroups,
-    required this.groups,
-  });
-
-  factory CmapSegmentedCoverageTable.fromByteData({
-    required ByteData byteData,
-    required int offset,
-  }) {
+class const CmapSegmentedCoverageTable({
+  required super.format,
+  required final int reserved,
+  required final int length,
+  required final int language,
+  required final int numGroups,
+  required final List<SequentialMapGroup> groups,
+}) extends CmapData {
+  factory fromByteData({required ByteData byteData, required int offset}) {
     final numGroups = byteData.getUint32(offset + 12);
 
     return CmapSegmentedCoverageTable(
@@ -467,9 +409,7 @@ class CmapSegmentedCoverageTable extends CmapData {
     );
   }
 
-  factory CmapSegmentedCoverageTable.create({
-    required List<Segment> segmentList,
-  }) {
+  factory create({required List<Segment> segmentList}) {
     final groups = segmentList
         .map(
           (e) => SequentialMapGroup(
@@ -498,12 +438,6 @@ class CmapSegmentedCoverageTable extends CmapData {
     );
   }
 
-  final int reserved;
-  final int length;
-  final int language;
-  final int numGroups;
-  final List<SequentialMapGroup> groups;
-
   @override
   int get size => length;
 
@@ -525,14 +459,14 @@ class CmapSegmentedCoverageTable extends CmapData {
   }
 }
 
-class CharacterToGlyphTable extends FontTable {
-  CharacterToGlyphTable({
-    required TableRecordEntry? entry,
-    required this.header,
-    required this.data,
-  }) : super.fromTableRecordEntry(entry);
+class CharacterToGlyphTable({
+  required TableRecordEntry? entry,
+  required final CharacterToGlyphTableHeader header,
+  required final List<CmapData> data,
+}) extends FontTable {
+  this : super.fromTableRecordEntry(entry);
 
-  factory CharacterToGlyphTable.fromByteData({
+  factory fromByteData({
     required ByteData byteData,
     required TableRecordEntry entry,
   }) {
@@ -551,9 +485,7 @@ class CharacterToGlyphTable extends FontTable {
     return CharacterToGlyphTable(entry: entry, header: header, data: data);
   }
 
-  factory CharacterToGlyphTable.create({
-    required List<GenericGlyph> fullGlyphList,
-  }) {
+  factory create({required List<GenericGlyph> fullGlyphList}) {
     final fullCharCodeList =
         fullGlyphList.map((e) => e.metadata.charCode).toList()
           ..removeAt(0); // removing .notdef
@@ -562,7 +494,7 @@ class CharacterToGlyphTable extends FontTable {
     final segmentList = _generateSegments(charCodeList: charCodeList);
     final segmentListFormat4 = [
       ...segmentList,
-      Segment(
+      const Segment(
         startCode: 0xFFFF,
         endCode: 0xFFFF,
         startGlyphID: 1,
@@ -604,9 +536,6 @@ class CharacterToGlyphTable extends FontTable {
 
     return CharacterToGlyphTable(entry: null, header: header, data: subtables);
   }
-
-  final CharacterToGlyphTableHeader header;
-  final List<CmapData> data;
 
   static List<Segment> _generateSegments({required List<int> charCodeList}) {
     var startCharCode = -1;
