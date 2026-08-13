@@ -541,8 +541,11 @@ class const PascalString({
   required final int length,
 }) implements BinaryCodable {
   factory fromByteData({required ByteData byteData, required int offset}) {
-    final length = byteData.getUint8(offset++);
-    final bytes = List.generate(length, (i) => byteData.getUint8(offset + i));
+    final length = byteData.getUint8(offset);
+    final bytes = List.generate(
+      length,
+      (i) => byteData.getUint8(offset + 1 + i),
+    );
     return PascalString(string: String.fromCharCodes(bytes), length: length);
   }
 
