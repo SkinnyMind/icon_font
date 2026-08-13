@@ -11,11 +11,13 @@ import 'package:icon_font/src/utils/extensions.dart';
 import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
-class GlyphDataTable extends FontTable {
-  GlyphDataTable({required TableRecordEntry? entry, required this.glyphList})
-    : super.fromTableRecordEntry(entry);
+class GlyphDataTable({
+  required TableRecordEntry? entry,
+  required final List<SimpleGlyph> glyphList,
+}) extends FontTable {
+  this : super.fromTableRecordEntry(entry);
 
-  factory GlyphDataTable.fromByteData({
+  factory fromByteData({
     required ByteData byteData,
     required TableRecordEntry entry,
     required IndexToLocationTable locationTable,
@@ -50,7 +52,7 @@ class GlyphDataTable extends FontTable {
     return GlyphDataTable(entry: entry, glyphList: glyphList);
   }
 
-  factory GlyphDataTable.fromGlyphs({required List<GenericGlyph> glyphList}) {
+  factory fromGlyphs({required List<GenericGlyph> glyphList}) {
     final glyphListCopy = glyphList.map((e) => e.copy());
 
     for (final glyph in glyphListCopy) {
@@ -72,8 +74,6 @@ class GlyphDataTable extends FontTable {
 
     return GlyphDataTable(entry: null, glyphList: simpleGlyphList);
   }
-
-  final List<SimpleGlyph> glyphList;
 
   @override
   int get size => glyphList.fold<int>(

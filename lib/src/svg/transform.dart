@@ -2,14 +2,19 @@ import 'dart:math' as math;
 
 import 'package:vector_math/vector_math.dart';
 
-enum TransformType { matrix, translate, scale, rotate, skewX, skewY }
+enum TransformType() {
+  matrix,
+  translate,
+  scale,
+  rotate,
+  skewX,
+  skewY
+}
 
-class Transform {
-  Transform({required this.type, required this.parameterList});
-
-  final TransformType? type;
-  final List<double> parameterList;
-
+class const Transform({
+  required final TransformType? type,
+  required final List<double> parameterList,
+}) {
   static List<Transform> parse(String? string) {
     if (string == null) {
       return [];
@@ -25,9 +30,8 @@ class Transform {
           );
 
           final parameterString = m.group(2)!;
-          final parameterMatches = RegExp(
-            r'[\w.-]+',
-          ).allMatches(parameterString);
+          final parameterMatches = RegExp(r'[\w.-]+')
+              .allMatches(parameterString);
           final parameterList = parameterMatches
               .map((m) => double.parse(m.group(0)!))
               .toList();

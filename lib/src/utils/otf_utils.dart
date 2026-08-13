@@ -20,9 +20,7 @@ const kPlatformUnicode = 0;
 const kPlatformMacintosh = 1;
 const kPlatformWindows = 3;
 
-class OtfUtils {
-  const OtfUtils._();
-
+class const OtfUtils._() {
   static Uint8List convertStringToTag(String string) {
     assert(string.length == 4, "Tag's length must be equal 4");
     return Uint8List.fromList(string.codeUnits);

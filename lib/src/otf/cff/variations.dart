@@ -5,14 +5,12 @@ import 'package:icon_font/src/utils/extensions.dart';
 
 const _regionAxisCoordinatesSize = 6;
 
-class RegionAxisCoordinates extends BinaryCodable {
-  RegionAxisCoordinates({
-    required this.startCoord,
-    required this.peakCoord,
-    required this.endCoord,
-  });
-
-  factory RegionAxisCoordinates.fromByteData({required ByteData byteData}) {
+class const RegionAxisCoordinates({
+  required final int startCoord,
+  required final int peakCoord,
+  required final int endCoord,
+}) extends BinaryCodable {
+  factory fromByteData({required ByteData byteData}) {
     // NOTE: not converting F2DOT14, because variations are ignored anyway
     return RegionAxisCoordinates(
       startCoord: byteData.getUint16(0),
@@ -20,10 +18,6 @@ class RegionAxisCoordinates extends BinaryCodable {
       endCoord: byteData.getUint16(4),
     );
   }
-
-  final int startCoord;
-  final int peakCoord;
-  final int endCoord;
 
   @override
   void encodeToBinary(ByteData byteData) {
@@ -37,15 +31,13 @@ class RegionAxisCoordinates extends BinaryCodable {
   int get size => _regionAxisCoordinatesSize;
 }
 
-class ItemVariationData extends BinaryCodable {
-  ItemVariationData({
-    required this.itemCount,
-    required this.shortDeltaCount,
-    required this.regionIndexCount,
-    required this.regionIndexes,
-  });
-
-  factory ItemVariationData.fromByteData({required ByteData byteData}) {
+class const ItemVariationData({
+  required final int itemCount,
+  required final int shortDeltaCount,
+  required final int regionIndexCount,
+  required final List<int> regionIndexes,
+}) extends BinaryCodable {
+  factory fromByteData({required ByteData byteData}) {
     final regionIndexCount = byteData.getUint16(4);
 
     return ItemVariationData(
@@ -58,11 +50,6 @@ class ItemVariationData extends BinaryCodable {
       ),
     );
   }
-
-  final int itemCount;
-  final int shortDeltaCount;
-  final int regionIndexCount;
-  final List<int> regionIndexes;
 
   @override
   void encodeToBinary(ByteData byteData) {
@@ -80,14 +67,12 @@ class ItemVariationData extends BinaryCodable {
   int get size => 6 + 2 * regionIndexCount;
 }
 
-class VariationRegionList extends BinaryCodable {
-  VariationRegionList({
-    required this.axisCount,
-    required this.regionCount,
-    required this.regions,
-  });
-
-  factory VariationRegionList.fromByteData({required ByteData byteData}) {
+class const VariationRegionList({
+  required final int axisCount,
+  required final int regionCount,
+  required final List<RegionAxisCoordinates> regions,
+}) extends BinaryCodable {
+  factory fromByteData({required ByteData byteData}) {
     final axisCount = byteData.getUint16(0);
     final regionCount = byteData.getUint16(2);
 
@@ -108,10 +93,6 @@ class VariationRegionList extends BinaryCodable {
       regions: regions,
     );
   }
-
-  final int axisCount;
-  final int regionCount;
-  final List<RegionAxisCoordinates> regions;
 
   @override
   void encodeToBinary(ByteData byteData) {
@@ -136,17 +117,15 @@ class VariationRegionList extends BinaryCodable {
   int get size => 4 + regionCount * axisCount * _regionAxisCoordinatesSize;
 }
 
-class ItemVariationStore extends BinaryCodable {
-  ItemVariationStore({
-    required this.format,
-    required this.variationRegionListOffset,
-    required this.itemVariationDataCount,
-    required this.itemVariationDataOffsets,
-    required this.variationRegionList,
-    required this.itemVariationDataList,
-  });
-
-  factory ItemVariationStore.fromByteData({required ByteData byteData}) {
+class ItemVariationStore({
+  required final int format,
+  required var int variationRegionListOffset,
+  required var int itemVariationDataCount,
+  required var List<int> itemVariationDataOffsets,
+  required final VariationRegionList variationRegionList,
+  required final List<ItemVariationData> itemVariationDataList,
+}) extends BinaryCodable {
+  factory fromByteData({required ByteData byteData}) {
     final variationRegionListOffset = byteData.getUint32(2);
     final itemVariationDataCount = byteData.getUint16(6);
     final itemVariationDataOffsets = List.generate(
@@ -173,14 +152,6 @@ class ItemVariationStore extends BinaryCodable {
       itemVariationDataList: itemVariationDataList,
     );
   }
-
-  final int format;
-  int variationRegionListOffset;
-  int itemVariationDataCount;
-  List<int> itemVariationDataOffsets;
-
-  final VariationRegionList variationRegionList;
-  final List<ItemVariationData> itemVariationDataList;
 
   @override
   void encodeToBinary(ByteData byteData) {
@@ -223,18 +194,16 @@ class ItemVariationStore extends BinaryCodable {
       _itemVariationSubtableListSize;
 }
 
-class VariationStoreData extends BinaryCodable {
-  VariationStoreData({required this.length, required this.store});
-
-  factory VariationStoreData.fromByteData({required ByteData byteData}) {
+class VariationStoreData({
+  required var int length,
+  required final ItemVariationStore store,
+}) extends BinaryCodable {
+  factory fromByteData({required ByteData byteData}) {
     return VariationStoreData(
       length: byteData.getUint16(0),
       store: ItemVariationStore.fromByteData(byteData: byteData.sublistView(2)),
     );
   }
-
-  int length;
-  final ItemVariationStore store;
 
   @override
   void encodeToBinary(ByteData byteData) {

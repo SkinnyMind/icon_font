@@ -5,26 +5,26 @@ import 'package:icon_font/src/otf/table/abstract.dart';
 import 'package:icon_font/src/otf/table/hmtx.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
 
-class HorizontalHeaderTable extends FontTable {
-  HorizontalHeaderTable({
-    required TableRecordEntry? entry,
-    required this.majorVersion,
-    required this.minorVersion,
-    required this.ascender,
-    required this.descender,
-    required this.lineGap,
-    required this.advanceWidthMax,
-    required this.minLeftSideBearing,
-    required this.minRightSideBearing,
-    required this.xMaxExtent,
-    required this.caretSlopeRise,
-    required this.caretSlopeRun,
-    required this.caretOffset,
-    required this.metricDataFormat,
-    required this.numberOfHMetrics,
-  }) : super.fromTableRecordEntry(entry);
+class HorizontalHeaderTable({
+  required TableRecordEntry? entry,
+  required final int majorVersion,
+  required final int minorVersion,
+  required final int ascender,
+  required final int descender,
+  required final int lineGap,
+  required final int advanceWidthMax,
+  required final int minLeftSideBearing,
+  required final int minRightSideBearing,
+  required final int xMaxExtent,
+  required final int caretSlopeRise,
+  required final int caretSlopeRun,
+  required final int caretOffset,
+  required final int metricDataFormat,
+  required final int numberOfHMetrics,
+}) extends FontTable {
+  this : super.fromTableRecordEntry(entry);
 
-  factory HorizontalHeaderTable.fromByteData({
+  factory fromByteData({
     required ByteData byteData,
     required TableRecordEntry entry,
   }) {
@@ -47,7 +47,7 @@ class HorizontalHeaderTable extends FontTable {
     );
   }
 
-  factory HorizontalHeaderTable.create({
+  factory create({
     required List<GenericGlyphMetrics> glyphMetricsList,
     required HorizontalMetricsTable hmtx,
     required int ascender,
@@ -73,22 +73,6 @@ class HorizontalHeaderTable extends FontTable {
       numberOfHMetrics: glyphMetricsList.length,
     );
   }
-
-  final int majorVersion;
-  final int minorVersion;
-  final int ascender;
-  final int descender;
-  final int lineGap;
-  final int advanceWidthMax;
-  final int minLeftSideBearing;
-  final int minRightSideBearing;
-  final int xMaxExtent;
-  final int caretSlopeRise;
-  final int caretSlopeRun;
-  final int caretOffset;
-
-  final int metricDataFormat;
-  final int numberOfHMetrics;
 
   @override
   int get size => 36;

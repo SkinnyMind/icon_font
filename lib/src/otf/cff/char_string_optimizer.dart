@@ -1,9 +1,8 @@
 import 'package:icon_font/src/otf/cff/char_string.dart';
 import 'package:icon_font/src/otf/cff/char_string_operator.dart';
 
-class CharStringOptimizer {
-  CharStringOptimizer({required bool isCFF1})
-    : _limits = CharStringInterpreterLimits(isCFF1: isCFF1);
+class CharStringOptimizer({required bool isCFF1}) {
+  this : _limits = CharStringInterpreterLimits(isCFF1: isCFF1);
 
   final CharStringInterpreterLimits _limits;
 

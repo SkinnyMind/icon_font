@@ -1,6 +1,10 @@
 import 'package:icon_font/src/otf/cff/operator.dart';
 
-enum DictOperator {
+enum DictOperator({
+  required final String label,
+  required final int b0,
+  final int? b1,
+}) {
   // Top DICT operators
   /// 1/unitsPerEm 0 0 1/unitsPerEm 0 0. Omitted if unitsPerEm is 1000.
   fontMatrix(label: 'FontMatrix', b0: 12, b1: 7),
@@ -51,15 +55,9 @@ enum DictOperator {
   languageGroup(label: 'LanguageGroup', b0: 12, b1: 17),
   expansionFactor(label: 'ExpansionFactor', b0: 12, b1: 18);
 
-  const DictOperator({required this.label, required int b0, int? b1})
-    : _b0 = b0,
-      _b1 = b1,
-      context = CFFOperatorContext.dict;
+  this : context = CFFOperatorContext.dict;
 
-  final int _b0;
-  final int? _b1;
-  final String label;
   final CFFOperatorContext context;
 
-  CFFOperator get operator => CFFOperator(context: context, b0: _b0, b1: _b1);
+  CFFOperator get operator => CFFOperator(context: context, b0: b0, b1: b1);
 }

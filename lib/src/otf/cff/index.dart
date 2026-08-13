@@ -115,18 +115,13 @@ class CFFIndex extends BinaryCodable {
   static int _getCountSize(bool isCFF1) => isCFF1 ? 2 : 4;
 }
 
-class CFFIndexWithData<T> implements BinaryCodable, CalculatableOffsets {
-  CFFIndexWithData({
-    required this.index,
-    required this.data,
-    required this.isCFF1,
-  });
-
+class CFFIndexWithData<T>({
+  required var CFFIndex? index,
+  required final List<T> data,
+  required final bool isCFF1,
+}) implements BinaryCodable, CalculatableOffsets {
   /// Decodes INDEX and its data from [ByteData]
-  factory CFFIndexWithData.fromByteData({
-    required ByteData byteData,
-    required bool isCFF1,
-  }) {
+  factory fromByteData({required ByteData byteData, required bool isCFF1}) {
     final decoder = _getDecoderForType(T);
 
     final index = CFFIndex.fromByteData(byteData: byteData, isCFF1: isCFF1);
@@ -150,14 +145,8 @@ class CFFIndexWithData<T> implements BinaryCodable, CalculatableOffsets {
     return CFFIndexWithData(index: index, data: dataList, isCFF1: isCFF1);
   }
 
-  factory CFFIndexWithData.create({
-    required List<T> data,
-    required bool isCFF1,
-  }) => CFFIndexWithData(index: null, data: data, isCFF1: isCFF1);
-
-  CFFIndex? index;
-  final List<T> data;
-  final bool isCFF1;
+  factory create({required List<T> data, required bool isCFF1}) =>
+      CFFIndexWithData(index: null, data: data, isCFF1: isCFF1);
 
   static Object Function(ByteData) _getDecoderForType(Type type) {
     return switch (type) {

@@ -9,31 +9,26 @@ import 'package:icon_font/src/utils/extensions.dart';
 /// or evenodd/nonzero according to OVERLAP_SIMPLE flag
 /// (depending on rasterizer implementation)
 /// * SVG can be both
-enum FillRule { nonzero, evenodd }
+enum FillRule() {
+  nonzero,
+  evenodd
+}
 
 /// A helper for working with outlines (including transforming).
 ///
 // ignore: lines_longer_than_80_chars
 /// TODO: It's very basic class for now used for generic glyph description. Replace it with a proper Path class (like java.awt.geom.Path2D or dart:ui's Path)
-class Outline {
-  Outline({
-    required this.pointList,
-    required this.isOnCurveList,
-    required this.hasCompactCurves,
-    required this.hasQuadCurves,
-    required this.fillRule,
-  });
-
-  final List<Point<num>> pointList;
-  final List<bool> isOnCurveList;
-  final FillRule fillRule;
+class Outline({
+  required final List<Point<num>> pointList,
+  required final List<bool> isOnCurveList,
 
   /// Indicates weather curves are compact (midpoints and endpoint are implicit)
-  bool hasCompactCurves;
+  required var bool hasCompactCurves,
 
   /// Indicates weather outline contains quadratic or cubic curves
-  bool hasQuadCurves;
-
+  required var bool hasQuadCurves,
+  required final FillRule fillRule,
+}) {
   /// Deep copy of an outline
   Outline copy() {
     return Outline(

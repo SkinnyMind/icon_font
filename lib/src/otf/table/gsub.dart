@@ -10,17 +10,15 @@ import 'package:icon_font/src/utils/extensions.dart';
 import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
-class GlyphSubstitutionTableHeader implements BinaryCodable {
-  GlyphSubstitutionTableHeader({
-    required this.majorVersion,
-    required this.minorVersion,
-    required this.scriptListOffset,
-    required this.featureListOffset,
-    required this.lookupListOffset,
-    required this.featureVariationsOffset,
-  });
-
-  factory GlyphSubstitutionTableHeader.fromByteData({
+class GlyphSubstitutionTableHeader({
+  required final int majorVersion,
+  required final int minorVersion,
+  required var int? scriptListOffset,
+  required var int? featureListOffset,
+  required var int? lookupListOffset,
+  required var int? featureVariationsOffset,
+}) implements BinaryCodable {
+  factory fromByteData({
     required ByteData byteData,
     required TableRecordEntry entry,
   }) {
@@ -46,7 +44,7 @@ class GlyphSubstitutionTableHeader implements BinaryCodable {
     );
   }
 
-  factory GlyphSubstitutionTableHeader.create() {
+  factory create() {
     return GlyphSubstitutionTableHeader(
       majorVersion: 1,
       minorVersion: 0,
@@ -56,13 +54,6 @@ class GlyphSubstitutionTableHeader implements BinaryCodable {
       featureVariationsOffset: null,
     );
   }
-
-  final int majorVersion;
-  final int minorVersion;
-  int? scriptListOffset;
-  int? featureListOffset;
-  int? lookupListOffset;
-  int? featureVariationsOffset;
 
   bool get isV10 => majorVersion == 1 && minorVersion == 0;
 
@@ -84,16 +75,16 @@ class GlyphSubstitutionTableHeader implements BinaryCodable {
   }
 }
 
-class GlyphSubstitutionTable extends FontTable {
-  GlyphSubstitutionTable({
-    required TableRecordEntry? entry,
-    required this.header,
-    required this.scriptListTable,
-    required this.featureListTable,
-    required this.lookupListTable,
-  }) : super.fromTableRecordEntry(entry);
+class GlyphSubstitutionTable({
+  required TableRecordEntry? entry,
+  required final GlyphSubstitutionTableHeader header,
+  required final ScriptListTable scriptListTable,
+  required final FeatureListTable featureListTable,
+  required final LookupListTable lookupListTable,
+}) extends FontTable {
+  this : super.fromTableRecordEntry(entry);
 
-  factory GlyphSubstitutionTable.fromByteData({
+  factory fromByteData({
     required ByteData byteData,
     required TableRecordEntry entry,
   }) {
@@ -124,7 +115,7 @@ class GlyphSubstitutionTable extends FontTable {
     );
   }
 
-  factory GlyphSubstitutionTable.create() {
+  factory create() {
     final header = GlyphSubstitutionTableHeader.create();
 
     final scriptListTable = ScriptListTable.create();
@@ -139,12 +130,6 @@ class GlyphSubstitutionTable extends FontTable {
       lookupListTable: lookupListTable,
     );
   }
-
-  final GlyphSubstitutionTableHeader header;
-
-  final ScriptListTable scriptListTable;
-  final FeatureListTable featureListTable;
-  final LookupListTable lookupListTable;
 
   @override
   void encodeToBinary(ByteData byteData) {

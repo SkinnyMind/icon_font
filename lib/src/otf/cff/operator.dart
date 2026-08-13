@@ -5,17 +5,20 @@ import 'package:icon_font/src/otf/cff/char_string_operator.dart';
 import 'package:icon_font/src/otf/cff/dict_operator.dart';
 import 'package:meta/meta.dart';
 
-enum CFFOperatorContext { dict, charString }
+enum CFFOperatorContext() {
+  dict,
+  charString
+}
 
 @immutable
-class CFFOperator implements BinaryCodable {
-  const CFFOperator({required this.context, required this.b0, this.b1})
-    : intValue = b1 != null ? ((b0 << 8) | b1) : b0;
+class const CFFOperator({
+  required final CFFOperatorContext context,
+  required final int b0,
+  final int? b1,
+}) implements BinaryCodable {
+  this : intValue = b1 != null ? ((b0 << 8) | b1) : b0;
 
-  final int b0;
-  final int? b1;
   final int intValue;
-  final CFFOperatorContext context;
 
   @override
   int get size => b1 == null ? 1 : 2;

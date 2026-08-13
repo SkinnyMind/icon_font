@@ -22,15 +22,13 @@ import 'package:icon_font/src/otf/table/table_record_entry.dart';
 import 'package:icon_font/src/utils/constants.dart';
 import 'package:icon_font/src/utils/extensions.dart';
 
-class CFF1TableHeader implements BinaryCodable {
-  CFF1TableHeader({
-    required this.majorVersion,
-    required this.minorVersion,
-    required this.headerSize,
-    required this.offSize,
-  });
-
-  factory CFF1TableHeader.fromByteData(ByteData byteData) {
+class CFF1TableHeader({
+  required final int majorVersion,
+  required final int minorVersion,
+  required final int headerSize,
+  required var int? offSize,
+}) implements BinaryCodable {
+  factory fromByteData(ByteData byteData) {
     return CFF1TableHeader(
       majorVersion: byteData.getUint8(0),
       minorVersion: byteData.getUint8(1),
@@ -39,7 +37,7 @@ class CFF1TableHeader implements BinaryCodable {
     );
   }
 
-  factory CFF1TableHeader.create() {
+  factory create() {
     return CFF1TableHeader(
       majorVersion: 1,
       minorVersion: 0,
@@ -47,11 +45,6 @@ class CFF1TableHeader implements BinaryCodable {
       offSize: null,
     );
   }
-
-  final int majorVersion;
-  final int minorVersion;
-  final int headerSize;
-  int? offSize;
 
   @override
   void encodeToBinary(ByteData byteData) {
@@ -66,22 +59,22 @@ class CFF1TableHeader implements BinaryCodable {
   int get size => 4;
 }
 
-class CFF1Table extends CFFTable implements CalculatableOffsets {
-  CFF1Table({
-    required TableRecordEntry? entry,
-    required this.header,
-    required this.nameIndex,
-    required this.topDicts,
-    required this.stringIndex,
-    required this.globalSubrsData,
-    required this.charsets,
-    required this.charStringsData,
-    required this.fontDictList,
-    required this.privateDictList,
-    required this.localSubrsDataList,
-  }) : super.fromTableRecordEntry(entry);
+class CFF1Table({
+  required TableRecordEntry? entry,
+  required final CFF1TableHeader header,
+  required final CFFIndexWithData<Uint8List> nameIndex,
+  required final CFFIndexWithData<CFFDict> topDicts,
+  required final CFFIndexWithData<Uint8List> stringIndex,
+  required final CFFIndexWithData<Uint8List> globalSubrsData,
+  required final CharsetEntry charsets,
+  required final CFFIndexWithData<Uint8List> charStringsData,
+  required final CFFIndexWithData<CFFDict> fontDictList,
+  required final List<CFFDict> privateDictList,
+  required final List<CFFIndexWithData<Uint8List>> localSubrsDataList,
+}) extends CFFTable implements CalculatableOffsets {
+  this : super.fromTableRecordEntry(entry);
 
-  factory CFF1Table.fromByteData({
+  factory fromByteData({
     required ByteData byteData,
     required TableRecordEntry entry,
   }) {
@@ -204,7 +197,7 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
     );
   }
 
-  factory CFF1Table.create({
+  factory create({
     required List<GenericGlyph> glyphList,
     required HeaderTable head,
     required HorizontalMetricsTable hmtx,
@@ -291,7 +284,7 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
           operandList: [],
         ),
       ];
-      final byteData = CharStringInterpreter(isCFF1: true).writeCommands(
+      final byteData = const CharStringInterpreter(isCFF1: true).writeCommands(
         commandList: commandList,
         glyphWidth: hmtx.hMetrics[i].advanceWidth,
       );
@@ -349,17 +342,6 @@ class CFF1Table extends CFFTable implements CalculatableOffsets {
 
     return table;
   }
-
-  final CFF1TableHeader header;
-  final CFFIndexWithData<Uint8List> nameIndex;
-  final CFFIndexWithData<CFFDict> topDicts;
-  final CFFIndexWithData<Uint8List> stringIndex;
-  final CFFIndexWithData<Uint8List> globalSubrsData;
-  final CharsetEntry charsets;
-  final CFFIndexWithData<Uint8List> charStringsData;
-  final CFFIndexWithData<CFFDict> fontDictList;
-  final List<CFFDict> privateDictList;
-  final List<CFFIndexWithData<Uint8List>> localSubrsDataList;
 
   CFFDict get topDict => topDicts.data.first;
 

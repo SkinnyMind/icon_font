@@ -6,13 +6,9 @@ import 'package:icon_font/src/otf/table/table_record_entry.dart';
 import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
-enum ProfileTableVersion {
+enum ProfileTableVersion({required final int value, required final int size}) {
   v0(value: 0x00005000, size: 6),
   v1(value: 0x00010000, size: 32);
-
-  const ProfileTableVersion({required this.value, required this.size});
-  final int value;
-  final int size;
 }
 
 class MaximumProfileTable extends FontTable {

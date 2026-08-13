@@ -3,9 +3,7 @@ import 'dart:typed_data';
 import 'package:icon_font/src/common/binary_codable.dart';
 import 'package:icon_font/src/utils/logger.dart';
 
-abstract class CoverageTable implements BinaryCodable {
-  const CoverageTable();
-
+abstract class const CoverageTable() implements BinaryCodable {
   static CoverageTable? fromByteData({
     required ByteData byteData,
     required int offset,
@@ -25,17 +23,12 @@ abstract class CoverageTable implements BinaryCodable {
   }
 }
 
-class CoverageTableFormat1 extends CoverageTable {
-  const CoverageTableFormat1({
-    required this.coverageFormat,
-    required this.glyphCount,
-    required this.glyphArray,
-  });
-
-  factory CoverageTableFormat1.fromByteData({
-    required ByteData byteData,
-    required int offset,
-  }) {
+class const CoverageTableFormat1({
+  required final int coverageFormat,
+  required final int glyphCount,
+  required final List<int> glyphArray,
+}) extends CoverageTable {
+  factory fromByteData({required ByteData byteData, required int offset}) {
     final coverageFormat = byteData.getUint16(offset);
     final glyphCount = byteData.getUint16(offset + 2);
     final glyphArray = List.generate(
@@ -49,10 +42,6 @@ class CoverageTableFormat1 extends CoverageTable {
       glyphArray: glyphArray,
     );
   }
-
-  final int coverageFormat;
-  final int glyphCount;
-  final List<int> glyphArray;
 
   @override
   int get size => 4 + 2 * glyphCount;

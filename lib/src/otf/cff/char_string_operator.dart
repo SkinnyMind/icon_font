@@ -1,6 +1,6 @@
 import 'package:icon_font/src/otf/cff/operator.dart';
 
-enum CharStringOperator {
+enum CharStringOperator({required final int b0, final int? b1}) {
   hstem(b0: 1),
   vstem(b0: 3),
   vmoveto(b0: 4),
@@ -31,14 +31,9 @@ enum CharStringOperator {
   hflex1(b0: 12, b1: 36),
   flex1(b0: 12, b1: 37);
 
-  const CharStringOperator({required int b0, int? b1})
-    : _b0 = b0,
-      _b1 = b1,
-      context = CFFOperatorContext.charString;
+  this : context = CFFOperatorContext.charString;
 
-  final int _b0;
-  final int? _b1;
   final CFFOperatorContext context;
 
-  CFFOperator get operator => CFFOperator(context: context, b0: _b0, b1: _b1);
+  CFFOperator get operator => CFFOperator(context: context, b0: b0, b1: b1);
 }

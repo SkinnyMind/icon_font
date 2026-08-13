@@ -6,10 +6,9 @@ import 'package:icon_font/src/otf/cff/operand.dart';
 import 'package:icon_font/src/otf/cff/operator.dart';
 import 'package:icon_font/src/utils/extensions.dart';
 
-class CharStringOperand extends CFFOperand {
-  CharStringOperand({required super.value, required super.size});
-
-  factory CharStringOperand.fromByteData({
+class CharStringOperand({required super.value, required super.size})
+    extends CFFOperand {
+  factory fromByteData({
     required ByteData byteData,
     required int offset,
     required int b0,
@@ -41,35 +40,38 @@ class CharStringOperand extends CFFOperand {
   int get size => value is double ? 5 : super.size;
 }
 
-class CharStringCommand implements BinaryCodable {
-  CharStringCommand({required this.operator, required this.operandList})
+class CharStringCommand({
+  required final CFFOperator operator,
+  required final List<CharStringOperand> operandList,
+}) implements BinaryCodable {
+  this
     : assert(
         operator.context == CFFOperatorContext.charString,
         "Operator's context must be CharString",
       );
 
-  factory CharStringCommand.hmoveto({required int dx}) {
+  factory hmoveto({required int dx}) {
     return CharStringCommand(
       operator: CharStringOperator.hmoveto.operator,
       operandList: _getOperandList(operandValues: [dx]),
     );
   }
 
-  factory CharStringCommand.vmoveto({required int dy}) {
+  factory vmoveto({required int dy}) {
     return CharStringCommand(
       operator: CharStringOperator.vmoveto.operator,
       operandList: _getOperandList(operandValues: [dy]),
     );
   }
 
-  factory CharStringCommand.rmoveto({required int dx, required int dy}) {
+  factory rmoveto({required int dx, required int dy}) {
     return CharStringCommand(
       operator: CharStringOperator.rmoveto.operator,
       operandList: _getOperandList(operandValues: [dx, dy]),
     );
   }
 
-  factory CharStringCommand.moveto({required int dx, required int dy}) {
+  factory moveto({required int dx, required int dy}) {
     if (dx == 0) {
       return CharStringCommand.vmoveto(dy: dy);
     } else if (dy == 0) {
@@ -79,21 +81,21 @@ class CharStringCommand implements BinaryCodable {
     return CharStringCommand.rmoveto(dx: dx, dy: dy);
   }
 
-  factory CharStringCommand.hlineto({required int dx}) {
+  factory hlineto({required int dx}) {
     return CharStringCommand(
       operator: CharStringOperator.hlineto.operator,
       operandList: _getOperandList(operandValues: [dx]),
     );
   }
 
-  factory CharStringCommand.vlineto({required int dy}) {
+  factory vlineto({required int dy}) {
     return CharStringCommand(
       operator: CharStringOperator.vlineto.operator,
       operandList: _getOperandList(operandValues: [dy]),
     );
   }
 
-  factory CharStringCommand.rlineto({required List<int> dlist}) {
+  factory rlineto({required List<int> dlist}) {
     if (dlist.length.isOdd || dlist.length < 2) {
       throw ArgumentError('|- {dxa dya}+ rlineto (5) |-');
     }
@@ -104,7 +106,7 @@ class CharStringCommand implements BinaryCodable {
     );
   }
 
-  factory CharStringCommand.lineto({required int dx, required int dy}) {
+  factory lineto({required int dx, required int dy}) {
     if (dx == 0) {
       return CharStringCommand.vlineto(dy: dy);
     } else if (dy == 0) {
@@ -114,7 +116,7 @@ class CharStringCommand implements BinaryCodable {
     return CharStringCommand.rlineto(dlist: [dx, dy]);
   }
 
-  factory CharStringCommand.hhcurveto({required List<int> dlist}) {
+  factory hhcurveto({required List<int> dlist}) {
     if (dlist.length < 4 || (dlist.length % 4 != 0 && dlist.length % 4 != 1)) {
       throw ArgumentError('|- dy1? {dxa dxb dyb dxc}+ hhcurveto (27) |-');
     }
@@ -125,7 +127,7 @@ class CharStringCommand implements BinaryCodable {
     );
   }
 
-  factory CharStringCommand.vvcurveto({required List<int> dlist}) {
+  factory vvcurveto({required List<int> dlist}) {
     if (dlist.length < 4 || (dlist.length % 4 != 0 && dlist.length % 4 != 1)) {
       throw ArgumentError('|- dx1? {dya dxb dyb dyc}+ vvcurveto (26) |-');
     }
@@ -136,7 +138,7 @@ class CharStringCommand implements BinaryCodable {
     );
   }
 
-  factory CharStringCommand.curveto({required List<int> dlist}) {
+  factory curveto({required List<int> dlist}) {
     if (dlist.length != 6) {
       throw ArgumentError('List length must be equal 6');
     }
@@ -166,9 +168,6 @@ class CharStringCommand implements BinaryCodable {
       operandList: _getOperandList(operandValues: dlist),
     );
   }
-
-  final CFFOperator operator;
-  final List<CharStringOperand> operandList;
 
   static List<CharStringOperand> _getOperandList({
     required List<num> operandValues,
@@ -212,11 +211,7 @@ class CharStringCommand implements BinaryCodable {
 /// A very basic implementation of the CFF2 CharString interpreter.
 /// Doesn't support hinting, subroutines, blending.
 /// Doesn't respect interpreter implementation limits.
-class CharStringInterpreter {
-  CharStringInterpreter({required this.isCFF1});
-
-  final bool isCFF1;
-
+class const CharStringInterpreter({required final bool isCFF1}) {
   ByteData writeCommands({
     required List<CharStringCommand> commandList,
     int? glyphWidth,

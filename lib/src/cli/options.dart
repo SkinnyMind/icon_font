@@ -2,9 +2,7 @@ import 'package:args/args.dart';
 
 import 'package:icon_font/src/cli/arguments.dart';
 
-class Options {
-  const Options._();
-
+class const Options._() {
   static void define({required ArgParser argParser}) {
     argParser
       ..addSeparator('Flutter class options:')

@@ -11,20 +11,18 @@ import 'package:icon_font/src/utils/extensions.dart';
 
 const _longHorMetricSize = 4;
 
-class LongHorMetric implements BinaryCodable {
-  LongHorMetric({required this.advanceWidth, required this.lsb});
-
-  factory LongHorMetric.fromByteData({
-    required ByteData byteData,
-    required int offset,
-  }) {
+class const LongHorMetric({
+  required final int advanceWidth,
+  required final int lsb,
+}) implements BinaryCodable {
+  factory fromByteData({required ByteData byteData, required int offset}) {
     return LongHorMetric(
       advanceWidth: byteData.getUint16(offset),
       lsb: byteData.getInt16(offset + 2),
     );
   }
 
-  factory LongHorMetric.createForGlyph({
+  factory createForGlyph({
     required GenericGlyphMetrics metrics,
     required int unitsPerEm,
   }) {
@@ -32,9 +30,6 @@ class LongHorMetric implements BinaryCodable {
         ? LongHorMetric(advanceWidth: unitsPerEm ~/ 3, lsb: 0)
         : LongHorMetric(advanceWidth: metrics.xMax - metrics.xMin, lsb: 0);
   }
-
-  final int advanceWidth;
-  final int lsb;
 
   int getRsb({required int xMax, required int xMin}) =>
       advanceWidth - (lsb + xMax - xMin);
@@ -50,14 +45,14 @@ class LongHorMetric implements BinaryCodable {
   }
 }
 
-class HorizontalMetricsTable extends FontTable {
-  HorizontalMetricsTable({
-    required TableRecordEntry? entry,
-    required this.hMetrics,
-    required this.leftSideBearings,
-  }) : super.fromTableRecordEntry(entry);
+class HorizontalMetricsTable({
+  required TableRecordEntry? entry,
+  required final List<LongHorMetric> hMetrics,
+  required final List<int> leftSideBearings,
+}) extends FontTable {
+  this : super.fromTableRecordEntry(entry);
 
-  factory HorizontalMetricsTable.fromByteData({
+  factory fromByteData({
     required ByteData byteData,
     required TableRecordEntry entry,
     required HorizontalHeaderTable hhea,
@@ -83,7 +78,7 @@ class HorizontalMetricsTable extends FontTable {
     );
   }
 
-  factory HorizontalMetricsTable.create({
+  factory create({
     required List<GenericGlyphMetrics> glyphMetricsList,
     required int unitsPerEm,
   }) {
@@ -101,9 +96,6 @@ class HorizontalMetricsTable extends FontTable {
       leftSideBearings: [],
     );
   }
-
-  final List<LongHorMetric> hMetrics;
-  final List<int> leftSideBearings;
 
   @override
   int get size =>

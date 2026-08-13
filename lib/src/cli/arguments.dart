@@ -6,9 +6,7 @@ import 'package:icon_font/src/utils/extensions.dart';
 import 'package:icon_font/src/utils/logger.dart';
 import 'package:yaml/yaml.dart';
 
-class Arguments {
-  const Arguments._();
-
+class const Arguments._() {
   /// Parses argument list.
   ///
   /// Throws [CliHelpException], if 'help' option is present.
@@ -26,7 +24,7 @@ class Arguments {
     }
 
     if (argResults.flag(CliArgument.help.optionName)) {
-      throw CliHelpException();
+      throw const CliHelpException();
     }
 
     final options = CliArgument.values.where(
@@ -136,28 +134,26 @@ class Arguments {
 }
 
 /// Contains all the parsed data for the application.
-class CliArguments {
-  CliArguments({
-    required this.svgDir,
-    required this.fontFile,
-    required this.classFile,
-    required this.className,
-    required this.fontPackage,
-    required this.iconList,
-    required this.fontName,
-    required this.recursive,
-    required this.ignoreShapes,
-    required this.normalize,
-    required this.configFile,
-  });
-
+class const CliArguments({
+  required final Directory svgDir,
+  required final File fontFile,
+  required final File? classFile,
+  required final String? className,
+  required final String? fontPackage,
+  required final bool? iconList,
+  required final String? fontName,
+  required final bool? recursive,
+  required final bool? ignoreShapes,
+  required final bool? normalize,
+  required final File? configFile,
+}) {
   /// Creates [CliArguments] for a map of raw values.
   ///
   /// Validates type of each argument and formats them.
   ///
   /// Throws [CliArgumentException], if there is an error in arg parsing
   /// or if argument has wrong type.
-  factory CliArguments.fromMap({required Map<CliArgument, Object?> map}) {
+  factory fromMap({required Map<CliArgument, Object?> map}) {
     return CliArguments(
       svgDir: map[CliArgument.svgDir]! as Directory,
       fontFile: map[CliArgument.fontFile]! as File,
@@ -172,21 +168,13 @@ class CliArguments {
       configFile: map[CliArgument.configFile] as File?,
     );
   }
-
-  final Directory svgDir;
-  final File fontFile;
-  final File? classFile;
-  final String? className;
-  final String? fontPackage;
-  final bool? iconList;
-  final String? fontName;
-  final bool? recursive;
-  final bool? ignoreShapes;
-  final bool? normalize;
-  final File? configFile;
 }
 
-enum CliArgument {
+enum CliArgument({
+  required final String optionName,
+  required final String configName,
+  required final Type allowedType,
+}) {
   // Required and not options
   svgDir(optionName: '', configName: 'input_svg_dir', allowedType: String),
   fontFile(optionName: '', configName: 'output_font_file', allowedType: String),
@@ -236,24 +224,12 @@ enum CliArgument {
   // Only in CLI, not part of the config
   help(optionName: 'help', configName: '', allowedType: bool),
   configFile(optionName: 'config-file', configName: '', allowedType: String);
-
-  const CliArgument({
-    required this.optionName,
-    required this.configName,
-    required this.allowedType,
-  });
-  final String optionName;
-  final String configName;
-  final Type allowedType;
 }
 
-class CliArgumentException implements Exception {
-  CliArgumentException({required this.message});
-
-  final String message;
-
+class const CliArgumentException({required final String message})
+    implements Exception {
   @override
   String toString() => message;
 }
 
-class CliHelpException implements Exception {}
+class const CliHelpException() implements Exception;

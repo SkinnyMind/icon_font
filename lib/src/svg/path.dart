@@ -2,16 +2,16 @@ import 'package:icon_font/src/svg/element.dart';
 import 'package:icon_font/src/utils/exceptions.dart';
 import 'package:xml/xml.dart';
 
-class PathElement extends SvgElement {
-  PathElement({
-    required this.fillRule,
-    required this.data,
-    super.parent,
-    XmlElement? element,
-    super.transform,
-  }) : super(xmlElement: element);
+class PathElement({
+  required final String? fillRule,
+  required final String data,
+  super.parent,
+  XmlElement? element,
+  super.transform,
+}) extends SvgElement {
+  this : super(xmlElement: element);
 
-  factory PathElement.fromXmlElement({
+  factory fromXmlElement({
     required SvgElement? parent,
     required XmlElement element,
   }) {
@@ -32,7 +32,4 @@ class PathElement extends SvgElement {
       element: element,
     );
   }
-
-  final String? fillRule;
-  final String data;
 }

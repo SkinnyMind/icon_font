@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math' as math;
 import 'dart:typed_data';
+
 import 'package:icon_font/src/cli/arguments.dart';
 import 'package:icon_font/src/svg/element.dart';
 import 'package:icon_font/src/svg/shapes.dart';
@@ -29,7 +30,7 @@ extension XmlElementExt on XmlElement {
     String? namespace,
     bool zeroIfAbsent = true,
   }) {
-    final attr = getAttribute(name, namespace: namespace);
+    final attr = getAttribute(name, namespaceUri: namespace);
 
     if (attr == null) {
       return zeroIfAbsent ? 0 : null;
@@ -106,19 +107,19 @@ extension CliArgumentMapExtension on Map<CliArgument, Object?> {
     final fontFile = formattedArguments[CliArgument.fontFile] as File?;
 
     if (svgDir == null) {
-      throw CliArgumentException(
+      throw const CliArgumentException(
         message: 'The input directory is not specified.',
       );
     }
 
     if (fontFile == null) {
-      throw CliArgumentException(
+      throw const CliArgumentException(
         message: 'The output font file is not specified.',
       );
     }
 
     if (svgDir.statSync().type != FileSystemEntityType.directory) {
-      throw CliArgumentException(
+      throw const CliArgumentException(
         message: "The input directory is not a directory or it doesn't exist.",
       );
     }
@@ -165,9 +166,8 @@ extension NumPretty on num {
 extension OTFByteDateExt on ByteData {
   void setTag(int offset, String tag) {
     var currentOffset = offset;
-    OtfUtils.convertStringToTag(
-      tag,
-    ).forEach((b) => setUint8(currentOffset++, b));
+    OtfUtils.convertStringToTag(tag)
+        .forEach((b) => setUint8(currentOffset++, b));
   }
 
   ByteData sublistView(int offset, [int? length]) {

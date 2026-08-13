@@ -8,8 +8,8 @@ import 'package:icon_font/src/otf/table/cff2.dart';
 import 'package:icon_font/src/otf/table/table_record_entry.dart';
 import 'package:icon_font/src/utils/logger.dart';
 
-abstract class CFFTable extends FontTable {
-  CFFTable.fromTableRecordEntry(super.entry) : super.fromTableRecordEntry();
+abstract class CFFTable.fromTableRecordEntry(super.entry) extends FontTable {
+  this : super.fromTableRecordEntry();
 
   static CFFTable? fromByteData({
     required ByteData byteData,

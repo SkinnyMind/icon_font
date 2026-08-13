@@ -14,15 +14,11 @@ import 'package:icon_font/src/utils/extensions.dart';
 import 'package:icon_font/src/utils/logger.dart';
 import 'package:icon_font/src/utils/otf_utils.dart';
 
-enum OS2TableVersion {
+enum OS2TableVersion({required final int value, required final int size}) {
   v0(value: 0x0000, size: 78),
   v1(value: 0x0001, size: 8),
   v4(value: 0x0004, size: 10),
   v5(value: 0x0005, size: 4);
-
-  const OS2TableVersion({required this.value, required this.size});
-  final int value;
-  final int size;
 }
 
 const _defaultSubscriptRelativeXsize = .65;
@@ -41,51 +37,51 @@ const _defaultStrikeoutRelativeOffset = .26;
 /// * Anything else: Any
 const _defaultPANOSE = [2, 0, 5, 3, 0, 0, 0, 0, 0, 0];
 
-class OS2Table extends FontTable {
-  OS2Table._({
-    required TableRecordEntry? entry,
-    required this.version,
-    required this.xAvgCharWidth,
-    required this.usWeightClass,
-    required this.usWidthClass,
-    required this.fsType,
-    required this.ySubscriptXSize,
-    required this.ySubscriptYSize,
-    required this.ySubscriptXOffset,
-    required this.ySubscriptYOffset,
-    required this.ySuperscriptXSize,
-    required this.ySuperscriptYSize,
-    required this.ySuperscriptXOffset,
-    required this.ySuperscriptYOffset,
-    required this.yStrikeoutSize,
-    required this.yStrikeoutPosition,
-    required this.sFamilyClass,
-    required this.panose,
-    required this.ulUnicodeRange1,
-    required this.ulUnicodeRange2,
-    required this.ulUnicodeRange3,
-    required this.ulUnicodeRange4,
-    required this.achVendID,
-    required this.fsSelection,
-    required this.usFirstCharIndex,
-    required this.usLastCharIndex,
-    required this.sTypoAscender,
-    required this.sTypoDescender,
-    required this.sTypoLineGap,
-    required this.usWinAscent,
-    required this.usWinDescent,
-    required this.ulCodePageRange1,
-    required this.ulCodePageRange2,
-    required this.sxHeight,
-    required this.sCapHeight,
-    required this.usDefaultChar,
-    required this.usBreakChar,
-    required this.usMaxContext,
-    required this.usLowerOpticalPointSize,
-    required this.usUpperOpticalPointSize,
-  }) : super.fromTableRecordEntry(entry);
+class OS2Table._({
+  required TableRecordEntry? entry,
+  required final int version,
+  required final int xAvgCharWidth,
+  required final int usWeightClass,
+  required final int usWidthClass,
+  required final int fsType,
+  required final int ySubscriptXSize,
+  required final int ySubscriptYSize,
+  required final int ySubscriptXOffset,
+  required final int ySubscriptYOffset,
+  required final int ySuperscriptXSize,
+  required final int ySuperscriptYSize,
+  required final int ySuperscriptXOffset,
+  required final int ySuperscriptYOffset,
+  required final int yStrikeoutSize,
+  required final int yStrikeoutPosition,
+  required final int sFamilyClass,
+  required final List<int> panose,
+  required final int ulUnicodeRange1,
+  required final int ulUnicodeRange2,
+  required final int ulUnicodeRange3,
+  required final int ulUnicodeRange4,
+  required final String achVendID,
+  required final int fsSelection,
+  required final int usFirstCharIndex,
+  required final int usLastCharIndex,
+  required final int sTypoAscender,
+  required final int sTypoDescender,
+  required final int sTypoLineGap,
+  required final int usWinAscent,
+  required final int usWinDescent,
+  required final int? ulCodePageRange1,
+  required final int? ulCodePageRange2,
+  required final int? sxHeight,
+  required final int? sCapHeight,
+  required final int? usDefaultChar,
+  required final int? usBreakChar,
+  required final int? usMaxContext,
+  required final int? usLowerOpticalPointSize,
+  required final int? usUpperOpticalPointSize,
+}) extends FontTable {
+  this : super.fromTableRecordEntry(entry);
 
-  factory OS2Table.fromByteData({
+  factory fromByteData({
     required ByteData byteData,
     required TableRecordEntry entry,
   }) {
@@ -152,7 +148,7 @@ class OS2Table extends FontTable {
     );
   }
 
-  factory OS2Table.create({
+  factory create({
     required HorizontalMetricsTable hmtx,
     required HeaderTable head,
     required HorizontalHeaderTable hhea,
@@ -241,54 +237,6 @@ class OS2Table extends FontTable {
       usUpperOpticalPointSize: !isV5 ? null : 0xFFFE,
     );
   }
-
-  final int version;
-
-  // Version 0
-  final int xAvgCharWidth;
-  final int usWeightClass;
-  final int usWidthClass;
-  final int fsType;
-  final int ySubscriptXSize;
-  final int ySubscriptYSize;
-  final int ySubscriptXOffset;
-  final int ySubscriptYOffset;
-  final int ySuperscriptXSize;
-  final int ySuperscriptYSize;
-  final int ySuperscriptXOffset;
-  final int ySuperscriptYOffset;
-  final int yStrikeoutSize;
-  final int yStrikeoutPosition;
-  final int sFamilyClass;
-  final List<int> panose;
-  final int ulUnicodeRange1;
-  final int ulUnicodeRange2;
-  final int ulUnicodeRange3;
-  final int ulUnicodeRange4;
-  final String achVendID;
-  final int fsSelection;
-  final int usFirstCharIndex;
-  final int usLastCharIndex;
-  final int sTypoAscender;
-  final int sTypoDescender;
-  final int sTypoLineGap;
-  final int usWinAscent;
-  final int usWinDescent;
-
-  // Version 1
-  final int? ulCodePageRange1;
-  final int? ulCodePageRange2;
-
-  // Version 4
-  final int? sxHeight;
-  final int? sCapHeight;
-  final int? usDefaultChar;
-  final int? usBreakChar;
-  final int? usMaxContext;
-
-  // Version 5
-  final int? usLowerOpticalPointSize;
-  final int? usUpperOpticalPointSize;
 
   @override
   int get size {

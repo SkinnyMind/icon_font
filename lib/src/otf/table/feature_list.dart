@@ -5,13 +5,11 @@ import 'package:icon_font/src/utils/extensions.dart';
 
 const _featureRecordSize = 6;
 
-class FeatureRecord implements BinaryCodable {
-  FeatureRecord({required this.featureTag, required this.featureOffset});
-
-  factory FeatureRecord.fromByteData({
-    required ByteData byteData,
-    required int offset,
-  }) {
+class FeatureRecord({
+  required final String featureTag,
+  required var int? featureOffset,
+}) implements BinaryCodable {
+  factory fromByteData({required ByteData byteData, required int offset}) {
     final featureTag = String.fromCharCodes(
       Uint8List.view(byteData.buffer, offset, 4),
     );
@@ -20,9 +18,6 @@ class FeatureRecord implements BinaryCodable {
       featureOffset: byteData.getUint16(offset + 4),
     );
   }
-
-  final String featureTag;
-  int? featureOffset;
 
   @override
   int get size => _featureRecordSize;
@@ -35,18 +30,12 @@ class FeatureRecord implements BinaryCodable {
   }
 }
 
-class FeatureTable implements BinaryCodable {
-  const FeatureTable({
-    required this.featureParams,
-    required this.lookupIndexCount,
-    required this.lookupListIndices,
-  });
-
-  factory FeatureTable.fromByteData(
-    ByteData byteData,
-    int offset,
-    FeatureRecord record,
-  ) {
+class const FeatureTable({
+  required final int featureParams,
+  required final int lookupIndexCount,
+  required final List<int> lookupListIndices,
+}) implements BinaryCodable {
+  factory fromByteData(ByteData byteData, int offset, FeatureRecord record) {
     final currentOffset = offset + record.featureOffset!;
 
     final lookupIndexCount = byteData.getUint16(currentOffset + 2);
@@ -61,10 +50,6 @@ class FeatureTable implements BinaryCodable {
       lookupListIndices: lookupListIndices,
     );
   }
-
-  final int featureParams;
-  final int lookupIndexCount;
-  final List<int> lookupListIndices;
 
   @override
   int get size => 4 + 2 * lookupIndexCount;
@@ -81,17 +66,12 @@ class FeatureTable implements BinaryCodable {
   }
 }
 
-class FeatureListTable implements BinaryCodable {
-  FeatureListTable({
-    required this.featureCount,
-    required this.featureRecords,
-    required this.featureTables,
-  });
-
-  factory FeatureListTable.fromByteData({
-    required ByteData byteData,
-    required int offset,
-  }) {
+class const FeatureListTable({
+  required final int featureCount,
+  required final List<FeatureRecord> featureRecords,
+  required final List<FeatureTable> featureTables,
+}) implements BinaryCodable {
+  factory fromByteData({required ByteData byteData, required int offset}) {
     final featureCount = byteData.getUint16(offset);
     final featureRecords = List.generate(
       featureCount,
@@ -112,7 +92,7 @@ class FeatureListTable implements BinaryCodable {
     );
   }
 
-  factory FeatureListTable.create() {
+  factory create() {
     final featureRecordList = [
       FeatureRecord(featureTag: 'liga', featureOffset: null),
     ];
@@ -129,11 +109,6 @@ class FeatureListTable implements BinaryCodable {
       ],
     );
   }
-
-  final int featureCount;
-  final List<FeatureRecord> featureRecords;
-
-  final List<FeatureTable> featureTables;
 
   @override
   int get size {
